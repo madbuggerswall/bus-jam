@@ -16,11 +16,13 @@ namespace Core.Levels {
 		private LevelGrid grid;
 
 		// Services
+		private IPassengerColorManager colorManager;
 		private ILevelGridBehaviourFactory gridBehaviourFactory;
 		private ILevelCellBehaviourFactory cellBehaviourFactory;
 		private IPassengerSpawner passengerSpawner;
 
 		void IInitializable.Initialize() {
+			colorManager = Context.Resolve<IPassengerColorManager>();
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
 			passengerSpawner = Context.Resolve<IPassengerSpawner>();
@@ -30,6 +32,7 @@ namespace Core.Levels {
 
 		public void LoadLevel(LevelDefinition levelDefinition) {
 			const GridPlane gridPlane = GridPlane.XZ;
+			const float cellDiameter = 1f;
 
 			// Create GridBehaviour
 			LevelData levelData = levelDefinition.GetLevelData();
@@ -37,9 +40,9 @@ namespace Core.Levels {
 			gridBehaviour = gridBehaviourFactory.Create(gridSize, gridPlane);
 
 			// Create Grid
-			Vector3 pivotLocalPos = new((float) gridSize.x / 2 - 1, 0, (float) gridSize.y / 2 - 1);
+			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y);
 			CellData[] cellDTOs = levelData.GetCells();
-			grid = new LevelGrid(gridBehaviour.transform, pivotLocalPos, gridSize, 1f, GridPlane.XZ);
+			grid = new LevelGrid(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, GridPlane.XZ);
 
 			// Set empty cells
 			for (int i = 0; i < cellDTOs.Length; i++)
@@ -57,6 +60,8 @@ namespace Core.Levels {
 					continue;
 
 				Passenger passenger = passengerSpawner.Spawn(passengerDTO.GetPassengerType(), grid, cell);
+				Material material = colorManager.GetMaterial(passengerDTO.GetPassengerColor());
+				passenger.Initialize(material);
 			}
 		}
 	}

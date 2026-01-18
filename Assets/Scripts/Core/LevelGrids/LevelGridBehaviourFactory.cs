@@ -16,10 +16,8 @@ namespace Core.LevelGrids {
 		}
 
 		LevelGridBehaviour ILevelGridBehaviourFactory.Create(Vector2Int gridSize, GridPlane gridPlane) {
-			Vector2 centerPlanePos = new(gridSize.x / 2f, gridSize.y / 2f);
-			Vector3 centerWorldPos = gridPlane.PlaneToWorldPosition(centerPlanePos, 0f);
 			LevelGridBehaviour gridBehaviour = gridPool.Spawn(gridBehaviourPrefab, gridRoot);
-			gridBehaviour.transform.position = centerWorldPos;
+			gridBehaviour.transform.localPosition = Vector3.zero;
 			return gridBehaviour;
 		}
 	}

@@ -1,5 +1,6 @@
 using Core.Buses;
 using Core.CameraSystem.Core;
+using Core.Data;
 using Core.Input;
 using Core.LevelGrids;
 using Core.Levels;
@@ -12,6 +13,7 @@ namespace Core.Contexts {
 		protected override void BindContext() {
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
 
+			Bind<PassengerColorManager>().To<IPassengerColorManager>();
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();
 			Bind<LevelCellBehaviourFactory>().To<ILevelCellBehaviourFactory>();
 			Bind<GridElementFactory>().To<IGridElementFactory>();
