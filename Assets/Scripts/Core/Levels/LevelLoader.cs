@@ -7,7 +7,9 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Levels {
-	public class LevelLoader : MonoBehaviour, IInitializable {
+	public interface ILevelLoader { }
+
+	public class LevelLoader : MonoBehaviour, IInitializable, ILevelLoader {
 		[SerializeField] private LevelDefinition defaultLevelDefinition;
 
 		private LevelGridBehaviour gridBehaviour;
@@ -15,11 +17,15 @@ namespace Core.Levels {
 
 		// Services
 		private ILevelGridBehaviourFactory gridBehaviourFactory;
-		private IPassengerFactory passengerFactory;
+		private ILevelCellBehaviourFactory cellBehaviourFactory;
+		private IPassengerSpawner passengerSpawner;
 
 		void IInitializable.Initialize() {
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
-			passengerFactory = Context.Resolve<IPassengerFactory>();
+			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
+			passengerSpawner = Context.Resolve<IPassengerSpawner>();
+
+			LoadLevel(defaultLevelDefinition);
 		}
 
 		public void LoadLevel(LevelDefinition levelDefinition) {
@@ -36,17 +42,21 @@ namespace Core.Levels {
 			grid = new LevelGrid(gridBehaviour.transform, pivotLocalPos, gridSize, 1f, GridPlane.XZ);
 
 			// Set empty cells
-			for (int i = 0; i < cellDTOs.Length; i++) {
-				CellData cellDTO = cellDTOs[i];
-				if (grid.TryGetCell(cellDTO.GetLocalCoord(), out LevelCell cell))
-					cell.SetReachable(cellDTO.GetCellType() is not CellType.Empty);
-			}
+			for (int i = 0; i < cellDTOs.Length; i++)
+				if (grid.TryGetCell(cellDTOs[i].GetLocalCoord(), out LevelCell cell))
+					cell.SetReachable(cellDTOs[i].GetCellType() is not CellType.Empty);
+
+			// Create CellBehaviours
+			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour.GetCellRoot());
 
 			// Create Passengers
 			PassengerData[] passengerDTOs = levelData.GetPassengers();
 			for (int i = 0; i < passengerDTOs.Length; i++) {
 				PassengerData passengerDTO = passengerDTOs[i];
-				Passenger passenger = passengerFactory.Create(passengerDTO.GetPassengerType());
+				if (!grid.TryGetCell(passengerDTO.GetLocalCoord(), out LevelCell cell))
+					continue;
+
+				Passenger passenger = passengerSpawner.Spawn(passengerDTO.GetPassengerType(), grid, cell);
 			}
 		}
 	}

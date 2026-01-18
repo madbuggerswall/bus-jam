@@ -8,7 +8,9 @@ namespace Core.Buses {
 	}
 
 	public class BusFactory : MonoBehaviour, IInitializable, IBusFactory {
-		// TODO Prefab
+		[SerializeField] private Transform busRoot;
+		[SerializeField] private Bus busPrefab;
+
 		private IObjectPool<Bus> pool;
 
 		void IInitializable.Initialize() {
@@ -17,7 +19,7 @@ namespace Core.Buses {
 
 		// TODO
 		public Bus CreateBus() {
-			throw new System.NotImplementedException();
+			return pool.Spawn(busPrefab, busRoot);
 		}
 	}
 }
