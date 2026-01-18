@@ -6,14 +6,30 @@ using UnityEngine;
 
 // Place this in an appropriate namespace (e.g., Core.Pathfinding)
 namespace Core.PathFinding {
-	public class FlowFieldManager : IInitializable {
-		private FlowField flowField;
+	public interface IFlowFieldManager {
+		public void OnGridModified();
+		public List<SquareCoord> GetPath(SquareCoord sourceCoord);
+	}
+
+	public class FlowFieldManager : IInitializable, IFlowFieldManager {
+		private VirtualExitFlowField flowField;
+		private LevelGrid levelGrid;
 
 		void IInitializable.Initialize() {
-			LevelGrid levelGrid;
+			flowField = new VirtualExitFlowField(
+				levelGrid,
+				VirtualExitFlowField.Edge.Forward,
+				levelGrid.GetGridSize().x / 2
+			);
 		}
 
-		// private OnGridModified
+		void IFlowFieldManager.OnGridModified() {
+			flowField.Build();
+		}
+
+		List<SquareCoord> IFlowFieldManager.GetPath(SquareCoord sourceCoord) {
+			return flowField.GetPath(sourceCoord);
+		}
 	}
 
 	public class FlowField {
@@ -123,11 +139,8 @@ namespace Core.PathFinding {
 					break;
 
 				// Reached destination (flow to self)
-				if (nextCoord.Equals(currentCoord))
-					break;
-
 				// Prevent infinite loops: if next already in path, break
-				if (path.Contains(nextCoord))
+				if (nextCoord.Equals(currentCoord) || path.Contains(nextCoord))
 					break;
 
 				currentCoord = nextCoord;
@@ -137,39 +150,21 @@ namespace Core.PathFinding {
 		}
 
 		/// <summary>
-		/// Returns world-space positions for the path (useful for steering).
-		/// </summary>
-		public List<Vector3> GetWorldPath(SquareCoord source, int maxSteps = 10000) {
-			List<SquareCoord> coordPath = GetPath(source, maxSteps);
-			List<Vector3> worldPath = new List<Vector3>(coordPath.Count);
-
-			foreach (SquareCoord coord in coordPath) {
-				if (grid.TryGetCell(coord, out LevelCell cell)) {
-					worldPath.Add(grid.GetWorldPosition(cell));
-				}
-			}
-
-			return worldPath;
-		}
-
-		/// <summary>
 		/// Helper: checks whether a LevelCell is walkable (not blocked by element and marked reachable).
 		/// </summary>
 		private static bool IsCellWalkable(LevelCell cell) {
 			return !cell.HasElement() && cell.IsReachable();
 		}
 
-		/// <summary>
-		/// Optional helpers to query internal maps
-		/// </summary>
 		public bool IsReachable(SquareCoord coord) => distanceMap.ContainsKey(coord);
-
-		public bool TryGetDistance(SquareCoord coord, out int dist) => distanceMap.TryGetValue(coord, out dist);
-		public bool TryGetFlow(SquareCoord coord, out SquareCoord next) => flowMap.TryGetValue(coord, out next);
 	}
 
 	public class VirtualExitFlowField {
+		public enum Edge { Forward, Back, Left, Right }
+
 		private readonly LevelGrid grid;
+		private readonly SquareCoord exitCoord;
+		private readonly Edge edge;
 
 		// Distance map: coord -> distance (0 = destination)
 		private readonly Dictionary<SquareCoord, int> distanceMap = new();
@@ -177,17 +172,41 @@ namespace Core.PathFinding {
 		// Flow map: coord -> next coord to step to (towards destination)
 		private readonly Dictionary<SquareCoord, SquareCoord> flowMap = new();
 
-		public VirtualExitFlowField(LevelGrid grid) {
-			this.grid = grid ?? throw new ArgumentNullException();
+
+		public VirtualExitFlowField(LevelGrid grid, Edge edge, int edgeCoord) {
+			this.grid = grid;
+			this.edge = edge;
+			this.exitCoord = GetExitCoord(edge, edgeCoord);
+		}
+
+		private SquareCoord GetExitCoord(Edge edge, int edgeCoord) {
+			int clamped = ClampEdgeCoord(edge, edgeCoord);
+			Vector2Int size = grid.GetGridSize();
+
+			return edge switch {
+				Edge.Forward => new SquareCoord(clamped, size.y), // one row beyond top
+				Edge.Back => new SquareCoord(clamped, -1),        // one row before bottom
+				Edge.Left => new SquareCoord(-1, clamped),        // one col before left
+				Edge.Right => new SquareCoord(size.x, clamped),   // one col beyond right
+				_ => throw new ArgumentOutOfRangeException(nameof(edge), edge, null)
+			};
+		}
+
+		private int ClampEdgeCoord(Edge edge, int edgeCoord) {
+			var size = grid.GetGridSize();
+			return edge switch {
+				Edge.Forward or Edge.Back => Mathf.Clamp(edgeCoord, 0, size.x - 1),
+				Edge.Left or Edge.Right => Mathf.Clamp(edgeCoord, 0, size.y - 1),
+				_ => throw new ArgumentOutOfRangeException(nameof(edge), edge, null)
+			};
 		}
 
 		public void Build() {
 			distanceMap.Clear();
 			flowMap.Clear();
 
-			SquareCoord targetCoord = new(grid.GetGridSize().x / 2, grid.GetGridSize().y);
-			BuildDistanceMap(targetCoord);
-			BuildFlowMap(targetCoord);
+			BuildDistanceMap(exitCoord);
+			BuildFlowMap(exitCoord);
 		}
 
 		private void BuildDistanceMap(SquareCoord targetCoord) {
@@ -212,7 +231,7 @@ namespace Core.PathFinding {
 				if (distanceMap.ContainsKey(neighborCoord))
 					continue;
 
-				// Allow virtual exit row
+				// Allow virtual exit row/col
 				if (IsVirtualExit(neighborCoord)) {
 					distanceMap[neighborCoord] = currentDistance + 1;
 					frontier.Enqueue(neighborCoord);
@@ -259,28 +278,31 @@ namespace Core.PathFinding {
 				flowMap[coord] = best;
 		}
 
-		// One row beyond front
-		private bool IsVirtualExit(SquareCoord coord) => coord.y == grid.GetGridSize().y;
+		private bool IsVirtualExit(SquareCoord coord) {
+			var size = grid.GetGridSize();
+			return edge switch {
+				Edge.Forward => coord.y == size.y,
+				Edge.Back => coord.y == -1,
+				Edge.Left => coord.x == -1,
+				Edge.Right => coord.x == size.x,
+				_ => false
+			};
+		}
 
-		// Returns a path of SquareCoord from source to destination following the flow.
-		// If source is unreachable or flow not built, returns an empty list.
 		public List<SquareCoord> GetPath(SquareCoord sourceCoord, int maxStepsMultiplier = 4) {
 			List<SquareCoord> path = new();
-
-			// unreachable
 			if (!distanceMap.ContainsKey(sourceCoord))
 				return path;
 
 			int maxSteps = grid.GetGridSize().x * grid.GetGridSize().y * maxStepsMultiplier;
 			SquareCoord currentCoord = sourceCoord;
+
 			for (int i = 0; i < maxSteps; i++) {
 				path.Add(currentCoord);
 
 				if (!flowMap.TryGetValue(currentCoord, out SquareCoord nextCoord))
 					break;
 
-				// Reached destination (flow to self)
-				// Prevent infinite loops: if next already in path, break
 				if (nextCoord == currentCoord || path.Contains(nextCoord))
 					break;
 
@@ -290,33 +312,8 @@ namespace Core.PathFinding {
 			return path;
 		}
 
-		// TODO Remove
-		public List<Vector3> GetWorldPath(SquareCoord source, int maxSteps = 10000) {
-			List<SquareCoord> coordPath = GetPath(source, maxSteps);
-			List<Vector3> worldPath = new List<Vector3>(coordPath.Count);
+		private static bool IsCellWalkable(LevelCell cell) => !cell.HasElement() && cell.IsReachable();
 
-			foreach (SquareCoord coord in coordPath) {
-				if (grid.TryGetCell(coord, out LevelCell cell)) {
-					worldPath.Add(grid.GetWorldPosition(cell));
-				}
-			}
-
-			return worldPath;
-		}
-
-		/// <summary>
-		/// Helper: checks whether a LevelCell is walkable (not blocked by element and marked reachable).
-		/// </summary>
-		private static bool IsCellWalkable(LevelCell cell) {
-			return !cell.HasElement() && cell.IsReachable();
-		}
-
-		/// <summary>
-		/// Optional helpers to query internal maps
-		/// </summary>
 		public bool IsReachable(SquareCoord coord) => distanceMap.ContainsKey(coord);
-
-		public bool TryGetDistance(SquareCoord coord, out int dist) => distanceMap.TryGetValue(coord, out dist);
-		public bool TryGetFlow(SquareCoord coord, out SquareCoord next) => flowMap.TryGetValue(coord, out next);
 	}
 }
