@@ -1,10 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Frolics.Grids.SpatialHelpers;
+using Frolics.Utilities;
 using UnityEngine;
 
 // Place this in an appropriate namespace (e.g., Core.Pathfinding)
 namespace Core.PathFinding {
+	public class FlowFieldManager : IInitializable {
+		private FlowField flowField;
+
+		void IInitializable.Initialize() {
+			LevelGrid levelGrid;
+		}
+		
+		// private OnGridModified
+	}
+
 	public class FlowField {
 		private readonly LevelGrid grid;
 
@@ -18,83 +29,92 @@ namespace Core.PathFinding {
 			this.grid = grid ?? throw new ArgumentNullException(nameof(grid));
 		}
 
-		/// <summary>
-		/// Build distance + flow fields from the given destination coordinate.
-		/// Cells with HasElement == true or IsReachable == false are treated as obstacles.
-		/// </summary>
-		public void Build(SquareCoord destination) {
+		// Build distance + flow fields from the given destination coordinate.
+		public void Build(SquareCoord targetCoord) {
 			distanceMap.Clear();
 			flowMap.Clear();
 
 			// Destination must exist and be walkable
-			if (!grid.TryGetCell(destination, out LevelCell destCell) || !IsCellWalkable(destCell)) {
-				// Nothing reachable if destination is invalid/unwalkable
+			// Nothing reachable if destination is invalid/unwalkable
+			if (!grid.TryGetCell(targetCoord, out LevelCell targetCell) || !IsCellWalkable(targetCell))
 				return;
-			}
 
-			distanceMap[destination] = 0;
+			BuildDistanceMap(targetCoord);
+			BuildFlowMap(targetCoord);
+		}
+
+		private void BuildDistanceMap(SquareCoord targetCoord) {
+			distanceMap[targetCoord] = 0;
+
 			Queue<SquareCoord> frontier = new();
-			frontier.Enqueue(destination);
+			frontier.Enqueue(targetCoord);
 
-			// Build distanceMap: to compute distances
-			while (frontier.Count > 0) {
-				SquareCoord current = frontier.Dequeue();
-				int currentDistance = distanceMap[current];
+			while (frontier.Count > 0)
+				ExpandFrontierNode(frontier);
+		}
 
-				for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++) {
-					SquareCoord neighborCoord = current + SquareCoord.DirectionVectors[i];
+		// BuildDistanceMap helper
+		private void ExpandFrontierNode(Queue<SquareCoord> frontier) {
+			SquareCoord current = frontier.Dequeue();
+			int currentDistance = distanceMap[current];
 
-					// Skip if already visited
-					if (distanceMap.ContainsKey(neighborCoord))
-						continue;
+			for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++) {
+				SquareCoord neighborCoord = current + SquareCoord.DirectionVectors[i];
 
-					// Skip if cell doesn't exist or is not walkable
-					if (!grid.TryGetCell(neighborCoord, out LevelCell neighborCell) || !IsCellWalkable(neighborCell))
-						continue;
-
-					distanceMap[neighborCoord] = currentDistance + 1;
-					frontier.Enqueue(neighborCoord);
-				}
-			}
-
-			// Build flowMap: for each reachable coord, pick neighbor with the smallest distance
-			foreach ((SquareCoord coord, _) in distanceMap) {
-				// Destination flows to itself
-				if (coord.Equals(destination)) {
-					flowMap[coord] = coord;
+				// Skip if already visited
+				if (distanceMap.ContainsKey(neighborCoord))
 					continue;
-				}
 
-				SquareCoord best = coord;
-				int shortestDistance = int.MaxValue;
+				// Skip if cell doesn't exist or is not walkable
+				if (!grid.TryGetCell(neighborCoord, out LevelCell neighborCell) || !IsCellWalkable(neighborCell))
+					continue;
 
-				for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++) {
-					SquareCoord neighborCoord = coord + SquareCoord.DirectionVectors[i];
-					if (!distanceMap.TryGetValue(neighborCoord, out int distance) || distance >= shortestDistance)
-						continue;
-
-					shortestDistance = distance;
-					best = neighborCoord;
-				}
-
-				if (shortestDistance < int.MaxValue) {
-					flowMap[coord] = best;
-				}
-				// If no neighbor has a smaller distance, the cell remains without flow (isolated)
+				distanceMap[neighborCoord] = currentDistance + 1;
+				frontier.Enqueue(neighborCoord);
 			}
 		}
 
-		/// <summary>
-		/// Returns a path of SquareCoord from source to destination following the flow.
-		/// If source is unreachable or flow not built, returns an empty list.
-		/// </summary>
-		public List<SquareCoord> GetPath(SquareCoord sourceCoord, int maxSteps = 10000) {
+		// Build flowMap: for each reachable coord, pick neighbor with the smallest distance
+		private void BuildFlowMap(SquareCoord targetCoord) {
+			foreach ((SquareCoord coord, _) in distanceMap)
+				AssignFlowDirection(targetCoord, coord);
+		}
+
+		// BuildFlowMap helper: Computes flow for coord
+		private void AssignFlowDirection(SquareCoord targetCoord, SquareCoord coord) {
+			// Destination flows to itself
+			if (coord.Equals(targetCoord)) {
+				flowMap[coord] = coord;
+				return;
+			}
+
+			SquareCoord best = coord;
+			int shortestDistance = int.MaxValue;
+
+			for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++) {
+				SquareCoord neighborCoord = coord + SquareCoord.DirectionVectors[i];
+				if (!distanceMap.TryGetValue(neighborCoord, out int distance) || distance >= shortestDistance)
+					continue;
+
+				shortestDistance = distance;
+				best = neighborCoord;
+			}
+
+			// If no neighbor has a smaller distance, the cell remains without flow (isolated)
+			if (shortestDistance < int.MaxValue)
+				flowMap[coord] = best;
+		}
+
+		// Returns a path of SquareCoord from source to destination following the flow.
+		// If source is unreachable or flow not built, returns an empty list.
+		public List<SquareCoord> GetPath(SquareCoord sourceCoord, int maxStepsMultiplier = 4) {
 			List<SquareCoord> path = new();
 
 			// unreachable
 			if (!distanceMap.ContainsKey(sourceCoord))
-				return path; 
+				return path;
 
+			int maxSteps = grid.GetGridSize().x * grid.GetGridSize().y * maxStepsMultiplier;
 			SquareCoord currentCoord = sourceCoord;
 			for (int i = 0; i < maxSteps; i++) {
 				path.Add(currentCoord);
@@ -122,7 +142,7 @@ namespace Core.PathFinding {
 		public List<Vector3> GetWorldPath(SquareCoord source, int maxSteps = 10000) {
 			List<SquareCoord> coordPath = GetPath(source, maxSteps);
 			List<Vector3> worldPath = new List<Vector3>(coordPath.Count);
-
+			
 			foreach (SquareCoord coord in coordPath) {
 				if (grid.TryGetCell(coord, out LevelCell cell)) {
 					worldPath.Add(grid.GetWorldPosition(cell));
