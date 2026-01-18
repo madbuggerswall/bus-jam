@@ -6,45 +6,51 @@ using UnityEngine;
 
 namespace Core.LevelGrids {
 	public interface ILevelGridBehaviourFactory {
-		public LevelGridBehaviour Create(LevelData data);
+		public LevelGridBehaviour Create(Vector2Int gridSize, GridPlane gridPlane);
+	}
+
+	public interface ILevelCellBehaviourFactory {
+		public void CreateCellBehaviours(LevelGrid grid, LevelGridBehaviour gridBehaviour);
+	}
+
+	public class LevelCellBehaviourFactory : MonoBehaviour, IInitializable, ILevelCellBehaviourFactory {
+		[SerializeField] private Transform cellPoolRoot;
+		[SerializeField] private LevelCellBehaviour cellBehaviourPrefab;
+
+		private IObjectPool<LevelCellBehaviour> cellPool;
+
+		void IInitializable.Initialize() {
+			cellPool = new ObjectPool<LevelCellBehaviour>(cellPoolRoot);
+		}
+
+		void ILevelCellBehaviourFactory.CreateCellBehaviours(LevelGrid grid, LevelGridBehaviour gridBehaviour) {
+			LevelCell[] cells = grid.GetCells();
+			for (int i = 0; i < cells.Length; i++) {
+				LevelCell cell = cells[i];
+				LevelCellBehaviour cellBehaviour = cellPool.Spawn(cellBehaviourPrefab, gridBehaviour.GetCellRoot());
+				cellBehaviour.Initialize(cell);
+				cellBehaviour.transform.position = grid.GetWorldPosition(cell);
+			}
+		}
 	}
 
 	public class LevelGridBehaviourFactory : MonoBehaviour, IInitializable, ILevelGridBehaviourFactory {
 		[SerializeField] private Transform gridRoot;
 		[SerializeField] private Transform gridPoolRoot;
-		[SerializeField] private Transform cellPoolRoot;
 
 		[SerializeField] private LevelGridBehaviour gridBehaviourPrefab;
-		[SerializeField] private LevelCellBehaviour cellBehaviourPrefab;
 
 		private IObjectPool<LevelGridBehaviour> gridPool;
-		private IObjectPool<LevelCellBehaviour> cellPool;
 
 		void IInitializable.Initialize() {
 			gridPool = new ObjectPool<LevelGridBehaviour>(gridPoolRoot);
-			cellPool = new ObjectPool<LevelCellBehaviour>(cellPoolRoot);
 		}
 
-		public LevelGridBehaviour Create(LevelData data) {
-			Vector2Int gridSize = data.GetGridSize();
-			Vector3 pivotLocalPos = new((float) gridSize.x / 2 - 1, 0, (float) gridSize.y / 2 - 1);
-			CellData[] cellDTOs = data.GetCells();
-
+		LevelGridBehaviour ILevelGridBehaviourFactory.Create(Vector2Int gridSize, GridPlane gridPlane) {
+			Vector2 centerPlanePos = new(gridSize.x / 2f, gridSize.y / 2f);
+			Vector3 centerWorldPos = gridPlane.PlaneToWorldPosition(centerPlanePos, 0f);
 			LevelGridBehaviour gridBehaviour = gridPool.Spawn(gridBehaviourPrefab, gridRoot);
-			LevelGrid levelGrid = new(gridBehaviour.transform, pivotLocalPos, gridSize, 1f, GridPlane.XZ);
-			for (int i = 0; i < cellDTOs.Length; i++) {
-				CellData cellDTO = cellDTOs[i];
-				if(levelGrid.TryGetCell(cellDTO.GetLocalCoord(), out LevelCell cell))
-					cell.SetReachable(cellDTO.GetCellType() is not CellType.Empty);
-			}
-
-			LevelCell[] cells = levelGrid.GetCells();
-			for (int i = 0; i < cells.Length; i++) {
-				LevelCell cell = cells[i];
-				Vector3 position = levelGrid.GetWorldPosition(cell);
-				cellPool.Spawn(cellBehaviourPrefab, gridBehaviour.GetCellRoot());
-			}
-
+			gridBehaviour.transform.position = centerWorldPos;
 			return gridBehaviour;
 		}
 	}
