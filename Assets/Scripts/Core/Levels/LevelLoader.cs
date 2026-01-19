@@ -18,15 +18,21 @@ namespace Core.Levels {
 		private WaitingGrid waitingGrid;
 
 		// Services
-		private IPassengerColorManager colorManager;
 		private ILevelGridBehaviourFactory gridBehaviourFactory;
 		private ILevelCellBehaviourFactory cellBehaviourFactory;
+
+		private IWaitingGridBehaviourFactory waitingGridBehaviourFactory;
+		private IWaitingCellBehaviourFactory waitingCellBehaviourFactory;
+
 		private IPassengerSpawner passengerSpawner;
 
 		void IInitializable.Initialize() {
-			colorManager = Context.Resolve<IPassengerColorManager>();
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
+
+			waitingGridBehaviourFactory = Context.Resolve<IWaitingGridBehaviourFactory>();
+			waitingCellBehaviourFactory = Context.Resolve<IWaitingCellBehaviourFactory>();
+
 			passengerSpawner = Context.Resolve<IPassengerSpawner>();
 
 			LoadLevel(defaultLevelDefinition);
@@ -35,9 +41,14 @@ namespace Core.Levels {
 		public void LoadLevel(LevelDefinition levelDefinition) {
 			// Create GridBehaviour
 			LevelData levelData = levelDefinition.GetLevelData();
+			
 			gridBehaviour = gridBehaviourFactory.Create();
 			grid = CreateLevelGrid(levelData);
 			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
+			
+			waitingGridBehaviour =  waitingGridBehaviourFactory.Create();
+			waitingGrid = CreateWaitingGrid(levelData);
+			waitingCellBehaviourFactory.CreateCellBehaviours(waitingGrid, waitingGridBehaviour);
 
 			passengerSpawner.SpawnPassengers(levelData, grid);
 

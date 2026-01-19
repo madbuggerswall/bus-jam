@@ -6,6 +6,7 @@ using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
+using Core.Waiting.Grids;
 using Frolics.Contexts;
 using UnityEngine;
 
@@ -15,8 +16,12 @@ namespace Core.Contexts {
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
 
 			Bind<PassengerColorManager>().To<IPassengerColorManager>();
+
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();
 			Bind<LevelCellBehaviourFactory>().To<ILevelCellBehaviourFactory>();
+			Bind<WaitingGridBehaviourFactory>().To<IWaitingGridBehaviourFactory>();
+			Bind<WaitingCellBehaviourFactory>().To<IWaitingCellBehaviourFactory>();
+
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<BusFactory>().To<IBusFactory>();
 
