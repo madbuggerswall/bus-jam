@@ -1,7 +1,8 @@
 using Core.Data;
+using Core.LevelGrids;
 
 namespace Core.Passengers {
 	public interface IPassengerSpawner {
-		public Passenger Spawn(PassengerType type, LevelGrid grid, LevelCell cell);
+		public void SpawnPassengers(LevelData levelData, LevelGrid grid);
 	}
 }

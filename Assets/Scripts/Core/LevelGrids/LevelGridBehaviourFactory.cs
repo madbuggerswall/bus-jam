@@ -1,4 +1,3 @@
-using Frolics.Grids;
 using Frolics.Pooling;
 using Frolics.Utilities;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Core.LevelGrids {
 			gridPool = new ObjectPool<LevelGridBehaviour>(transform);
 		}
 
-		LevelGridBehaviour ILevelGridBehaviourFactory.Create(Vector2Int gridSize, GridPlane gridPlane) {
+		LevelGridBehaviour ILevelGridBehaviourFactory.Create() {
 			LevelGridBehaviour gridBehaviour = gridPool.Spawn(gridBehaviourPrefab, gridRoot);
 			gridBehaviour.transform.localPosition = Vector3.zero;
 			return gridBehaviour;

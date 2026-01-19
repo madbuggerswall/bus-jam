@@ -5,12 +5,15 @@ namespace Core.LevelGrids {
 	public class LevelGridBehaviour : MonoBehaviour {
 		[SerializeField] private Transform cellRoot;
 
-		private List<LevelCellBehaviour> cellBehaviours;
+		private readonly List<LevelCellBehaviour> cellBehaviours = new();
 
 		public void Initialize() {
-			cellBehaviours = new List<LevelCellBehaviour>();
+			cellBehaviours.Clear();
 		}
 
+		public void AddCellBehaviour(LevelCellBehaviour cellBehaviour) => cellBehaviours.Add(cellBehaviour);
+
+		// Getters
 		public Transform GetCellRoot() => cellRoot;
 		public List<LevelCellBehaviour> GetCellBehaviours() => cellBehaviours;
 	}

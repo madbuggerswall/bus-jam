@@ -1,6 +1,7 @@
+using Core.LevelGrids;
 using Frolics.Grids.SpatialHelpers;
 
-namespace Core.PathFinding {
+namespace Core.PathFinding.FlowFields {
 	public class FlowField : FlowFieldBase {
 		public FlowField(LevelGrid grid, SquareCoord targetCoord) : base(grid, targetCoord) { }
 

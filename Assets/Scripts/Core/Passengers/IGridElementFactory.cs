@@ -1,4 +1,5 @@
 using Core.GridElements;
+using Core.LevelGrids;
 
 namespace Core.Passengers {
 	public interface IGridElementFactory {

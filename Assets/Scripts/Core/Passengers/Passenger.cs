@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core.Data;
 using Core.GridElements;
+using Core.LevelGrids;
 using Frolics.Grids.SpatialHelpers;
 using Frolics.Tweens.Core;
 using Frolics.Tweens.Easing;

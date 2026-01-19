@@ -1,4 +1,5 @@
 using Core.Data;
+using Frolics.Contexts;
 using Frolics.Pooling;
 using Frolics.Utilities;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Core.Buses {
 
 		void IInitializable.Initialize() {
 			pool = new ObjectPool<Bus>(transform);
+			colorManager = Context.Resolve<IPassengerColorManager>();
 		}
 
 		Bus IBusFactory.CreateBus(BusData busData) {

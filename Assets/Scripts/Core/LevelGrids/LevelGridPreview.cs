@@ -2,7 +2,7 @@ using Frolics.Grids;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace Core.Segments.Grids {
+namespace Core.LevelGrids {
 	[System.Serializable]
 	public class LevelGridPreview : MonoBehaviour {
 		[Header("Grid Settings")]
