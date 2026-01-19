@@ -34,12 +34,13 @@ namespace Core.Passengers {
 		}
 
 		public void PlayPathTween(LevelGrid grid, List<SquareCoord> coords) {
+			passenger.transform.position = grid.ToWorldPosition(coords[0]);
 			Sequence sequence = Sequence.Create();
-
-			for (int i = 0; i < coords.Count; i++) {
-				Vector3 worldPosition = grid.ToWorldPosition(coords[i]);
-				Tween positionTween = passenger.transform.TweenPosition(worldPosition, 0.5f);
+			
+			for (int i = 1; i < coords.Count; i++) {
+				Tween positionTween = passenger.transform.TweenPosition(grid.ToWorldPosition(coords[i]), 0.25f);
 				positionTween.SetEase(i == 0 ? Ease.Type.InQuad : Ease.Type.Linear);
+				
 				sequence.Append(positionTween);
 			}
 

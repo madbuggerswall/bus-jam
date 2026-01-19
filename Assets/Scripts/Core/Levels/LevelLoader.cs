@@ -1,6 +1,7 @@
 using Core.Data;
 using Core.LevelGrids;
 using Core.Passengers;
+using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;
@@ -24,6 +25,9 @@ namespace Core.Levels {
 
 		private LevelGridBehaviour gridBehaviour;
 		private LevelGrid grid;
+
+		private WaitingGridBehaviour waitingGridBehaviour;
+		private WaitingGrid waitingGrid;
 
 		// Services
 		private IPassengerColorManager colorManager;
@@ -64,12 +68,24 @@ namespace Core.Levels {
 			CellData[] cellDTOs = levelData.GetCells();
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y);
-			LevelGrid grid = new LevelGrid(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
+			LevelGrid grid = new(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
 
 			// Set empty cells
 			for (int i = 0; i < cellDTOs.Length; i++)
 				if (grid.TryGetCell(cellDTOs[i].GetLocalCoord(), out LevelCell cell))
 					cell.SetReachable(cellDTOs[i].GetCellType() is not CellType.Empty);
+
+			return grid;
+		}
+
+		private WaitingGrid CreateWaitingGrid(LevelData levelData) {
+			const GridPlane gridPlane = GridPlane.XZ;
+			const float cellDiameter = 1f;
+
+			Vector2Int gridSize = levelData.GetWaitingGridSize();
+
+			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y / 2f + cellDiameter / 2);
+			WaitingGrid grid = new(waitingGridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
 
 			return grid;
 		}
