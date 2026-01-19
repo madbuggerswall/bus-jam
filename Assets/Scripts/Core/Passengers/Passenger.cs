@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Data;
 using Core.GridElements;
 using Frolics.Grids.SpatialHelpers;
 using Frolics.Tweens.Core;
@@ -10,9 +11,13 @@ namespace Core.Passengers {
 	public class Passenger : GridElement {
 		[SerializeField] private MeshRenderer meshRenderer;
 
+		private PassengerColor color;
+
 		public void Initialize(Material material) {
 			meshRenderer.sharedMaterial = material;
 		}
+
+		public PassengerColor GetColor() { return color; }
 	}
 
 	// This should not be a per passenger class or operation

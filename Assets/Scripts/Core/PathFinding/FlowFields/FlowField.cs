@@ -1,6 +1,4 @@
-using System;
 using Frolics.Grids.SpatialHelpers;
-using UnityEngine;
 
 namespace Core.PathFinding {
 	public class FlowField : FlowFieldBase {

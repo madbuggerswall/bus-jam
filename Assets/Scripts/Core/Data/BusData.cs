@@ -8,5 +8,6 @@ namespace Core.Data {
 		[SerializeField] private int reservedCount;
 
 		public PassengerColor GetPassengerColor() => passengerColor;
+		public int GetReservedCount() => reservedCount;
 	}
 }

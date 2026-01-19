@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Core.GridElements;
 using Frolics.Grids;
 using Frolics.Grids.SpatialHelpers;
-using UnityEngine;
 
 public class LevelCell : SquareCell {
 	private GridElement element;

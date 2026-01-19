@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Core.CameraSystem.Core;
+using Core.LevelGrids;
+using Core.Passengers;
 using Frolics.Contexts;
 using Frolics.Input;
 using Frolics.Input.Mobile;
@@ -8,6 +11,26 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Input {
+	public interface ICellBehaviourMapper {
+		public bool TryGetCellBehaviour(Collider collider, out LevelCellBehaviour cellBehaviour);
+	}
+
+	public class CellBehaviourMapper : IInitializable, ICellBehaviourMapper {
+		private Dictionary<Collider, LevelCellBehaviour> cellBehaviourMap;
+		private LevelGridBehaviour gridBehaviour;
+
+		void IInitializable.Initialize() {
+			cellBehaviourMap = new Dictionary<Collider, LevelCellBehaviour>();
+			List<LevelCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
+			for (int i = 0; i < cellBehaviours.Count; i++)
+				cellBehaviourMap.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
+		}
+
+		bool ICellBehaviourMapper.TryGetCellBehaviour(Collider collider, out LevelCellBehaviour cellBehaviour) {
+			return cellBehaviourMap.TryGetValue(collider, out cellBehaviour);
+		}
+	}
+
 	public class PassengerClickHandler : IInitializable {
 		private IPointerClickHandler clickHandler;
 
@@ -19,10 +42,6 @@ namespace Core.Input {
 
 	public interface IPointerClickHandler { }
 
-	public interface IClickable {
-		public void OnClick();
-	}
-
 	public interface IClickHandlerFactory {
 		public IPointerClickHandler Create();
 	}
@@ -30,21 +49,23 @@ namespace Core.Input {
 	public class ClickHandlerFactory : IClickHandlerFactory {
 		public IPointerClickHandler Create() {
 			return Application.platform switch {
-				RuntimePlatform.Android or RuntimePlatform.IPhonePlayer => new TouchClickHandler(),
-				RuntimePlatform.LinuxEditor or RuntimePlatform.OSXEditor => new MouseClickHandler(),
+				RuntimePlatform.Android or RuntimePlatform.IPhonePlayer => new TouchCellClickHandler(),
+				RuntimePlatform.LinuxEditor or RuntimePlatform.OSXEditor => new MouseCellClickHandler(),
 				_ => throw new ArgumentOutOfRangeException()
 			};
 		}
 	}
 
-	public abstract class PointerClickHandler : IPointerClickHandler {
+	public abstract class PointerCellClickHandler : IPointerClickHandler {
 		// Services
 		protected readonly IInputManager inputManager;
 		private readonly IMainCameraProvider cameraProvider;
+		private readonly ICellBehaviourMapper cellBehaviourMapper;
 
-		protected PointerClickHandler() {
+		protected PointerCellClickHandler() {
 			inputManager = Context.Resolve<IInputManager>();
 			cameraProvider = Context.Resolve<IMainCameraProvider>();
+			cellBehaviourMapper = Context.Resolve<ICellBehaviourMapper>();
 		}
 
 		// Sandbox methods 
@@ -53,38 +74,28 @@ namespace Core.Input {
 			if (!Physics.Raycast(ray, out RaycastHit hit))
 				return;
 
-			// IDEA ClickableManager caches a <Collider,Clickable> dictionary
-			IClickable clickable = hit.collider.GetComponent<IClickable>();
-			clickable?.OnClick();
+			if (cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out LevelCellBehaviour cellBehaviour)) {
+				LevelCell cell = cellBehaviour.GetCell();
+				if (cell.GetGridElement() is Passenger passenger) {
+					
+				}
+			}
 		}
-
-		protected void OnPointerDrag(Vector2 pointerPosition) { }
-
-		// IDEA Cancel the press if dragged away from clickable
-		protected void OnPointerRelease(Vector2 pointerPosition) { }
 	}
 
-	public class MouseClickHandler : PointerClickHandler {
-		public MouseClickHandler() {
+	public class MouseCellClickHandler : PointerCellClickHandler {
+		public MouseCellClickHandler() {
 			inputManager.MouseInputHandler.MousePressEvent += OnMousePress;
-			inputManager.MouseInputHandler.MouseDragEvent += OnMouseDrag;
-			inputManager.MouseInputHandler.MouseReleaseEvent += OnMouseRelease;
 		}
 
 		private void OnMousePress(MouseData mouseData) => OnPointerPress(mouseData.MousePosition);
-		private void OnMouseDrag(MouseData mouseData) => OnPointerDrag(mouseData.MousePosition);
-		private void OnMouseRelease(MouseData mouseData) => OnPointerRelease(mouseData.MousePosition);
 	}
 
-	public class TouchClickHandler : PointerClickHandler {
-		public TouchClickHandler() {
+	public class TouchCellClickHandler : PointerCellClickHandler {
+		public TouchCellClickHandler() {
 			inputManager.TouchInputHandler.TouchPressEvent += OnTouchPress;
-			inputManager.TouchInputHandler.TouchDragEvent += OnTouchDrag;
-			inputManager.TouchInputHandler.TouchReleaseEvent += OnTouchRelease;
 		}
 
 		private void OnTouchPress(TouchData touchData) => OnPointerPress(touchData.PressPosition);
-		private void OnTouchDrag(TouchData touchData) => OnPointerDrag(touchData.PressPosition);
-		private void OnTouchRelease(TouchData touchData) => OnPointerRelease(touchData.PressPosition);
 	}
 }

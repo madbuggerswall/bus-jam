@@ -1,7 +1,6 @@
 using Core.Buses;
 using Core.CameraSystem.Core;
 using Core.Data;
-using Core.Input;
 using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
@@ -21,8 +20,11 @@ namespace Core.Contexts {
 			
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 			Bind<LevelLoader>().To<ILevelLoader>();
+			
+			Bind<BusController>().To<IBusController>();
+			Bind<BusManager>();
 
-			Bind<PassengerClickHandler>();
+			// Bind<PassengerClickHandler>();
 		}
 
 		protected override void OnInitialized() {

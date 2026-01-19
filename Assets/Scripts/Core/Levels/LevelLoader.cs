@@ -63,6 +63,13 @@ namespace Core.Levels {
 				Material material = colorManager.GetMaterial(passengerDTO.GetPassengerColor());
 				passenger.Initialize(material);
 			}
+			
+			// Create Buses
+			BusData[] busDTOs = levelData.GetBuses();
+			for (int i = 0; i < busDTOs.Length; i++) {
+				BusData busDTO = busDTOs[i];
+				
+			}
 		}
 	}
 }
