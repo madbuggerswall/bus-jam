@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Core.Buses;
 using Core.CameraSystem.Core;
 using Core.LevelGrids;
-using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
 using Frolics.Contexts;
@@ -19,7 +18,7 @@ namespace Core.Input {
 		
 		private readonly IPathFinder pathFinder;
 		private readonly BusManager busManager; 
-		private readonly IGridProvider gridProvider;
+		private readonly ILevelGridProvider levelGridProvider;
 
 		protected PointerCellClickHandler() {
 			inputManager = Context.Resolve<IInputManager>();
@@ -28,7 +27,7 @@ namespace Core.Input {
 			
 			pathFinder = Context.Resolve<IPathFinder>();
 			busManager = Context.Resolve<BusManager>();
-			gridProvider = Context.Resolve<IGridProvider>();
+			levelGridProvider = Context.Resolve<ILevelGridProvider>();
 		}
 
 		// Sandbox methods 
@@ -54,7 +53,7 @@ namespace Core.Input {
 			}
 
 			List<SquareCoord> squareCoords = pathFinder.GetPath(cell.GetCoord());
-			passenger.GetController().PlayPathTween(gridProvider.GetGrid(), squareCoords);
+			passenger.GetController().PlayPathTween(levelGridProvider.GetGrid(), squareCoords);
 		}
 	}
 }

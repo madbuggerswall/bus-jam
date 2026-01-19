@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Core.LevelGrids;
-using Core.Levels;
 using Core.PathFinding.FlowFields;
 using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
@@ -13,12 +12,12 @@ namespace Core.PathFinding {
 		private SquareCoord targetCoord;
 
 		// Services
-		private IGridProvider gridProvider;
+		private ILevelGridProvider levelGridProvider;
 
 		void IInitializable.Initialize() {
-			gridProvider = Context.Resolve<IGridProvider>();
+			levelGridProvider = Context.Resolve<ILevelGridProvider>();
 
-			levelGrid = gridProvider.GetGrid();
+			levelGrid = levelGridProvider.GetGrid();
 			targetCoord = new SquareCoord(levelGrid.GetGridSize().x / 2, levelGrid.GetGridSize().y);
 			flowField = new VirtualExitFlowField(levelGrid, targetCoord);
 			

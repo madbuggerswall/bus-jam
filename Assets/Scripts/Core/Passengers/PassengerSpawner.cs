@@ -1,6 +1,7 @@
 using System;
 using Core.Data;
 using Core.LevelGrids;
+using Core.Levels;
 using Frolics.Contexts;
 using Frolics.Utilities;
 using UnityEngine;
@@ -14,16 +15,25 @@ namespace Core.Passengers {
 		[SerializeField] private Passenger ropePrefab;
 
 		// Services
+		private ILevelLoader levelLoader;
 		private IGridElementFactory elementFactory;
 		private IPassengerColorManager colorManager;
+		private ILevelGridProvider gridProvider;
 
 		void IInitializable.Initialize() {
+			levelLoader = Context.Resolve<ILevelLoader>();
 			colorManager = Context.Resolve<IPassengerColorManager>();
 			elementFactory = Context.Resolve<IGridElementFactory>();
+			gridProvider = Context.Resolve<ILevelGridProvider>();
+
+			SpawnPassengers();
 		}
 
-		void IPassengerSpawner.SpawnPassengers(LevelData levelData, LevelGrid grid) {
+		public void SpawnPassengers() {
+			LevelData levelData = levelLoader.GetLevelData();
 			PassengerData[] passengerDTOs = levelData.GetPassengers();
+			LevelGrid grid = gridProvider.GetGrid();
+
 			for (int i = 0; i < passengerDTOs.Length; i++) {
 				PassengerData passengerDTO = passengerDTOs[i];
 				if (!grid.TryGetCell(passengerDTO.GetLocalCoord(), out LevelCell cell))

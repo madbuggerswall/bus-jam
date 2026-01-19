@@ -17,18 +17,21 @@ namespace Core.Contexts {
 
 			Bind<PassengerColorManager>().To<IPassengerColorManager>();
 
+			// Factories
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();
 			Bind<LevelCellBehaviourFactory>().To<ILevelCellBehaviourFactory>();
 			Bind<WaitingGridBehaviourFactory>().To<IWaitingGridBehaviourFactory>();
 			Bind<WaitingCellBehaviourFactory>().To<IWaitingCellBehaviourFactory>();
-
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<BusFactory>().To<IBusFactory>();
-
+			
+			// Level Initialization
+			Bind<LevelLoader>().To<ILevelLoader>();
+			Bind<LevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
+			Bind<WaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
-			Bind<LevelLoader>().To<ILevelLoader>().To<IGridBehaviourProvider>().To<IGridProvider>();
-			Bind<PathFinder>().To<IPathFinder>();
 
+			Bind<PathFinder>().To<IPathFinder>();
 			Bind<BusController>().To<IBusController>();
 			Bind<BusManager>();
 

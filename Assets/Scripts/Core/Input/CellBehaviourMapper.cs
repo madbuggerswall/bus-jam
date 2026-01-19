@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Core.LevelGrids;
-using Core.Levels;
 using Frolics.Contexts;
 using Frolics.Utilities;
 using UnityEngine;
@@ -10,16 +9,16 @@ namespace Core.Input {
 		private Dictionary<Collider, LevelCellBehaviour> cellBehaviourMap;
 		
 		// Services
-		private IGridBehaviourProvider gridBehaviourProvider;
+		private ILevelGridBehaviourProvider levelGridBehaviourProvider;
 
 		void IInitializable.Initialize() {
-			gridBehaviourProvider = Context.Resolve<IGridBehaviourProvider>();
+			levelGridBehaviourProvider = Context.Resolve<ILevelGridBehaviourProvider>();
 			cellBehaviourMap = MapCellBehavioursByCollider();
 		}
 
 		private Dictionary<Collider, LevelCellBehaviour> MapCellBehavioursByCollider() {
 			Dictionary<Collider, LevelCellBehaviour> cellBehaviourMap = new();
-			List<LevelCellBehaviour> cellBehaviours = gridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
+			List<LevelCellBehaviour> cellBehaviours = levelGridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
 			for (int i = 0; i < cellBehaviours.Count; i++)
 				cellBehaviourMap.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
 			
