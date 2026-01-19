@@ -7,7 +7,9 @@ namespace Core.LevelGrids {
 		private GridElement element;
 		private bool isReachable;
 
-		public LevelCell(SquareCoord coordinate) : base(coordinate) { }
+		public LevelCell(SquareCoord coordinate) : base(coordinate) {
+			isReachable = true;
+		}
 
 
 		public bool IsReachable() => isReachable;

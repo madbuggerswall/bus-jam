@@ -13,36 +13,27 @@ namespace Core.Passengers {
 		[SerializeField] private MeshRenderer meshRenderer;
 
 		private PassengerColor color;
+		private PassengerController controller;
 
-		public void Initialize(Material material) {
+		public void Initialize(PassengerColor color, Material material) {
 			meshRenderer.sharedMaterial = material;
+			this.color = color;
+			controller = new PassengerController(this);
 		}
 
 		public PassengerColor GetColor() { return color; }
+		public PassengerController GetController() { return controller; }
 	}
 
-	// This should not be a per passenger class or operation
+	// IDEA Rename to PassengerTweenHelper
 	public class PassengerController {
-		private LevelGrid grid;
-		private Passenger passenger;
+		private readonly Passenger passenger;
 
-		// TODO PlayPathTween(cells, destination)
-		private void PlayPathTween(LevelCell[] cells) {
-			Sequence sequence = Sequence.Create();
-			for (int i = 0; i < cells.Length; i++) {
-				LevelCell cell = cells[i];
-				Vector3 position = grid.GetWorldPosition(cell);
-
-				Tween positionTween = passenger.transform.TweenPosition(position, 0.5f);
-				positionTween.SetEase(i == 0 ? Ease.Type.InQuad : Ease.Type.Linear);
-
-				sequence.Append(positionTween);
-			}
-
-			sequence.Play();
+		public PassengerController(Passenger passenger) {
+			this.passenger = passenger;
 		}
-
-		private void PlayPathTween(LevelGrid grid, List<SquareCoord> coords) {
+		
+		public void PlayPathTween(LevelGrid grid, List<SquareCoord> coords) {
 			Sequence sequence = Sequence.Create();
 
 			for (int i = 0; i < coords.Count; i++) {

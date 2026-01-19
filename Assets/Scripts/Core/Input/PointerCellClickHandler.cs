@@ -1,7 +1,12 @@
+using System.Collections.Generic;
+using Core.Buses;
 using Core.CameraSystem.Core;
 using Core.LevelGrids;
+using Core.Levels;
 using Core.Passengers;
+using Core.PathFinding;
 using Frolics.Contexts;
+using Frolics.Grids.SpatialHelpers;
 using Frolics.Input;
 using UnityEngine;
 
@@ -11,11 +16,19 @@ namespace Core.Input {
 		protected readonly IInputManager inputManager;
 		private readonly IMainCameraProvider cameraProvider;
 		private readonly ICellBehaviourMapper cellBehaviourMapper;
+		
+		private readonly IPathFinder pathFinder;
+		private readonly BusManager busManager; 
+		private readonly IGridProvider gridProvider;
 
 		protected PointerCellClickHandler() {
 			inputManager = Context.Resolve<IInputManager>();
 			cameraProvider = Context.Resolve<IMainCameraProvider>();
 			cellBehaviourMapper = Context.Resolve<ICellBehaviourMapper>();
+			
+			pathFinder = Context.Resolve<IPathFinder>();
+			busManager = Context.Resolve<BusManager>();
+			gridProvider = Context.Resolve<IGridProvider>();
 		}
 
 		// Sandbox methods 
@@ -24,12 +37,24 @@ namespace Core.Input {
 			if (!Physics.Raycast(ray, out RaycastHit hit))
 				return;
 
-			if (cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out LevelCellBehaviour cellBehaviour)) {
-				LevelCell cell = cellBehaviour.GetCell();
-				if (cell.GetGridElement() is Passenger passenger) {
-					Debug.Log(cellBehaviour);
-				}
+			if (!cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out LevelCellBehaviour cellBehaviour))
+				return;
+
+			LevelCell cell = cellBehaviour.GetCell();
+			if (cell.GetGridElement() is not Passenger passenger)
+				return;
+
+			if (!pathFinder.IsTargetReachable()) 
+				return;
+			
+			bool colorMatch = passenger.GetColor() == busManager.GetCurrentBus().GetColor();
+			if (!colorMatch) {
+				// TODO WaitingArea
+				return;
 			}
+
+			List<SquareCoord> squareCoords = pathFinder.GetPath(cell.GetCoord());
+			passenger.GetController().PlayPathTween(gridProvider.GetGrid(), squareCoords);
 		}
 	}
 }

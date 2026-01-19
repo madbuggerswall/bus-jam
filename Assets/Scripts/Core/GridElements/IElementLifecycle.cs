@@ -17,11 +17,13 @@ namespace Core.GridElements {
 			this.grid = grid;
 			this.pool = pool;
 		}
+
 		public void RemoveFromGrid() {
-			
+			grid.RemoveElement(element);
 		}
+
 		public void Despawn() {
-			throw new System.NotImplementedException();
+			pool.Despawn(element);
 		}
 	}
 }

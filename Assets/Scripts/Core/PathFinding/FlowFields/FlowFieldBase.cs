@@ -127,6 +127,6 @@ namespace Core.PathFinding.FlowFields {
 			return !cell.HasElement() && cell.IsReachable();
 		}
 
-		public bool IsTargetReachable(SquareCoord coord) => distanceMap.ContainsKey(targetCoord);
+		public bool IsTargetReachable(SquareCoord coord) => distanceMap.ContainsKey(coord);
 	}
 }

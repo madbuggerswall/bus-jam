@@ -41,5 +41,7 @@ namespace Core.Buses {
 		public void OnBusFill() {
 			currentBus = nextBus;
 		}
+
+		public Bus GetCurrentBus() => currentBus;
 	}
 }

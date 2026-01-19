@@ -9,7 +9,4 @@ namespace Core.Data {
 		[SerializeField] private LevelData levelData;
 		public LevelData GetLevelData() => levelData;
 	}
-
-	// IDEA ColorManager
-	// IDEA ColorDefinition and ColorDefinitionManager
 }

@@ -21,15 +21,16 @@ namespace Core.PathFinding.FlowFields {
 			if (IsVirtualExit(neighborCoord))
 				return true;
 
-			return grid.TryGetCell(neighborCoord, out LevelCell cell) && IsCellWalkable(cell);
+			bool cellFound = grid.TryGetCell(neighborCoord, out LevelCell cell);
+			return cellFound && IsCellWalkable(cell);
 		}
 
 		private bool IsVirtualExit(SquareCoord coord) {
 			if (targetCoord.x == grid.GetGridSize().x || targetCoord.x == -1)
-				return coord.x == targetCoord.x;
+				return coord.x == targetCoord.x && coord.y > -1 && coord.y < grid.GetGridSize().y;
 
 			if (targetCoord.y == grid.GetGridSize().y || targetCoord.y == -1)
-				return coord.y == targetCoord.y;
+				return coord.y == targetCoord.y && coord.x > -1 && coord.x < grid.GetGridSize().x;
 
 			return false;
 		}
