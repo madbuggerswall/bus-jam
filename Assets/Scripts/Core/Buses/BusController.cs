@@ -5,12 +5,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Buses {
-	public interface IBusController {
-		public void PlaySpawnToStartTween(Bus bus);
-		public void PlayStartToStopTween(Bus bus);
-		public void PlayStopToExitTween(Bus bus);
-	}
-
 	public class BusController : MonoBehaviour, IInitializable, IBusController {
 		[SerializeField] private Transform spawnPoint;
 		[SerializeField] private Transform startPoint;

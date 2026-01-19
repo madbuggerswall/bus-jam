@@ -8,18 +8,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Levels {
-	public interface IGridBehaviourProvider {
-		public LevelGridBehaviour GetGridBehaviour();
-	}
-
-	public interface IGridProvider {
-		public LevelGrid GetGrid();
-	}
-
-	public interface ILevelLoader {
-		public LevelData GetLevelData();
-	}
-
 	public class LevelLoader : MonoBehaviour, IInitializable, ILevelLoader, IGridBehaviourProvider, IGridProvider {
 		[SerializeField] private LevelDefinition defaultLevelDefinition;
 

@@ -37,24 +37,4 @@ namespace Core.PathFinding {
 			return flowField.IsTargetReachable(sourceCoord);
 		}
 	}
-
-	public class LevelGridManager : IInitializable, IGridBehaviourProvider, IGridProvider {
-		private LevelGrid grid;
-		private LevelGridBehaviour gridBehaviour;
-
-		// Services
-		private ILevelLoader levelLoader;
-
-		void IInitializable.Initialize() {
-			throw new System.NotImplementedException();
-		}
-
-		LevelGridBehaviour IGridBehaviourProvider.GetGridBehaviour() {
-			throw new System.NotImplementedException();
-		}
-
-		LevelGrid IGridProvider.GetGrid() {
-			throw new System.NotImplementedException();
-		}
-	}
 }

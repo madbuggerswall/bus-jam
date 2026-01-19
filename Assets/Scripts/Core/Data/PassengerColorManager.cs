@@ -3,10 +3,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Data {
-	public interface IPassengerColorManager {
-		public Material GetMaterial(PassengerColor color);
-	}
-
 	public class PassengerColorManager : MonoBehaviour, IInitializable, IPassengerColorManager {
 		[SerializeField] private Material blue;
 		[SerializeField] private Material brown;

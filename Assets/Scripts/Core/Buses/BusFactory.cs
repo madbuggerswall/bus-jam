@@ -5,10 +5,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Buses {
-	public interface IBusFactory {
-		public Bus CreateBus(BusData busData);
-	}
-
 	public class BusFactory : MonoBehaviour, IInitializable, IBusFactory {
 		[SerializeField] private Transform busRoot;
 		[SerializeField] private Transform spawnPoint;
