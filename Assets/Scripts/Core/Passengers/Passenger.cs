@@ -5,19 +5,24 @@ using UnityEngine;
 namespace Core.Passengers {
 	public class Passenger : GridElement {
 		[SerializeField] private MeshRenderer meshRenderer;
+		[SerializeField] private Transform meshTransform;
 
 		private PassengerColor color;
-		private PassengerController controller;
+		private PassengerTweenHelper tweenHelper;
+		private bool isReserved;
 
 		public void Initialize(PassengerColor color, Material material) {
 			meshRenderer.sharedMaterial = material;
 			this.color = color;
-			controller = new PassengerController(this);
+			tweenHelper = new PassengerTweenHelper(this);
 		}
 
 		public PassengerColor GetColor() { return color; }
-		public PassengerController GetController() { return controller; }
+		public PassengerTweenHelper GetTweenHelper() { return tweenHelper; }
+		public Transform GetMeshTransform() => meshTransform;
 	}
+
+	public class ReservedPassenger : Passenger { }
 
 	// IDEA Rename to PassengerTweenHelper
 }

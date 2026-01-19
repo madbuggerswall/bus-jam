@@ -40,6 +40,6 @@ namespace Core.Waiting.Grids {
 		}
 
 		WaitingGridBehaviour IWaitingGridBehaviourProvider.GetWaitingGridBehaviour() => gridBehaviour;
-		WaitingGrid IWaitingGridProvider.GetWaitingGrid() => grid;
+		WaitingGrid IWaitingGridProvider.GetGrid() => grid;
 	}
 }

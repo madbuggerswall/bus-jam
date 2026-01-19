@@ -6,6 +6,7 @@ using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
+using Core.Waiting;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using UnityEngine;
@@ -32,9 +33,12 @@ namespace Core.Contexts {
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 
 			Bind<PathFinder>().To<IPathFinder>();
+			Bind<PassengerController>().To<IPassengerController>();
 			Bind<BusController>().To<IBusController>();
-			Bind<BusManager>();
-
+			Bind<BusManager>().To<IBusManager>();
+			// Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
+			Bind<RuleManager>();
+			
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();
 			Bind<PassengerClickHandler>();
 		}

@@ -5,7 +5,12 @@ using Frolics.Contexts;
 using Frolics.Utilities;
 
 namespace Core.Buses {
-	public class BusManager : IInitializable {
+	public interface IBusManager {
+		public Bus GetCurrentBus();
+		public void OnBusFill();
+	}
+
+	public class BusManager : IInitializable, IBusManager {
 		private BusData[] busDTOs;
 		private int currentIndex = 0;
 
@@ -35,13 +40,23 @@ namespace Core.Buses {
 			nextBus = busFactory.CreateBus(nextBusData);
 			busController.PlaySpawnToStartTween(nextBus);
 		}
-
-		public void TryMountPassenger(Passenger passenger) { }
-
-		public void OnBusFill() {
+		
+		void IBusManager.OnBusFill() {
 			currentBus = nextBus;
+			busController.PlayStartToStopTween(currentBus);
+
+			BusData nextBusData = busDTOs[currentIndex++];
+			nextBus = busFactory.CreateBus(nextBusData);
+			
+			// TODO Wait for last passenger
+			busController.PlaySpawnToStartTween(nextBus);
 		}
 
-		public Bus GetCurrentBus() => currentBus;
+		private void GetNextBus() {
+			BusData nextBusData = busDTOs[currentIndex++];
+			
+		}
+
+		Bus IBusManager.GetCurrentBus() => currentBus;
 	}
 }

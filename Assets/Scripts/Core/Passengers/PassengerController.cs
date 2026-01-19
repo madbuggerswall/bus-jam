@@ -1,30 +1,57 @@
 using System.Collections.Generic;
 using Core.LevelGrids;
+using Core.PathFinding;
+using Core.Waiting.Grids;
+using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
-using Frolics.Tweens.Core;
-using Frolics.Tweens.Easing;
-using Frolics.Tweens.Extensions;
+using Frolics.Utilities;
+using UnityEngine;
 
 namespace Core.Passengers {
-	public class PassengerController {
-		private readonly Passenger passenger;
+	public class PassengerController : MonoBehaviour, IInitializable, IPassengerController {
+		[SerializeField] private Transform busMountPoint;
 
-		public PassengerController(Passenger passenger) {
-			this.passenger = passenger;
+		// Services
+		private ILevelGridProvider gridProvider;
+		private IWaitingGridProvider waitingGridProvider;
+		private IPathFinder pathFinder;
+
+		void IInitializable.Initialize() {
+			gridProvider = Context.Resolve<ILevelGridProvider>();
+			waitingGridProvider = Context.Resolve<IWaitingGridProvider>();
+			pathFinder = Context.Resolve<IPathFinder>();
 		}
 
-		public void PlayPathTween(LevelGrid grid, List<SquareCoord> coords) {
-			passenger.transform.position = grid.ToWorldPosition(coords[0]);
-			Sequence sequence = Sequence.Create();
-			
-			for (int i = 1; i < coords.Count; i++) {
-				Tween positionTween = passenger.transform.TweenPosition(grid.ToWorldPosition(coords[i]), 0.25f);
-				positionTween.SetEase(i == 0 ? Ease.Type.InQuad : Ease.Type.Linear);
-				
-				sequence.Append(positionTween);
-			}
+		void IPassengerController.PlayWaitingToBus(Passenger passenger) {
+			List<Vector3> positions = new();
+			positions.Add(passenger.transform.position);
+			positions.Add(busMountPoint.position);
+			passenger.GetTweenHelper().PlayPathTween(positions);
+		}
 
-			sequence.Play();
+		void IPassengerController.PlayGridToBus(Passenger passenger, LevelCell cell) {
+			List<SquareCoord> coords = pathFinder.GetPath(cell.GetCoord());
+			List<Vector3> positions = new();
+			LevelGrid grid = gridProvider.GetGrid();
+
+			for (int i = 0; i < coords.Count; i++)
+				positions.Add(grid.ToWorldPosition(coords[i]));
+
+			positions.Add(busMountPoint.position);
+			passenger.GetTweenHelper().PlayPathTween(positions);
+		}
+
+		void IPassengerController.PlayGridToWaiting(Passenger passenger, LevelCell cell, WaitingCell waitingCell) {
+			List<SquareCoord> coords = pathFinder.GetPath(cell.GetCoord());
+			List<Vector3> positions = new();
+			LevelGrid grid = gridProvider.GetGrid();
+			WaitingGrid waitingGrid = waitingGridProvider.GetGrid();
+
+			for (int i = 0; i < coords.Count; i++)
+				positions.Add(grid.ToWorldPosition(coords[i]));
+
+			positions.Add(waitingGrid.GetWorldPosition(waitingCell));
+			passenger.GetTweenHelper().PlayPathTween(positions);
 		}
 	}
 }

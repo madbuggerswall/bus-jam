@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Core.GridElements;
-using Core.LevelGrids;
 using Core.Passengers;
 using Frolics.Grids;
 using Frolics.Grids.SpatialHelpers;
@@ -24,32 +22,60 @@ namespace Core.Waiting.Grids {
 			this.pivotPoint = pivotPoint;
 		}
 
-		public bool CanPlaceElementAtCell(LevelCell pivotCell, GridElement element) {
-			SquareCoord[] coords = element.GetSquareCoords();
-			SquareCoord pivotCoord = pivotCell.GetCoord();
+		public bool HasEmptyCells() {
+			WaitingCell[] cells = GetCells();
+			for (int i = 0; i < cells.Length; i++)
+				if (!cells[i].HasPassenger())
+					return true;
 
-			for (int i = 0; i < coords.Length; i++)
-				if (!TryGetCell(pivotCoord + coords[i], out WaitingCell cell) || cell.HasPassenger())
-					return false;
-
-			return true;
+			return false;
 		}
 
-		public void PlacePassengerAtCell(WaitingCell pivotCell, Passenger passenger) {
-			SquareCoord pivotCoord = pivotCell.GetCoord();
-			SquareCoord[] coords = passenger.GetSquareCoords();
+		public bool TryPlacePassenger(Passenger passenger, out WaitingCell cell) {
+			WaitingCell[] cells = GetCells();
+			for (int i = 0; i < cells.Length; i++) {
+				if (cells[i].HasPassenger())
+					continue;
 
-			for (int i = 0; i < coords.Length; i++)
-				if (TryGetCell(pivotCoord + coords[i], out WaitingCell cell))
-					cell.SetPassenger(passenger);
+				cell = cells[i];
+				cell.SetPassenger(passenger);
+				passengers.Add(passenger, cell);
 
-			if (!passengers.TryAdd(passenger, pivotCell))
-				throw new InvalidOperationException("Element already exists");
+				return true;
+			}
+
+			cell = null;
+			return false;
 		}
+
+		// public void PlaceToNextEmptyCell(Passenger passenger) { }
+
+		// public bool CanPlaceElementAtCell(LevelCell pivotCell, GridElement element) {
+		// 	SquareCoord[] coords = element.GetSquareCoords();
+		// 	SquareCoord pivotCoord = pivotCell.GetCoord();
+		//
+		// 	for (int i = 0; i < coords.Length; i++)
+		// 		if (!TryGetCell(pivotCoord + coords[i], out WaitingCell cell) || cell.HasPassenger())
+		// 			return false;
+		//
+		// 	return true;
+		// }
+
+		// public void PlacePassengerAtCell(WaitingCell pivotCell, Passenger passenger) {
+		// 	SquareCoord pivotCoord = pivotCell.GetCoord();
+		// 	SquareCoord[] coords = passenger.GetSquareCoords();
+		//
+		// 	for (int i = 0; i < coords.Length; i++)
+		// 		if (TryGetCell(pivotCoord + coords[i], out WaitingCell cell))
+		// 			cell.SetPassenger(passenger);
+		//
+		// 	if (!passengers.TryAdd(passenger, pivotCell))
+		// 		throw new InvalidOperationException("Element already exists");
+		// }
 
 		public void RemovePassenger(Passenger passenger) {
 			if (!passengers.Remove(passenger, out WaitingCell pivotCell))
-				throw new InvalidOperationException("Element does not exist");
+				throw new InvalidOperationException("Passenger does not exist");
 
 			RemoveElement(passenger, pivotCell);
 		}
