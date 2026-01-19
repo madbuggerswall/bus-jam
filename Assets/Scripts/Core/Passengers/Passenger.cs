@@ -32,17 +32,14 @@ namespace Core.Passengers {
 		public PassengerController(Passenger passenger) {
 			this.passenger = passenger;
 		}
-		
+
 		public void PlayPathTween(LevelGrid grid, List<SquareCoord> coords) {
 			Sequence sequence = Sequence.Create();
 
 			for (int i = 0; i < coords.Count; i++) {
-				SquareCoord worldCoord = grid.ToWorldCoord(coords[i]);
-				Vector3 worldPosition = grid.ToWorldPosition(worldCoord);
-
+				Vector3 worldPosition = grid.ToWorldPosition(coords[i]);
 				Tween positionTween = passenger.transform.TweenPosition(worldPosition, 0.5f);
 				positionTween.SetEase(i == 0 ? Ease.Type.InQuad : Ease.Type.Linear);
-
 				sequence.Append(positionTween);
 			}
 

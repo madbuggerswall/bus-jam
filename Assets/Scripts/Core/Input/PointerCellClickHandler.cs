@@ -44,7 +44,7 @@ namespace Core.Input {
 			if (cell.GetGridElement() is not Passenger passenger)
 				return;
 
-			if (!pathFinder.IsTargetReachable()) 
+			if (!pathFinder.IsTargetReachable(cell.GetCoord())) 
 				return;
 			
 			bool colorMatch = passenger.GetColor() == busManager.GetCurrentBus().GetColor();

@@ -100,11 +100,13 @@ namespace Core.PathFinding.FlowFields {
 			List<SquareCoord> path = new();
 
 			// unreachable
-			if (!distanceMap.ContainsKey(sourceCoord))
+			if (!IsTargetReachable(sourceCoord))
 				return path;
-
+			
+			path.Add(sourceCoord);
 			int maxSteps = grid.GetGridSize().x * grid.GetGridSize().y * maxStepsMultiplier;
-			SquareCoord currentCoord = sourceCoord;
+			SquareCoord currentCoord = GetNearestNeighbor(sourceCoord);
+
 			for (int i = 0; i < maxSteps; i++) {
 				path.Add(currentCoord);
 
@@ -121,12 +123,35 @@ namespace Core.PathFinding.FlowFields {
 
 			return path;
 		}
+		
+		private SquareCoord GetNearestNeighbor(SquareCoord sourceCoord) {
+			SquareCoord nearest = sourceCoord;
+			int shortestDistance = int.MaxValue;
+
+			for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++) {
+				SquareCoord neighborCoord = sourceCoord + SquareCoord.DirectionVectors[i];
+				if (!distanceMap.TryGetValue(neighborCoord, out int distance) || distance >= shortestDistance)
+					continue;
+
+				shortestDistance = distance;
+				nearest = neighborCoord;
+			}
+
+			return nearest;
+		}
 
 		// Checks whether a LevelCell is walkable (not blocked by element and marked reachable).
 		protected static bool IsCellWalkable(LevelCell cell) {
 			return !cell.HasElement() && cell.IsReachable();
 		}
 
-		public bool IsTargetReachable(SquareCoord coord) => distanceMap.ContainsKey(coord);
+		public bool IsTargetReachable(SquareCoord coord) {
+			for (int i = 0; i < SquareCoord.DirectionVectors.Length; i++)
+				if (distanceMap.TryGetValue(coord + SquareCoord.DirectionVectors[i], out _))
+					return true;
+
+			return distanceMap.ContainsKey(coord);
+		}
+
 	}
 }

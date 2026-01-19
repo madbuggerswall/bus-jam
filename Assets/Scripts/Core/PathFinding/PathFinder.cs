@@ -33,8 +33,8 @@ namespace Core.PathFinding {
 			return flowField.GetPath(sourceCoord);
 		}
 
-		bool IPathFinder.IsTargetReachable() {
-			return flowField.IsTargetReachable(targetCoord);
+		bool IPathFinder.IsTargetReachable(SquareCoord sourceCoord) {
+			return flowField.IsTargetReachable(sourceCoord);
 		}
 	}
 

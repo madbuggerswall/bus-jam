@@ -5,6 +5,6 @@ namespace Core.PathFinding {
 	public interface IPathFinder {
 		public void OnGridModified();
 		public List<SquareCoord> GetPath(SquareCoord sourceCoord);
-		public bool IsTargetReachable();
+		public bool IsTargetReachable(SquareCoord sourceCoord);
 	}
 }
