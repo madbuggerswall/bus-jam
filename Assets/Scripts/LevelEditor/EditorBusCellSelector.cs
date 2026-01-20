@@ -8,7 +8,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public class EditorBusCellSelector : IInitializable {
+	public interface IEditorBusCellSelector {
+		public BusCell GetSelectedCell();
+	}
+
+	public class EditorBusCellSelector : IInitializable, IEditorBusCellSelector {
 		private BusCell selectedCell;
 
 		// Services
@@ -33,16 +37,23 @@ namespace LevelEditor {
 		}
 
 		private void OnPrimaryPress(Vector2 pointerPosition) {
-			Ray ray = cameraProvider.GetMainCamera().ScreenPointToRay(pointerPosition);
-			if (!Physics.Raycast(ray, out RaycastHit hit))
-				return;
-
-			if (!cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out BusCellBehaviour cellBehaviour))
-				return;
-
-			selectedCell = cellBehaviour.GetCell();
+			TrySelectCell(pointerPosition, out selectedCell);
 		}
 
-		public BusCell GetSelectedCell() => selectedCell;
+		private bool TrySelectCell(Vector2 pointerPosition, out BusCell cell) {
+			cell = null;
+
+			Ray ray = cameraProvider.GetMainCamera().ScreenPointToRay(pointerPosition);
+			if (!Physics.Raycast(ray, out RaycastHit hit))
+				return false;
+
+			if (!cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out BusCellBehaviour cellBehaviour))
+				return false;
+
+			cell = cellBehaviour.GetCell();
+			return true;
+		}
+
+		BusCell IEditorBusCellSelector.GetSelectedCell() => selectedCell;
 	}
 }

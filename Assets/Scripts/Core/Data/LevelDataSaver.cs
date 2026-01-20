@@ -6,9 +6,11 @@ using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
 using Frolics.Utilities;
 using LevelEditor;
+using LevelEditor.BusGrids;
+using UnityEngine;
 
 namespace Core.Data {
-	public class LevelDataSaver : IInitializable {
+	public class LevelDataSaver : IInitializable, ILevelDataSaver {
 		// Services
 		private ILevelGridProvider levelGridProvider;
 		private IWaitingGridProvider waitingGridProvider;
@@ -22,24 +24,72 @@ namespace Core.Data {
 			levelTimeProvider = Context.Resolve<ILevelTimeProvider>();
 		}
 
-		public void Save() { }
+		LevelDTO ILevelDataSaver.SaveLevelData() {
+			Vector2Int levelGridSize = levelGridProvider.GetGrid().GetGridSize();
+			Vector2Int waitingGridSize = waitingGridProvider.GetGrid().GetGridSize();
+			float levelTime = levelTimeProvider.GetLevelTime();
+			CellDTO[] cellDTOs = SaveCellData();
+			PassengerDTO[] passengerDTOs = SavePassengerData();
+			BusDTO[] busDTOs = SaveBusData();
 
-		private void PassengerDataStuff() {
+			return new LevelDTO(levelGridSize, waitingGridSize, levelTime, cellDTOs, passengerDTOs, busDTOs);
+		}
+
+		private CellDTO[] SaveCellData() {
+			List<CellDTO> cellDTOs = new();
+			LevelGrid grid = levelGridProvider.GetGrid();
+			LevelCell[] cells = grid.GetCells();
+
+			for (int i = 0; i < cells.Length; i++) {
+				LevelCell cell = cells[i];
+
+				SquareCoord localCoord = cell.GetCoord();
+				bool isEmpty = !cell.IsReachable();
+				CellDTO cellDTO = new(localCoord, isEmpty);
+				cellDTOs.Add(cellDTO);
+			}
+
+			return cellDTOs.ToArray();
+		}
+
+		private PassengerDTO[] SavePassengerData() {
 			List<PassengerDTO> passengerDTOs = new();
 			LevelGrid grid = levelGridProvider.GetGrid();
 			LevelCell[] cells = grid.GetCells();
-			
+
 			for (int i = 0; i < cells.Length; i++) {
-				LevelCell cell =  cells[i];
-				if(!cell.HasElement())
+				LevelCell cell = cells[i];
+				if (!cell.HasElement() || cell.GetGridElement() is not Passenger passenger)
 					continue;
 
-				if (cell.GetGridElement() is Passenger passenger) {
-					ColorDefinition colorDefinition = passenger.GetColorDefinition();
-					SquareCoord localCoord = cell.GetCoord();
-				}
-				
+				SquareCoord localCoord = cell.GetCoord();
+				ColorDefinition colorDefinition = passenger.GetColorDefinition();
+				PassengerDefinition passengerDefinition = passenger.GetPassengerDefinition();
+				PassengerDTO passengerDTO = new(localCoord, colorDefinition, passengerDefinition);
+				passengerDTOs.Add(passengerDTO);
 			}
+
+			return passengerDTOs.ToArray();
+		}
+
+		private BusDTO[] SaveBusData() {
+			List<BusDTO> busDTOs = new();
+			BusGrid busGrid = busGridProvider.GetGrid();
+			BusCell[] cells = busGrid.GetCells();
+
+			for (int i = 0; i < cells.Length; i++) {
+				BusCell cell = cells[i];
+				if (!cell.HasBus())
+					continue;
+
+				EditorBus bus = cell.GetBus();
+				ColorDefinition colorDefinition = bus.GetColorDefinition();
+				int reservedCount = bus.GetReservedCount();
+				BusDTO busDTO = new BusDTO(colorDefinition, reservedCount);
+				busDTOs.Add(busDTO);
+			}
+
+			return busDTOs.ToArray();
 		}
 	}
 }

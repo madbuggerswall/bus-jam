@@ -7,6 +7,11 @@ namespace Core.Data {
 		[SerializeField] private ColorDefinition colorDefinition;
 		[SerializeField] private int reservedCount;
 
+		public BusDTO(ColorDefinition colorDefinition, int reservedCount) {
+			this.colorDefinition = colorDefinition;
+			this.reservedCount = reservedCount;
+		}
+
 		public ColorDefinition GetColorDefinition() => colorDefinition;
 		public int GetReservedCount() => reservedCount;
 	}

@@ -11,9 +11,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public class CellElementSpawner : MonoBehaviour, IInitializable {
+	public class EditorElementSpawner : MonoBehaviour, IInitializable {
 		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
 		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
+		[SerializeField] private ColorDefinition defaultColorDefinition;
 
 		private Dictionary<Key, ColorDefinition> colorMap;
 		private Dictionary<Key, GridElement> prefabMap;
@@ -22,13 +23,13 @@ namespace LevelEditor {
 		private IInputManager inputManager;
 		private IGridElementFactory elementFactory;
 		private ILevelGridProvider levelGridProvider;
-		private EditorLevelCellSelector cellSelector;
+		private IEditorLevelCellSelector cellSelector;
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
 			elementFactory = Context.Resolve<IGridElementFactory>();
 			levelGridProvider = Context.Resolve<ILevelGridProvider>();
-			cellSelector = Context.Resolve<EditorLevelCellSelector>();
+			cellSelector = Context.Resolve<IEditorLevelCellSelector>();
 
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
 			InitializeColorMap();
@@ -57,8 +58,8 @@ namespace LevelEditor {
 			if (colorMap.TryGetValue(keyData.KeyControl.keyCode, out ColorDefinition colorDefinition)) {
 				ColorElement(colorDefinition);
 			}
-			
-			if(keyData.KeyControl.keyCode == Key.Backspace) {
+
+			if (keyData.KeyControl.keyCode == Key.Backspace) {
 				DeleteElement();
 			}
 		}
@@ -71,14 +72,16 @@ namespace LevelEditor {
 			if (selectedCell.HasElement())
 				return;
 
-			elementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
+			GridElement element = elementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
+			if (element is IColorable colorable)
+				colorable.SetColorDefinition(defaultColorDefinition);
 		}
 
 		private void DeleteElement() {
 			LevelCell selectedCell = cellSelector.GetSelectedCell();
 			if (selectedCell == null)
 				return;
-			
+
 			if (!selectedCell.HasElement())
 				return;
 

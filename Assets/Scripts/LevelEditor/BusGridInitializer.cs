@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace LevelEditor {
 	public class BusGridInitializer : MonoBehaviour, IInitializable, IBusGridBehaviourProvider, IBusGridProvider {
-		[SerializeField] private Vector2Int gridSize;
+		[SerializeField] private Vector2Int gridSize = new Vector2Int(8, 2);
 
 		private BusGrid grid;
 		private BusGridBehaviour gridBehaviour;
@@ -21,11 +21,6 @@ namespace LevelEditor {
 			gridBehaviourFactory = Context.Resolve<IBusGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<IBusCellBehaviourFactory>();
 			cellBehaviourMapper = Context.Resolve<IEditorBusCellBehaviourMapper>();
-
-			// Create Grid & GridBehaviour
-			// gridBehaviour = gridBehaviourFactory.Create();
-			// grid = CreateLevelGrid();
-			// cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 		}
 
 		private BusGrid CreateBusGrid() {
@@ -41,19 +36,24 @@ namespace LevelEditor {
 		BusGrid IBusGridProvider.GetGrid() => grid;
 
 		[ContextMenu("Create Grid")]
-		private void CreateGrid() {
-			if (gridBehaviour != null) {
-				List<BusCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
-				for (int index = 0; index < cellBehaviours.Count; index++)
-					cellBehaviourFactory.Despawn(cellBehaviours[index]);
-
-				gridBehaviourFactory.Despawn(gridBehaviour);
-			}
+		public void CreateGrid() {
+			DespawnFormerGrid();
 
 			gridBehaviour = gridBehaviourFactory.Create();
 			grid = CreateBusGrid();
 			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 			cellBehaviourMapper.MapCellBehavioursByCollider();
+		}
+
+		private void DespawnFormerGrid() {
+			if (gridBehaviour == null)
+				return;
+
+			List<BusCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
+			for (int index = 0; index < cellBehaviours.Count; index++)
+				cellBehaviourFactory.Despawn(cellBehaviours[index]);
+
+			gridBehaviourFactory.Despawn(gridBehaviour);
 		}
 	}
 }

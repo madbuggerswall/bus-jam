@@ -31,7 +31,7 @@ namespace Core.Passengers.Types {
 
 		private void PlayCloakTween() {
 			const float duration = 0.5f;
-			float targetScale = isSecret ? 1f : 0f;
+			float targetScale = isSecret ? 1f : 0.2f;
 
 			Tween tween = secretTransform.TweenLocalScaleY(targetScale, duration);
 			tween.SetEase(Ease.Type.InOutQuad);

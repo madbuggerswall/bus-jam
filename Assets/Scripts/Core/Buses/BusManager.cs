@@ -39,7 +39,7 @@ namespace Core.Buses {
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
 			pathFinder = Context.Resolve<IPathFinder>();
 
-			busDTOs = levelLoader.GetLevelData().GetBuses();
+			busDTOs = levelLoader.GetLevelData().GetBusDTOs();
 
 			// Init
 			BusDTO currentBusDTO = busDTOs[currentIndex++];

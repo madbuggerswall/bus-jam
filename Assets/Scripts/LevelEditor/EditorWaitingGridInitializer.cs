@@ -10,7 +10,7 @@ namespace LevelEditor {
 		IInitializable,
 		IWaitingGridBehaviourProvider,
 		IWaitingGridProvider {
-		[SerializeField] private Vector2Int gridSize;
+		[SerializeField] private Vector2Int gridSize = new Vector2Int(7, 1);
 
 		private WaitingGrid grid;
 		private WaitingGridBehaviour gridBehaviour;
@@ -22,11 +22,6 @@ namespace LevelEditor {
 		void IInitializable.Initialize() {
 			gridBehaviourFactory = Context.Resolve<IWaitingGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<IWaitingCellBehaviourFactory>();
-
-			// Create Grid & GridBehaviour
-			// gridBehaviour = gridBehaviourFactory.Create();
-			// grid = CreateGrid();
-			// cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 		}
 
 		private WaitingGrid CreateWaitingGrid() {
@@ -41,20 +36,25 @@ namespace LevelEditor {
 
 		WaitingGridBehaviour IWaitingGridBehaviourProvider.GetWaitingGridBehaviour() => gridBehaviour;
 		WaitingGrid IWaitingGridProvider.GetGrid() => grid;
-		
-		[ContextMenu("Create Grid")]
-		private void CreateGrid() {
-			if (gridBehaviour != null) {
-				List<WaitingCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
-				for (int index = 0; index < cellBehaviours.Count; index++)
-					cellBehaviourFactory.Despawn(cellBehaviours[index]);
 
-				gridBehaviourFactory.Despawn(gridBehaviour);
-			}
+		[ContextMenu("Create Grid")]
+		public void CreateGrid() {
+			DespawnFormerGrid();
 
 			gridBehaviour = gridBehaviourFactory.Create();
 			grid = CreateWaitingGrid();
 			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
+		}
+
+		private void DespawnFormerGrid() {
+			if (gridBehaviour == null)
+				return;
+
+			List<WaitingCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
+			for (int index = 0; index < cellBehaviours.Count; index++)
+				cellBehaviourFactory.Despawn(cellBehaviours[index]);
+
+			gridBehaviourFactory.Despawn(gridBehaviour);
 		}
 	}
 }

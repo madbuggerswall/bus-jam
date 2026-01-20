@@ -11,9 +11,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public class CellEditorBusSpawner : MonoBehaviour, IInitializable {
+	public class EditorBusSpawner : MonoBehaviour, IInitializable {
 		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
 		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
+		[SerializeField] private ColorDefinition defaultColorDefinition;
 
 		private Dictionary<Key, ColorDefinition> colorMap;
 		private Dictionary<Key, GridElement> prefabMap;
@@ -22,13 +23,13 @@ namespace LevelEditor {
 		private IInputManager inputManager;
 		private IEditorBusFactory editorBusFactory;
 		private IBusGridProvider busGridProvider;
-		private EditorBusCellSelector cellSelector;
+		private IEditorBusCellSelector cellSelector;
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
 			editorBusFactory = Context.Resolve<IEditorBusFactory>();
 			busGridProvider = Context.Resolve<IBusGridProvider>();
-			cellSelector = Context.Resolve<EditorBusCellSelector>();
+			cellSelector = Context.Resolve<IEditorBusCellSelector>();
 
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
 			InitializeColorMap();
@@ -71,7 +72,8 @@ namespace LevelEditor {
 			if (selectedCell.HasBus())
 				return;
 
-			editorBusFactory.Create(prefab as EditorBus, busGridProvider.GetGrid(), selectedCell);
+			EditorBus bus = editorBusFactory.Create(prefab as EditorBus, busGridProvider.GetGrid(), selectedCell);
+			bus.SetColorDefinition(defaultColorDefinition);
 		}
 
 		private void DeleteElement() {

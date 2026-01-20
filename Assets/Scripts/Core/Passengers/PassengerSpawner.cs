@@ -27,8 +27,8 @@ namespace Core.Passengers {
 		}
 
 		public void SpawnPassengers() {
-			LevelData levelData = levelLoader.GetLevelData();
-			PassengerDTO[] passengerDTOs = levelData.GetPassengers();
+			LevelDTO levelDTO = levelLoader.GetLevelData();
+			PassengerDTO[] passengerDTOs = levelDTO.GetPassengerDTOs();
 			LevelGrid grid = gridProvider.GetGrid();
 
 			for (int i = 0; i < passengerDTOs.Length; i++) {

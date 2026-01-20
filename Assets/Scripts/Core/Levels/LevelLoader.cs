@@ -8,6 +8,6 @@ namespace Core.Levels {
 
 		void IInitializable.Initialize() { }
 		
-		LevelData ILevelLoader.GetLevelData() => defaultLevelDefinition.GetLevelData();
+		LevelDTO ILevelLoader.GetLevelData() => defaultLevelDefinition.GetLevelDTO();
 	}
 }

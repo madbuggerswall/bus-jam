@@ -10,8 +10,7 @@ namespace Core.LevelGrids {
 		public LevelCell(SquareCoord coordinate) : base(coordinate) {
 			isReachable = true;
 		}
-
-
+		
 		public bool IsReachable() => isReachable;
 		public bool HasElement() => element is not null;
 

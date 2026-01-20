@@ -30,9 +30,9 @@ namespace Core.LevelGrids {
 			const GridPlane gridPlane = GridPlane.XZ;
 			const float cellDiameter = 1f;
 
-			LevelData levelData = levelLoader.GetLevelData();
-			Vector2Int gridSize = levelData.GetGridSize();
-			CellDTO[] cellDTOs = levelData.GetCells();
+			LevelDTO levelDTO = levelLoader.GetLevelData();
+			Vector2Int gridSize = levelDTO.GetGridSize();
+			CellDTO[] cellDTOs = levelDTO.GetCellDTOs();
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y);
 			LevelGrid grid = new(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
@@ -40,7 +40,7 @@ namespace Core.LevelGrids {
 			// Set empty cells
 			for (int i = 0; i < cellDTOs.Length; i++)
 				if (grid.TryGetCell(cellDTOs[i].GetLocalCoord(), out LevelCell cell))
-					cell.SetReachable(cellDTOs[i].GetCellType() is not CellType.Empty);
+					cell.SetReachable(!cellDTOs[i].IsEmpty());
 
 			return grid;
 		}

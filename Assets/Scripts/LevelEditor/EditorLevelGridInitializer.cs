@@ -10,7 +10,7 @@ namespace LevelEditor {
 		IInitializable,
 		ILevelGridBehaviourProvider,
 		ILevelGridProvider {
-		[SerializeField] private Vector2Int gridSize;
+		[SerializeField] private Vector2Int gridSize = new Vector2Int(6, 6);
 
 		private LevelGrid grid;
 		private LevelGridBehaviour gridBehaviour;
@@ -24,11 +24,6 @@ namespace LevelEditor {
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
 			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
-
-			// Create Grid & GridBehaviour
-			// gridBehaviour = gridBehaviourFactory.Create();
-			// grid = CreateLevelGrid();
-			// cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 		}
 
 		private LevelGrid CreateLevelGrid() {
@@ -44,20 +39,24 @@ namespace LevelEditor {
 		LevelGrid ILevelGridProvider.GetGrid() => grid;
 
 		[ContextMenu("Create Grid")]
-		private void CreateGrid() {
-			if (gridBehaviour != null) {
-				List<LevelCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
-				for (int index = 0; index < cellBehaviours.Count; index++)
-					cellBehaviourFactory.Despawn(cellBehaviours[index]);
-
-				gridBehaviourFactory.Despawn(gridBehaviour);
-			}
+		public void CreateGrid() {
+			DespawnFormerGrid();
 
 			gridBehaviour = gridBehaviourFactory.Create();
 			grid = CreateLevelGrid();
 			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 			cellBehaviourMapper.MapCellBehavioursByCollider();
 		}
-	}
 
+		private void DespawnFormerGrid() {
+			if (gridBehaviour == null)
+				return;
+
+			List<LevelCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
+			for (int index = 0; index < cellBehaviours.Count; index++)
+				cellBehaviourFactory.Despawn(cellBehaviours[index]);
+
+			gridBehaviourFactory.Despawn(gridBehaviour);
+		}
+	}
 }

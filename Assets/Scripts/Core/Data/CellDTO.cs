@@ -5,10 +5,15 @@ using UnityEngine;
 namespace Core.Data {
 	[Serializable]
 	public struct CellDTO {
-		[SerializeField] private CellType cellType;
+		[SerializeField] private bool isEmpty;
 		[SerializeField] private SquareCoord localCoord;
 
-		public CellType GetCellType() => cellType;
+		public CellDTO(SquareCoord localCoord, bool isEmpty) {
+			this.isEmpty = isEmpty;
+			this.localCoord = localCoord;
+		}
+
+		public bool IsEmpty() => isEmpty;
 		public SquareCoord GetLocalCoord() => localCoord;
 	}
 }

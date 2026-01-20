@@ -30,8 +30,8 @@ namespace Core.Waiting.Grids {
 			const GridPlane gridPlane = GridPlane.XZ;
 			const float cellDiameter = 1f;
 
-			LevelData levelData = levelLoader.GetLevelData();
-			Vector2Int gridSize = levelData.GetWaitingGridSize();
+			LevelDTO levelDTO = levelLoader.GetLevelData();
+			Vector2Int gridSize = levelDTO.GetWaitingGridSize();
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y / 2f + cellDiameter / 2);
 			WaitingGrid grid = new(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);

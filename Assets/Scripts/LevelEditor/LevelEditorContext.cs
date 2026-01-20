@@ -20,23 +20,28 @@ namespace LevelEditor {
 
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<EditorBusFactory>().To<IEditorBusFactory>();
-			// Bind<BusFactory>().To<IBusFactory>();
 
 			Bind<EditorLevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
 			Bind<EditorWaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
 			Bind<BusGridInitializer>().To<IBusGridBehaviourProvider>().To<IBusGridProvider>();
 
 			Bind<EditorCellBehaviourMapper>().To<IEditorCellBehaviourMapper>();
-			Bind<EditorLevelCellSelector>();
-			Bind<CellElementSpawner>();
+			Bind<EditorLevelCellSelector>().To<IEditorLevelCellSelector>();
+			Bind<EditorElementSpawner>();
 
 			Bind<EditorBusCellBehaviourMapper>().To<IEditorBusCellBehaviourMapper>();
-			Bind<EditorBusCellSelector>();
-			Bind<CellEditorBusSpawner>();
+			Bind<EditorBusCellSelector>().To<IEditorBusCellSelector>();
+			Bind<EditorBusSpawner>();
+
+			Bind<LevelDataSaver>().To<ILevelDataSaver>();
+			Bind<LevelDefinitionSaver>().To<ILevelDefinitionSaver>();
+			Bind<LevelTimeProvider>().To<ILevelTimeProvider>();
 		}
 
 		protected override void OnInitialized() {
-			// throw new System.NotImplementedException();
+			Resolve<EditorLevelGridInitializer>().CreateGrid();
+			Resolve<EditorWaitingGridInitializer>().CreateGrid();
+			Resolve<BusGridInitializer>().CreateGrid();
 		}
 	}
 }

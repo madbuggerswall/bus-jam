@@ -6,7 +6,9 @@ namespace Core.Data {
 		private const string MenuName = "Definition/Levels/" + FileName;
 		private const string FileName = nameof(LevelDefinition);
 
-		[SerializeField] private LevelData levelData;
-		public LevelData GetLevelData() => levelData;
+		[SerializeField] private LevelDTO levelDTO;
+
+		public void SetLevelDTO(LevelDTO levelDTO) => this.levelDTO = levelDTO;
+		public LevelDTO GetLevelDTO() => levelDTO;
 	}
 }
