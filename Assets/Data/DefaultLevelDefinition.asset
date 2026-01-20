@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelData:
     gridSize: {x: 4, y: 4}
-    waitingGridSize: {x: 5, y: 1}
+    waitingGridSize: {x: 7, y: 1}
     cells: []
     passengers:
     - localCoord:

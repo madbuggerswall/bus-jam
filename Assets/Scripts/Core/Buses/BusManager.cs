@@ -88,7 +88,6 @@ namespace Core.Buses {
 				arrivingBus = busFactory.CreateBus(nextBusData);
 			}
 
-
 			signalBus.Fire(new BussFullSignal(arrivingBus, currentBus, leavingBus));
 			BoardWaitingPassengers();
 		}

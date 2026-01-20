@@ -11,11 +11,9 @@ namespace Core.Buses {
 	public class TweenTimer : IInitializable {
 		private IPassengerController passengerController;
 		private IBusController busController;
-		private IBusManager busManager;
 		private ISignalBus signalBus;
-		private ILevelGridProvider levelGridProvider;
 
-		private Dictionary<Bus, int> waitingPassengersByBus;
+		private Dictionary<Bus, int> passengersBusWaits;
 		private Queue<WaitingPassengerBoardSignal> waitingPassengersQueue;
 		private Queue<BussFullSignal> busSequenceQueue;
 		private HashSet<Bus> busesToLeave;
@@ -23,11 +21,9 @@ namespace Core.Buses {
 		void IInitializable.Initialize() {
 			passengerController = Context.Resolve<IPassengerController>();
 			busController = Context.Resolve<IBusController>();
-			busManager = Context.Resolve<IBusManager>();
 			signalBus = Context.Resolve<ISignalBus>();
-			levelGridProvider = Context.Resolve<ILevelGridProvider>();
 
-			waitingPassengersByBus = new Dictionary<Bus, int>();
+			passengersBusWaits = new Dictionary<Bus, int>();
 			waitingPassengersQueue = new Queue<WaitingPassengerBoardSignal>();
 			busSequenceQueue = new Queue<BussFullSignal>();
 			busesToLeave = new HashSet<Bus>();
@@ -43,8 +39,8 @@ namespace Core.Buses {
 			Passenger passenger = signal.Passenger;
 			LevelCell cell = signal.Cell;
 
-			if (!waitingPassengersByBus.TryAdd(bus, 1))
-				waitingPassengersByBus[bus] += 1;
+			if (!passengersBusWaits.TryAdd(bus, 1))
+				passengersBusWaits[bus] += 1;
 
 			// TODO Try to avoid closure
 			Tween tween = passengerController.PlayGridToBus(passenger, cell);
@@ -52,16 +48,17 @@ namespace Core.Buses {
 		}
 
 		private void OnBoardTweenComplete(Bus bus) {
-			if (waitingPassengersByBus.ContainsKey(bus))
-				waitingPassengersByBus[bus] -= 1;
+			if (passengersBusWaits.ContainsKey(bus))
+				passengersBusWaits[bus] -= 1;
 
-			if (waitingPassengersByBus[bus] == 0 && busesToLeave.Contains(bus)) {
-				waitingPassengersByBus.Remove(bus);
+			if (passengersBusWaits[bus] == 0 && busesToLeave.Contains(bus)) {
+				passengersBusWaits.Remove(bus);
 				busesToLeave.Remove(bus);
 				BussFullSignal bussFullSignal = busSequenceQueue.Dequeue();
 				Bus arrivingBus = bussFullSignal.ArrivingBus;
 				Bus currentBus = bussFullSignal.CurrentBus;
 				Bus leavingBus = bussFullSignal.LeavingBus;
+
 				Tween tween = busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
 				tween.SetOnComplete(CheckWaitingQueue);
 			}
@@ -79,16 +76,27 @@ namespace Core.Buses {
 		}
 
 		private void CheckWaitingQueue() {
+			List<WaitingPassengerBoardSignal> requeueList = new();
 			while (waitingPassengersQueue.Count > 0) {
 				WaitingPassengerBoardSignal signal = waitingPassengersQueue.Dequeue();
 				Bus bus = signal.Bus;
 				Passenger passenger = signal.Passenger;
 
-				if (!waitingPassengersByBus.TryAdd(bus, 1))
-					waitingPassengersByBus[bus] += 1;
+				if (busSequenceQueue.TryPeek(out BussFullSignal bussFullSignal))
+					if (bussFullSignal.LeavingBus != bus) {
+						requeueList.Add(signal);
+						continue;
+					}
+
+				if (!passengersBusWaits.TryAdd(bus, 1))
+					passengersBusWaits[bus] += 1;
 
 				Tween tween = passengerController.PlayWaitingToBus(passenger);
 				tween.SetOnComplete(() => OnBoardTweenComplete(bus));
+			}
+
+			foreach (WaitingPassengerBoardSignal requeue in requeueList) {
+				waitingPassengersQueue.Enqueue(requeue);
 			}
 		}
 
