@@ -23,5 +23,9 @@ namespace Core.Waiting.Grids {
 				gridBehaviour.AddCellBehaviour(cellBehaviour);
 			}
 		}
+
+		void IWaitingCellBehaviourFactory.Despawn(WaitingCellBehaviour cellBehaviour) {
+			cellPool.Despawn(cellBehaviour);
+		}
 	}
 }

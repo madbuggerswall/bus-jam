@@ -16,8 +16,13 @@ namespace Core.Waiting.Grids {
 
 		WaitingGridBehaviour IWaitingGridBehaviourFactory.Create() {
 			WaitingGridBehaviour gridBehaviour = gridPool.Spawn(gridBehaviourPrefab, gridRoot);
+			gridBehaviour.Initialize();
 			gridBehaviour.transform.localPosition = Vector3.zero;
 			return gridBehaviour;
+		}
+		
+		void IWaitingGridBehaviourFactory.Despawn(WaitingGridBehaviour gridBehaviour) {
+			gridPool.Despawn(gridBehaviour);
 		}
 	}
 }

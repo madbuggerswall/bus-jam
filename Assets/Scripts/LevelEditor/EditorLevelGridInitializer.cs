@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Core.Data;
 using Core.LevelGrids;
+using Core.Levels;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;
@@ -16,21 +18,19 @@ namespace LevelEditor {
 		private LevelGridBehaviour gridBehaviour;
 
 		// Services
-		// private ILevelLoader levelLoader;
 		private ILevelGridBehaviourFactory gridBehaviourFactory;
 		private ILevelCellBehaviourFactory cellBehaviourFactory;
 		private IEditorCellBehaviourMapper cellBehaviourMapper;
 
 		void IInitializable.Initialize() {
-			// levelLoader = Context.Resolve<ILevelLoader>();
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
 			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
 
 			// Create Grid & GridBehaviour
-			gridBehaviour = gridBehaviourFactory.Create();
-			grid = CreateLevelGrid();
-			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
+			// gridBehaviour = gridBehaviourFactory.Create();
+			// grid = CreateLevelGrid();
+			// cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 		}
 
 		private LevelGrid CreateLevelGrid() {

@@ -20,6 +20,7 @@ namespace LevelEditor {
 			Bind<BusFactory>().To<IBusFactory>();
 
 			Bind<EditorLevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
+			Bind<EditorWaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
 
 			Bind<EditorCellBehaviourMapper>().To<IEditorCellBehaviourMapper>();
 			Bind<EditorCellSelector>();
