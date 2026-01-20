@@ -59,13 +59,6 @@ namespace Core.LevelGrids {
 			return cell;
 		}
 
-		public void ClearElements() {
-			foreach ((GridElement element, LevelCell pivotCell) in elements) {
-				RemoveElement(element, pivotCell);
-				element.GetLifecycle().Despawn();
-			}
-		}
-
 		private void RemoveElement(GridElement element, LevelCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = element.GetSquareCoords();

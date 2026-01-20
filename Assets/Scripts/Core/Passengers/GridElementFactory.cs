@@ -13,16 +13,17 @@ namespace Core.Passengers {
 		}
 
 		GridElement IGridElementFactory.Create(GridElement prefab, LevelGrid grid, LevelCell cell) {
-			// TODO Set element's parent to an elementRoot 
 			GridElement element = pool.Spawn(prefab);
-			ElementLifecycle lifecycle = new(element, pool);
-			element.Initialize(lifecycle);
 
 			Vector3 pivotOffset = element.transform.position - element.GetPivotWorldPosition();
 			element.transform.position = grid.GetWorldPosition(cell) + pivotOffset;
 
 			grid.PlaceElementAtCell(element, cell);
 			return element;
+		}
+
+		void IGridElementFactory.Despawn(GridElement element) {
+			pool.Despawn(element);
 		}
 	}
 }

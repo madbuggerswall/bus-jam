@@ -52,13 +52,6 @@ namespace Core.Waiting.Grids {
 			RemovePassenger(passenger, pivotCell);
 		}
 
-		public void ClearPassengers() {
-			foreach ((Passenger passenger, WaitingCell pivotCell) in passengers) {
-				RemovePassenger(passenger, pivotCell);
-				passenger.GetLifecycle().Despawn();
-			}
-		}
-
 		private void RemovePassenger(Passenger passenger, WaitingCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = passenger.GetSquareCoords();

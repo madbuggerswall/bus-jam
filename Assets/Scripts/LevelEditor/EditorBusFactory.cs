@@ -6,6 +6,7 @@ using UnityEngine;
 namespace LevelEditor {
 	public interface IEditorBusFactory {
 		public EditorBus Create(EditorBus prefab, BusGrid grid, BusCell cell);
+		public void Despawn(EditorBus bus);
 	}
 
 	public class EditorBusFactory : MonoBehaviour, IInitializable, IEditorBusFactory {
@@ -23,6 +24,10 @@ namespace LevelEditor {
 
 			grid.PlaceBusAtCell(element, cell);
 			return element;
+		}
+
+		void IEditorBusFactory.Despawn(EditorBus bus) {
+			pool.Despawn(bus);
 		}
 	}
 }

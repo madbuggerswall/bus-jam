@@ -51,13 +51,6 @@ namespace LevelEditor.BusGrids {
 			RemoveBus(bus, pivotCell);
 		}
 
-		public void ClearBuses() {
-			foreach ((EditorBus bus, BusCell pivotCell) in buses) {
-				RemoveBus(bus, pivotCell);
-				bus.GetLifecycle().Despawn();
-			}
-		}
-
 		private void RemoveBus(EditorBus bus, BusCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = bus.GetSquareCoords();

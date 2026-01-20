@@ -82,9 +82,9 @@ namespace LevelEditor {
 			if (!selectedCell.HasBus())
 				return;
 
-			EditorBus element = selectedCell.GetBus();
-			busGridProvider.GetGrid().RemoveBus(element);
-			element.GetLifecycle().Despawn();
+			EditorBus bus = selectedCell.GetBus();
+			busGridProvider.GetGrid().RemoveBus(bus);
+			editorBusFactory.Despawn(bus);
 		}
 
 		private void ColorElement(ColorDefinition colorDefinition) {

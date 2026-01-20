@@ -20,13 +20,13 @@ namespace LevelEditor {
 
 		// Services
 		private IInputManager inputManager;
-		private IGridElementFactory gridElementFactory;
+		private IGridElementFactory elementFactory;
 		private ILevelGridProvider levelGridProvider;
 		private EditorLevelCellSelector cellSelector;
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
-			gridElementFactory = Context.Resolve<IGridElementFactory>();
+			elementFactory = Context.Resolve<IGridElementFactory>();
 			levelGridProvider = Context.Resolve<ILevelGridProvider>();
 			cellSelector = Context.Resolve<EditorLevelCellSelector>();
 
@@ -71,7 +71,7 @@ namespace LevelEditor {
 			if (selectedCell.HasElement())
 				return;
 
-			gridElementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
+			elementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
 		}
 
 		private void DeleteElement() {
@@ -84,7 +84,7 @@ namespace LevelEditor {
 
 			GridElement element = selectedCell.GetGridElement();
 			levelGridProvider.GetGrid().RemoveElement(element);
-			element.GetLifecycle().Despawn();
+			elementFactory.Despawn(element);
 		}
 
 		private void ColorElement(ColorDefinition colorDefinition) {
