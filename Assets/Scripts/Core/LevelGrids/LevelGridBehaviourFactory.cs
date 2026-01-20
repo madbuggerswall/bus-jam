@@ -16,8 +16,13 @@ namespace Core.LevelGrids {
 
 		LevelGridBehaviour ILevelGridBehaviourFactory.Create() {
 			LevelGridBehaviour gridBehaviour = gridPool.Spawn(gridBehaviourPrefab, gridRoot);
+			gridBehaviour.Initialize();
 			gridBehaviour.transform.localPosition = Vector3.zero;
 			return gridBehaviour;
+		}
+
+		void ILevelGridBehaviourFactory.Despawn(LevelGridBehaviour gridBehaviour) {
+			gridPool.Despawn(gridBehaviour);
 		}
 	}
 }

@@ -9,12 +9,10 @@ using Frolics.Input.Standalone;
 using Frolics.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Core.Input {
 	public class CellElementSelector : MonoBehaviour, IInitializable {
-		[SerializeField] private Passenger passenger;
-		[SerializeField] private ReservedPassenger reservedPassenger;
-
 		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
 		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
 
@@ -29,17 +27,27 @@ namespace Core.Input {
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
+			gridElementFactory = Context.Resolve<IGridElementFactory>();
+			levelGridProvider = Context.Resolve<ILevelGridProvider>();
+			cellSelector = Context.Resolve<EditorCellSelector>();
+
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
+			InitializeColorMap();
+			InitializePrefabMap();
+		}
 
-			colorMap = new Dictionary<Key, ColorDefinition>();
-			KeyColorMapping[] colorMappings = colorMapDefinition.GetKeyColorMappings();
-			for (int i = 0; i < colorMappings.Length; i++)
-				colorMap.Add(colorMappings[i].GetKey(), colorMappings[i].GetColorDefinition());
-
+		private void InitializePrefabMap() {
 			prefabMap = new Dictionary<Key, GridElement>();
 			KeyPrefabMapping[] prefabMappings = prefabMapDefinition.GetKeyPrefabMappings();
 			for (int i = 0; i < prefabMappings.Length; i++)
 				prefabMap.Add(prefabMappings[i].GetKey(), prefabMappings[i].GetPrefab());
+		}
+
+		private void InitializeColorMap() {
+			colorMap = new Dictionary<Key, ColorDefinition>();
+			KeyColorMapping[] colorMappings = colorMapDefinition.GetKeyColorMappings();
+			for (int i = 0; i < colorMappings.Length; i++)
+				colorMap.Add(colorMappings[i].GetKey(), colorMappings[i].GetColorDefinition());
 		}
 
 		private void OnKeyPress(KeyData keyData) {
@@ -50,6 +58,10 @@ namespace Core.Input {
 			if (colorMap.TryGetValue(keyData.KeyControl.keyCode, out ColorDefinition colorDefinition)) {
 				ColorElement(colorDefinition);
 			}
+			
+			if(keyData.KeyControl.keyCode == Key.Backspace) {
+				DeleteElement();
+			}
 		}
 
 		private void SpawnElement(GridElement prefab) {
@@ -57,7 +69,23 @@ namespace Core.Input {
 			if (selectedCell == null)
 				return;
 
+			if (selectedCell.HasElement())
+				return;
+
 			gridElementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
+		}
+
+		private void DeleteElement() {
+			LevelCell selectedCell = cellSelector.GetSelectedCell();
+			if (selectedCell == null)
+				return;
+			
+			if (!selectedCell.HasElement())
+				return;
+
+			GridElement element = selectedCell.GetGridElement();
+			levelGridProvider.GetGrid().RemoveElement(element);
+			element.GetLifecycle().Despawn();
 		}
 
 		private void ColorElement(ColorDefinition colorDefinition) {

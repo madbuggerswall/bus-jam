@@ -23,5 +23,9 @@ namespace Core.LevelGrids {
 				gridBehaviour.AddCellBehaviour(cellBehaviour);
 			}
 		}
+
+		void ILevelCellBehaviourFactory.Despawn(LevelCellBehaviour cellBehaviour) {
+			cellPool.Despawn(cellBehaviour);
+		}
 	}
 }

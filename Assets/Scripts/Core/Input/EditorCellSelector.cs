@@ -14,12 +14,12 @@ namespace Core.Input {
 		// Services
 		private IInputManager inputManager;
 		private IMainCameraProvider cameraProvider;
-		private ICellBehaviourMapper cellBehaviourMapper;
+		private IEditorCellBehaviourMapper cellBehaviourMapper;
 
 		public void Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
 			cameraProvider = Context.Resolve<IMainCameraProvider>();
-			cellBehaviourMapper = Context.Resolve<ICellBehaviourMapper>();
+			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
 
 			inputManager.MouseInputHandler.MousePressEvent += OnMousePress;
 		}
