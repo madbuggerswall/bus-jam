@@ -4,11 +4,6 @@ using Frolics.Contexts;
 using Frolics.Utilities;
 
 namespace Core.LevelGrids {
-	public interface ILevelAreaManager {
-		public void RemovePassenger(Passenger passenger);
-		public LevelCell GetCell(Passenger passenger);
-	}
-
 	public class LevelAreaManager : IInitializable, ILevelAreaManager {
 		// Services 
 		private ILevelGridProvider levelGridProvider;

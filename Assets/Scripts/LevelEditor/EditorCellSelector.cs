@@ -7,7 +7,7 @@ using Frolics.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Core.Input {
+namespace LevelEditor {
 	public class EditorCellSelector : IInitializable {
 		private LevelCell selectedCell;
 

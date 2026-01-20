@@ -1,13 +1,12 @@
 using Core.Buses;
 using Core.CameraSystem.Core;
 using Core.Data;
-using Core.Input;
 using Core.LevelGrids;
 using Core.Passengers;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 
-namespace Core.Contexts {
+namespace LevelEditor {
 	public class LevelEditorContext : SubContext<LevelEditorContext> {
 		protected override void BindContext() {
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();

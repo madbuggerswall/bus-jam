@@ -3,11 +3,6 @@ using Core.GridElements;
 using UnityEngine;
 
 namespace Core.Passengers {
-	public interface IColorable {
-		public ColorDefinition GetColorDefinition();
-		public void SetColorDefinition(ColorDefinition colorDefinition);
-	}
-
 	public class Passenger : GridElement, IColorable {
 		[SerializeField] private MeshRenderer meshRenderer;
 		[SerializeField] private Transform meshTransform;

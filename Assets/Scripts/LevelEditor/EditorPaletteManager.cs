@@ -1,3 +1,3 @@
-namespace Core.Input {
+namespace LevelEditor {
 	public class EditorPaletteManager { }
 }

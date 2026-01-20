@@ -7,7 +7,7 @@ using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
 
-namespace Core.Input {
+namespace Core {
 	public class RuleManager : IInitializable {
 		// Services
 		private ISignalBus signalBus;

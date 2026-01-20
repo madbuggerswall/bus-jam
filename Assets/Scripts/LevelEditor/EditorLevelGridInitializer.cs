@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Core.Input;
+using Core.LevelGrids;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace Core.LevelGrids {
+namespace LevelEditor {
 	public class EditorLevelGridInitializer : MonoBehaviour,
 		IInitializable,
 		ILevelGridBehaviourProvider,

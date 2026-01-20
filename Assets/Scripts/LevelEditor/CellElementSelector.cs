@@ -9,9 +9,8 @@ using Frolics.Input.Standalone;
 using Frolics.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
-namespace Core.Input {
+namespace LevelEditor {
 	public class CellElementSelector : MonoBehaviour, IInitializable {
 		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
 		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
