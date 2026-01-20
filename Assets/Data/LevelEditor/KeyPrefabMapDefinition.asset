@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61ee5aa8935de83a8a6b8fba8815b848, type: 3}
-  m_Name: KeyPrefabMapping
+  m_Name: KeyPrefabMapDefinition
   m_EditorClassIdentifier: 
   keyPrefabMappings:
   - key: 40

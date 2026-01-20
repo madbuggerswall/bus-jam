@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace Core.Data {
 	public class PassengerColorManager : MonoBehaviour, IInitializable, IPassengerColorManager {
-		[SerializeField] private Material blue;
-		[SerializeField] private Material brown;
-		[SerializeField] private Material cyan;
-		[SerializeField] private Material green;
-		[SerializeField] private Material orange;
-		[SerializeField] private Material pink;
-		[SerializeField] private Material purple;
-		[SerializeField] private Material red;
-		[SerializeField] private Material yellow;
-		[SerializeField] private Material white;
+		[SerializeField] private ColorDefinition blue;
+		[SerializeField] private ColorDefinition brown;
+		[SerializeField] private ColorDefinition cyan;
+		[SerializeField] private ColorDefinition green;
+		[SerializeField] private ColorDefinition orange;
+		[SerializeField] private ColorDefinition pink;
+		[SerializeField] private ColorDefinition purple;
+		[SerializeField] private ColorDefinition red;
+		[SerializeField] private ColorDefinition white;
+		[SerializeField] private ColorDefinition yellow;
 
 		public void Initialize() { }
-		
-		public Material GetMaterial(PassengerColor color) {
+
+		public ColorDefinition GetColorDefinition(PassengerColor color) {
 			return color switch {
 				PassengerColor.Blue => blue,
 				PassengerColor.Brown => brown,
@@ -27,8 +27,8 @@ namespace Core.Data {
 				PassengerColor.Pink => pink,
 				PassengerColor.Purple => purple,
 				PassengerColor.Red => red,
-				PassengerColor.Yellow => white,
 				PassengerColor.White => white,
+				PassengerColor.Yellow => yellow,
 				_ => throw new ArgumentOutOfRangeException(nameof(color), color, null)
 			};
 		}

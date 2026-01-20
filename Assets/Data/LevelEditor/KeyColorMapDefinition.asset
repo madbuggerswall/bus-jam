@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9eaacc3100ccff8c8e346356e416503, type: 3}
+  m_Name: KeyColorMapDefinition
+  m_EditorClassIdentifier: 
+  keyColorMappings:
+  - key: 41
+    colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9, type: 2}
+  - key: 42
+    colorDefinition: {fileID: 11400000, guid: 4362743dd3ba92e069abfa0ab1e5208b, type: 2}
+  - key: 43
+    colorDefinition: {fileID: 11400000, guid: 5645892e5a274a2d09d6b0a392c937cc, type: 2}
+  - key: 44
+    colorDefinition: {fileID: 11400000, guid: 4e346022c94138b608981f0933e8082b, type: 2}
+  - key: 45
+    colorDefinition: {fileID: 11400000, guid: acfe092fb5c607a7eaa7448d44617133, type: 2}
+  - key: 46
+    colorDefinition: {fileID: 11400000, guid: ee3fde9c9b3abd5fbb8885d24a7425b6, type: 2}
+  - key: 47
+    colorDefinition: {fileID: 11400000, guid: e6192f08e2e3e86e4a33720e5bdf2075, type: 2}
+  - key: 48
+    colorDefinition: {fileID: 11400000, guid: 61601a4189c03acef91aeff8592c31a9, type: 2}
+  - key: 49
+    colorDefinition: {fileID: 11400000, guid: b65c130079d31b089a5ad5f35aff5d72, type: 2}
+  - key: 50
+    colorDefinition: {fileID: 11400000, guid: de27c58320f927bb79e1b206e432f88e, type: 2}

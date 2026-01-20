@@ -42,8 +42,8 @@ namespace Core.Passengers {
 				Passenger passengerPrefab = GetPrefab(passengerDTO.GetPassengerType());
 				Passenger passenger = (Passenger) elementFactory.Create(passengerPrefab, grid, cell);
 				PassengerColor color = passengerDTO.GetPassengerColor();
-				Material material = colorManager.GetMaterial(color);
-				passenger.Initialize(color, material);
+				ColorDefinition colorDefinition = colorManager.GetColorDefinition(color);
+				passenger.Initialize(colorDefinition);
 			}
 		}
 

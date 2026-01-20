@@ -74,7 +74,7 @@ namespace Core.Buses {
 		}
 
 		public bool CanBoardPassenger(Passenger passenger) {
-			return currentBus.CanBoarPassenger(passenger);
+			return currentBus.CanBoardPassenger(passenger);
 		}
 
 		private void OnBusFull() {

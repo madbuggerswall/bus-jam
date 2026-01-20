@@ -3,10 +3,9 @@ using Core.GridElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 [CreateAssetMenu(menuName = MenuName, fileName = FileName)]
-public class PalettePrefabDefinition : ScriptableObject {
-	private const string FileName = nameof(PalettePrefabDefinition);
+public class KeyPrefabMapDefinition : ScriptableObject {
+	private const string FileName = nameof(KeyPrefabMapDefinition);
 	private const string MenuName = "Definition/Editor/" + FileName;
 
 	[SerializeField] private KeyPrefabMapping[] keyPrefabMappings;
@@ -19,5 +18,5 @@ public struct KeyPrefabMapping {
 	[SerializeField] private GridElement gridElement;
 
 	public Key GetKey() => key;
-	public GridElement GetColor() => gridElement;
+	public GridElement GetPrefab() => gridElement;
 }

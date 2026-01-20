@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Core.Input {
-	public class EditorCellSelector : MonoBehaviour, IInitializable {
+	public class EditorCellSelector : IInitializable {
 		private LevelCell selectedCell;
 
 		// Services

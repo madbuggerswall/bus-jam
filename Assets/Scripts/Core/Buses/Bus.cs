@@ -3,30 +3,29 @@ using Core.Passengers;
 using UnityEngine;
 
 namespace Core.Buses {
-	public class Bus : MonoBehaviour {
+	public class Bus : MonoBehaviour, IColorable {
 		[SerializeField] private MeshRenderer meshRenderer;
 
 		private const int DefaultCapacity = 3;
 
-		private PassengerColor color;
+		private ColorDefinition colorDefinition;
+
 		private int capacity;
 		private int reservedCapacity;
 		private int passengerCount;
 		private int reservedCount = 0;
 
-		public void Initialize(BusData busData, Material material) {
-			color = busData.GetPassengerColor();
+		public void Initialize(BusData busData, ColorDefinition colorDefinition) {
+			SetColorDefinition(colorDefinition);
+
 			capacity = DefaultCapacity;
 			reservedCapacity = busData.GetReservedCount();
 			passengerCount = 0;
 			reservedCount = 0;
-
-			meshRenderer.sharedMaterial = material;
 		}
 
-		public bool CanBoarPassenger(Passenger passenger) {
-			PassengerColor passengerColor = passenger.GetColor();
-			if (color != passengerColor)
+		public bool CanBoardPassenger(Passenger passenger) {
+			if (colorDefinition != passenger.GetColorDefinition())
 				return false;
 
 			if (passenger is ReservedPassenger)
@@ -46,7 +45,17 @@ namespace Core.Buses {
 			return (passengerCount + reservedCount) == capacity;
 		}
 
-		public PassengerColor GetColor() => color;
+		// IColorable
+		public ColorDefinition GetColorDefinition() {
+			return colorDefinition;
+		}
+
+		// IColorable
+		public void SetColorDefinition(ColorDefinition colorDefinition) {
+			this.colorDefinition = colorDefinition;
+			meshRenderer.sharedMaterial = colorDefinition.GetMaterial();
+		}
+
 		public int GetCapacity() => capacity;
 		public int GetReservedCount() => reservedCount;
 		public int GetReservedCapacity() => reservedCapacity;

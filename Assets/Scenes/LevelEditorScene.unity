@@ -550,7 +550,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.20343596, g: 0.16274877, b: 0.19811198, a: 0}
+  m_BackGroundColor: {r: 0.1902362, g: 0.20392157, b: 0.16470589, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 1
@@ -1134,8 +1134,8 @@ MonoBehaviour:
   pink: {fileID: 2100000, guid: 7f2408ab50677278a8c6803c99fed086, type: 2}
   purple: {fileID: 2100000, guid: 32b5add1db5bdbcfdab5dfddd2ba4fe3, type: 2}
   red: {fileID: 2100000, guid: fccd06b8c4a1dce8aafd664bf4ce105f, type: 2}
-  yellow: {fileID: 2100000, guid: 29a07a28d492d316eac6d49afd4dc5d5, type: 2}
   white: {fileID: 2100000, guid: 3aae741fc051abb74920387282c1dd76, type: 2}
+  yellow: {fileID: 2100000, guid: 29a07a28d492d316eac6d49afd4dc5d5, type: 2}
 --- !u!1 &525399041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1937,7 +1937,6 @@ Transform:
   - {fileID: 957924770}
   - {fileID: 399195473}
   - {fileID: 252522010}
-  - {fileID: 2035077828}
   - {fileID: 1025635328}
   - {fileID: 747907067}
   m_Father: {fileID: 0}
@@ -2908,55 +2907,6 @@ Transform:
   - {fileID: 510732905}
   m_Father: {fileID: 866863222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2035077827
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2035077828}
-  - component: {fileID: 2035077830}
-  m_Layer: 0
-  m_Name: PassengerSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2035077828
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2035077827}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1307328014}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2035077830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2035077827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ed1a1e126454613a03e914e61f30b6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultPrefab: {fileID: 1759278802}
-  reservedPrefab: {fileID: 0}
-  secretPrefab: {fileID: 0}
-  cloakPrefab: {fileID: 0}
-  ropePrefab: {fileID: 0}
 --- !u!1 &2132858436
 GameObject:
   m_ObjectHideFlags: 0

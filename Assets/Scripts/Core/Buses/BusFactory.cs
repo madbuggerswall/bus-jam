@@ -20,9 +20,9 @@ namespace Core.Buses {
 		}
 
 		Bus IBusFactory.CreateBus(BusData busData) {
-			Material material = colorManager.GetMaterial(busData.GetPassengerColor());
+			ColorDefinition colorDefinition = colorManager.GetColorDefinition(busData.GetPassengerColor());
 			Bus bus = pool.Spawn(busPrefab, busRoot);
-			bus.Initialize(busData, material);
+			bus.Initialize(busData, colorDefinition);
 			bus.transform.position = spawnPoint.position;
 			return bus;
 		}

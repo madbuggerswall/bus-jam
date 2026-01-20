@@ -1,5 +1,6 @@
 using Core.Buses;
 using Core.CameraSystem.Core;
+using Core.Input;
 using Core.LevelGrids;
 using Core.Passengers;
 using Core.Waiting.Grids;
@@ -16,6 +17,9 @@ namespace Core.Contexts {
 			Bind<WaitingCellBehaviourFactory>().To<IWaitingCellBehaviourFactory>();
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<BusFactory>().To<IBusFactory>();
+
+			Bind<EditorCellSelector>();
+			Bind<CellElementSelector>();
 		}
 
 		protected override void OnInitialized() {

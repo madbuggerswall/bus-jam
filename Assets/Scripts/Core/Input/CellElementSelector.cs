@@ -9,17 +9,17 @@ using Frolics.Input.Standalone;
 using Frolics.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace Core.Input {
 	public class CellElementSelector : MonoBehaviour, IInitializable {
 		[SerializeField] private Passenger passenger;
 		[SerializeField] private ReservedPassenger reservedPassenger;
 
-		private Dictionary<KeyControl, PassengerColor> colorMap;
-		private Dictionary<KeyControl, GridElement> passengerMap;
+		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
+		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
 
-		private GridElement currentElement;
+		private Dictionary<Key, ColorDefinition> colorMap;
+		private Dictionary<Key, GridElement> prefabMap;
 
 		// Services
 		private IInputManager inputManager;
@@ -31,29 +31,25 @@ namespace Core.Input {
 			inputManager = Context.Resolve<IInputManager>();
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
 
-			colorMap = new Dictionary<KeyControl, PassengerColor> {
-				{ Keyboard.current.digit1Key, PassengerColor.Blue },
-				{ Keyboard.current.digit2Key, PassengerColor.Brown },
-				{ Keyboard.current.digit3Key, PassengerColor.Cyan },
-				{ Keyboard.current.digit4Key, PassengerColor.Green },
-				{ Keyboard.current.digit5Key, PassengerColor.Orange },
-				{ Keyboard.current.digit6Key, PassengerColor.Pink },
-				{ Keyboard.current.digit7Key, PassengerColor.Purple },
-				{ Keyboard.current.digit8Key, PassengerColor.Red },
-				{ Keyboard.current.digit9Key, PassengerColor.White },
-				{ Keyboard.current.digit0Key, PassengerColor.Yellow }
-			};
+			colorMap = new Dictionary<Key, ColorDefinition>();
+			KeyColorMapping[] colorMappings = colorMapDefinition.GetKeyColorMappings();
+			for (int i = 0; i < colorMappings.Length; i++)
+				colorMap.Add(colorMappings[i].GetKey(), colorMappings[i].GetColorDefinition());
 
-			passengerMap = new Dictionary<KeyControl, GridElement> {
-				{ Keyboard.current.zKey, passenger },
-				{ Keyboard.current.xKey, reservedPassenger },
-			};
+			prefabMap = new Dictionary<Key, GridElement>();
+			KeyPrefabMapping[] prefabMappings = prefabMapDefinition.GetKeyPrefabMappings();
+			for (int i = 0; i < prefabMappings.Length; i++)
+				prefabMap.Add(prefabMappings[i].GetKey(), prefabMappings[i].GetPrefab());
 		}
 
 		private void OnKeyPress(KeyData keyData) {
-			if (passengerMap.TryGetValue(keyData.KeyControl, out GridElement elementPrefab)) { }
+			if (prefabMap.TryGetValue(keyData.KeyControl.keyCode, out GridElement prefab)) {
+				SpawnElement(prefab);
+			}
 
-			if (colorMap.TryGetValue(keyData.KeyControl, out PassengerColor passengerColor)) { }
+			if (colorMap.TryGetValue(keyData.KeyControl.keyCode, out ColorDefinition colorDefinition)) {
+				ColorElement(colorDefinition);
+			}
 		}
 
 		private void SpawnElement(GridElement prefab) {
@@ -61,12 +57,18 @@ namespace Core.Input {
 			if (selectedCell == null)
 				return;
 
-			GridElement element = gridElementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
-			currentElement = element;
+			gridElementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
 		}
-		
-		private void ColorElement(){}
 
-		public GridElement GetCurrentElement() => currentElement;
+		private void ColorElement(ColorDefinition colorDefinition) {
+			LevelCell selectedCell = cellSelector.GetSelectedCell();
+			if (selectedCell == null || !selectedCell.HasElement())
+				return;
+
+			if (selectedCell.GetGridElement() is not IColorable colorable)
+				return;
+
+			colorable.SetColorDefinition(colorDefinition);
+		}
 	}
 }
