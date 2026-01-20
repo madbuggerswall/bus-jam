@@ -3,19 +3,23 @@ using Core.GridElements;
 using UnityEngine;
 
 namespace Core.Passengers {
-	public class Passenger : GridElement, IColorable {
+	public abstract class Passenger : GridElement, IColorable {
+		[SerializeField] private PassengerDefinition passengerDefinition;
 		[SerializeField] private MeshRenderer meshRenderer;
 		[SerializeField] private Transform meshTransform;
 
 		private ColorDefinition colorDefinition;
 		private PassengerTweenHelper tweenHelper;
-		private bool isReserved;
 
-		public void Initialize(ColorDefinition colorDefinition) {
+		public virtual void Initialize(ColorDefinition colorDefinition) {
 			SetColorDefinition(colorDefinition);
 			tweenHelper = new PassengerTweenHelper(this);
 		}
-		
+
+		public abstract bool CanMove();
+		public abstract void OnNeighborMove();
+		public abstract void OnAnyMove();
+
 		// IColorable
 		public ColorDefinition GetColorDefinition() {
 			return colorDefinition;
@@ -27,8 +31,8 @@ namespace Core.Passengers {
 			meshRenderer.sharedMaterial = colorDefinition.GetMaterial();
 		}
 
+		public PassengerDefinition GetPassengerDefinition() => passengerDefinition;
 		public PassengerTweenHelper GetTweenHelper() { return tweenHelper; }
 		public Transform GetMeshTransform() => meshTransform;
-
 	}
 }

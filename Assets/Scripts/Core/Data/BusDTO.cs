@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Core.Data {
 	[Serializable]
-	public struct BusData {
-		[SerializeField] private PassengerColor passengerColor;
+	public struct BusDTO {
+		[SerializeField] private ColorDefinition colorDefinition;
 		[SerializeField] private int reservedCount;
 
-		public PassengerColor GetPassengerColor() => passengerColor;
+		public ColorDefinition GetColorDefinition() => colorDefinition;
 		public int GetReservedCount() => reservedCount;
 	}
 }

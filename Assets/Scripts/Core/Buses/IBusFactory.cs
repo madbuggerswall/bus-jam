@@ -2,6 +2,6 @@ using Core.Data;
 
 namespace Core.Buses {
 	public interface IBusFactory {
-		public Bus CreateBus(BusData busData);
+		public Bus CreateBus(BusDTO busDTO);
 	}
 }

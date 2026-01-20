@@ -6,16 +6,16 @@ namespace Core.Data {
 	public class LevelData {
 		[SerializeField] private Vector2Int gridSize;
 		[SerializeField] private Vector2Int waitingGridSize;
-		[SerializeField] private CellData[] cells;
-		[SerializeField] private PassengerData[] passengers;
-		[SerializeField] private BusData[] buses;
+		[SerializeField] private CellDTO[] cells;
+		[SerializeField] private PassengerDTO[] passengers;
+		[SerializeField] private BusDTO[] buses;
 		[SerializeField] private float levelTime;
 
 		public Vector2Int GetGridSize() => gridSize;
 		public Vector2Int GetWaitingGridSize() => waitingGridSize;
-		public CellData[] GetCells() => cells;
-		public PassengerData[] GetPassengers() => passengers;
-		public BusData[] GetBuses() => buses;
+		public CellDTO[] GetCells() => cells;
+		public PassengerDTO[] GetPassengers() => passengers;
+		public BusDTO[] GetBuses() => buses;
 		public float GetLevelTime() => levelTime;
 	}
 }

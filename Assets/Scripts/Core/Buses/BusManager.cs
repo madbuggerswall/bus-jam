@@ -11,7 +11,7 @@ using Frolics.Utilities;
 
 namespace Core.Buses {
 	public class BusManager : IInitializable, IBusManager {
-		private BusData[] busDTOs;
+		private BusDTO[] busDTOs;
 		private int currentIndex = 0;
 
 		private Bus arrivingBus;
@@ -42,11 +42,11 @@ namespace Core.Buses {
 			busDTOs = levelLoader.GetLevelData().GetBuses();
 
 			// Init
-			BusData currentBusData = busDTOs[currentIndex++];
-			currentBus = busFactory.CreateBus(currentBusData);
+			BusDTO currentBusDTO = busDTOs[currentIndex++];
+			currentBus = busFactory.CreateBus(currentBusDTO);
 
-			BusData arrivingBusData = busDTOs[currentIndex++];
-			arrivingBus = busFactory.CreateBus(arrivingBusData);
+			BusDTO arrivingBusDTO = busDTOs[currentIndex++];
+			arrivingBus = busFactory.CreateBus(arrivingBusDTO);
 
 			// TODO TweenTimer needs to play this
 			busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
@@ -84,8 +84,8 @@ namespace Core.Buses {
 			if (currentIndex >= busDTOs.Length) {
 				arrivingBus = null;
 			} else {
-				BusData nextBusData = busDTOs[currentIndex++];
-				arrivingBus = busFactory.CreateBus(nextBusData);
+				BusDTO nextBusDTO = busDTOs[currentIndex++];
+				arrivingBus = busFactory.CreateBus(nextBusDTO);
 			}
 
 			signalBus.Fire(new BussFullSignal(arrivingBus, currentBus, leavingBus));

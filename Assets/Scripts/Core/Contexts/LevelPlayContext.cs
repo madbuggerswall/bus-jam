@@ -14,7 +14,6 @@ namespace Core.Contexts {
 	public class LevelPlayContext : SubContext<LevelPlayContext> {
 		protected override void BindContext() {
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
-			Bind<PassengerColorManager>().To<IPassengerColorManager>();
 
 			// Factories
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();

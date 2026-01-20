@@ -1,5 +1,6 @@
 using Core.Data;
 using Core.Passengers;
+using Core.Passengers.Types;
 using UnityEngine;
 
 namespace Core.Buses {
@@ -15,11 +16,11 @@ namespace Core.Buses {
 		private int passengerCount;
 		private int reservedCount = 0;
 
-		public void Initialize(BusData busData, ColorDefinition colorDefinition) {
-			SetColorDefinition(colorDefinition);
+		public void Initialize(BusDTO busDTO) {
+			SetColorDefinition(busDTO.GetColorDefinition());
 
 			capacity = DefaultCapacity;
-			reservedCapacity = busData.GetReservedCount();
+			reservedCapacity = busDTO.GetReservedCount();
 			passengerCount = 0;
 			reservedCount = 0;
 		}

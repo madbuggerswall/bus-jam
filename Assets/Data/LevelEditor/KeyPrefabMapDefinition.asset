@@ -14,8 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyPrefabMappings:
   - key: 40
-    gridElement: {fileID: 2470218102841278183, guid: a888b3ac263f992e5929ab70b3a7c1a8,
+    gridElement: {fileID: 2111370911845466295, guid: a888b3ac263f992e5929ab70b3a7c1a8,
       type: 3}
   - key: 38
-    gridElement: {fileID: 7027161818335784751, guid: b9d7f72156ecf8fe089f676b40acf7cc,
+    gridElement: {fileID: 321824926933391707, guid: b9d7f72156ecf8fe089f676b40acf7cc,
+      type: 3}
+  - key: 17
+    gridElement: {fileID: 1529441658935372484, guid: 2c348e5eba735f576b7d0297e01f90d0,
+      type: 3}
+  - key: 36
+    gridElement: {fileID: 8004750810035539235, guid: 5ddc4489636ea95fb945d5ad6a305ef5,
+      type: 3}
+  - key: 16
+    gridElement: {fileID: 8308925524362642048, guid: 5f94ea19fc4f86c6bbe6d5e1ff54cf91,
       type: 3}

@@ -1,4 +1,3 @@
-using System;
 using Core.Data;
 using Core.LevelGrids;
 using Core.Levels;
@@ -17,12 +16,10 @@ namespace Core.Passengers {
 		// Services
 		private ILevelLoader levelLoader;
 		private IGridElementFactory elementFactory;
-		private IPassengerColorManager colorManager;
 		private ILevelGridProvider gridProvider;
 
 		void IInitializable.Initialize() {
 			levelLoader = Context.Resolve<ILevelLoader>();
-			colorManager = Context.Resolve<IPassengerColorManager>();
 			elementFactory = Context.Resolve<IGridElementFactory>();
 			gridProvider = Context.Resolve<ILevelGridProvider>();
 
@@ -31,32 +28,19 @@ namespace Core.Passengers {
 
 		public void SpawnPassengers() {
 			LevelData levelData = levelLoader.GetLevelData();
-			PassengerData[] passengerDTOs = levelData.GetPassengers();
+			PassengerDTO[] passengerDTOs = levelData.GetPassengers();
 			LevelGrid grid = gridProvider.GetGrid();
 
 			for (int i = 0; i < passengerDTOs.Length; i++) {
-				PassengerData passengerDTO = passengerDTOs[i];
+				PassengerDTO passengerDTO = passengerDTOs[i];
 				if (!grid.TryGetCell(passengerDTO.GetLocalCoord(), out LevelCell cell))
 					continue;
 
-				Passenger passengerPrefab = GetPrefab(passengerDTO.GetPassengerType());
+				Passenger passengerPrefab = passengerDTO.GetPassengerDefinition().GetPrefab();
 				Passenger passenger = (Passenger) elementFactory.Create(passengerPrefab, grid, cell);
-				PassengerColor color = passengerDTO.GetPassengerColor();
-				ColorDefinition colorDefinition = colorManager.GetColorDefinition(color);
+				ColorDefinition colorDefinition = passengerDTO.GetColorDefinition();
 				passenger.Initialize(colorDefinition);
 			}
-		}
-
-
-		private Passenger GetPrefab(PassengerType type) {
-			return type switch {
-				PassengerType.Default => defaultPrefab,
-				PassengerType.Reserved => reservedPrefab,
-				PassengerType.Secret => secretPrefab,
-				PassengerType.Cloak => cloakPrefab,
-				PassengerType.Rope => ropePrefab,
-				_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-			};
 		}
 	}
 }

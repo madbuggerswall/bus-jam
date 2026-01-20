@@ -32,7 +32,7 @@ namespace Core.LevelGrids {
 
 			LevelData levelData = levelLoader.GetLevelData();
 			Vector2Int gridSize = levelData.GetGridSize();
-			CellData[] cellDTOs = levelData.GetCells();
+			CellDTO[] cellDTOs = levelData.GetCells();
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y);
 			LevelGrid grid = new(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);

@@ -10,7 +10,6 @@ namespace LevelEditor {
 	public class LevelEditorContext : SubContext<LevelEditorContext> {
 		protected override void BindContext() {
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
-			Bind<PassengerColorManager>().To<IPassengerColorManager>();
 
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();
 			Bind<LevelCellBehaviourFactory>().To<ILevelCellBehaviourFactory>();

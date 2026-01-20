@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.Data {
 	[Serializable]
-	public struct CellData {
+	public struct CellDTO {
 		[SerializeField] private CellType cellType;
 		[SerializeField] private SquareCoord localCoord;
 
