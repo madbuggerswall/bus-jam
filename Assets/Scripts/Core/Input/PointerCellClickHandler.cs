@@ -6,7 +6,7 @@ using Frolics.Input;
 using UnityEngine;
 
 namespace Core.Input {
-	public abstract class PointerCellClickHandler : IPointerClickHandler {
+	public abstract class PointerCellClickHandler : IPointerCellClickHandler {
 		// Services
 		protected readonly IInputManager inputManager;
 		private readonly IMainCameraProvider cameraProvider;
@@ -36,6 +36,4 @@ namespace Core.Input {
 			ruleManager.OnPassengerSelected(passenger, cell);
 		}
 	}
-
-	// TODO Rename
 }

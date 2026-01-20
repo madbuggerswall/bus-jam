@@ -21,6 +21,4 @@ namespace Core.Passengers {
 		public PassengerTweenHelper GetTweenHelper() { return tweenHelper; }
 		public Transform GetMeshTransform() => meshTransform;
 	}
-
-	// IDEA Rename to PassengerTweenHelper
 }

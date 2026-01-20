@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ee5aa8935de83a8a6b8fba8815b848, type: 3}
+  m_Name: KeyPrefabMapping
+  m_EditorClassIdentifier: 
+  keyPrefabMappings:
+  - key: 40
+    gridElement: {fileID: 2470218102841278183, guid: a888b3ac263f992e5929ab70b3a7c1a8,
+      type: 3}
+  - key: 38
+    gridElement: {fileID: 7027161818335784751, guid: b9d7f72156ecf8fe089f676b40acf7cc,
+      type: 3}
