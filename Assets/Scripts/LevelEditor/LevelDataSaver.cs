@@ -1,15 +1,15 @@
 using System.Collections.Generic;
+using Core.Data;
 using Core.LevelGrids;
 using Core.Passengers;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
 using Frolics.Utilities;
-using LevelEditor;
 using LevelEditor.BusGrids;
 using UnityEngine;
 
-namespace Core.Data {
+namespace LevelEditor {
 	public class LevelDataSaver : IInitializable, ILevelDataSaver {
 		// Services
 		private ILevelGridProvider levelGridProvider;

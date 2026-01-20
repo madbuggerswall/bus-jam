@@ -1,9 +1,10 @@
+using Core.Data;
 using Frolics.Contexts;
 using Frolics.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Core.Data {
+namespace LevelEditor {
 	public class LevelDefinitionSaver : IInitializable, ILevelDefinitionSaver {
 		// Services
 		private ILevelDataSaver levelDataSaver;

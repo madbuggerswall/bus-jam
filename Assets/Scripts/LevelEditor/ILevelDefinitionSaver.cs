@@ -1,4 +1,4 @@
-namespace Core.Data {
+namespace LevelEditor {
 	public interface ILevelDefinitionSaver {
 		public void SaveLevelDefinition();
 	}
