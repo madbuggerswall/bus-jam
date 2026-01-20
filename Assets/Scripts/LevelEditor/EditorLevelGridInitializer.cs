@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Core.Data;
 using Core.LevelGrids;
-using Core.Levels;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;
@@ -61,4 +59,5 @@ namespace LevelEditor {
 			cellBehaviourMapper.MapCellBehavioursByCollider();
 		}
 	}
+
 }

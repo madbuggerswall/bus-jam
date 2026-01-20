@@ -15,7 +15,7 @@ namespace Core.Passengers {
 		GridElement IGridElementFactory.Create(GridElement prefab, LevelGrid grid, LevelCell cell) {
 			// TODO Set element's parent to an elementRoot 
 			GridElement element = pool.Spawn(prefab);
-			ElementLifecycle lifecycle = new(element, grid, pool);
+			ElementLifecycle lifecycle = new(element, pool);
 			element.Initialize(lifecycle);
 
 			Vector3 pivotOffset = element.transform.position - element.GetPivotWorldPosition();

@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public class EditorCellSelector : IInitializable {
+	public class EditorLevelCellSelector : IInitializable {
 		private LevelCell selectedCell;
 
 		// Services

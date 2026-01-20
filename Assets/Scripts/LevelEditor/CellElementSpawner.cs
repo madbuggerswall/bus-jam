@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public class CellElementSelector : MonoBehaviour, IInitializable {
+	public class CellElementSpawner : MonoBehaviour, IInitializable {
 		[SerializeField] private KeyColorMapDefinition colorMapDefinition;
 		[SerializeField] private KeyPrefabMapDefinition prefabMapDefinition;
 
@@ -22,13 +22,13 @@ namespace LevelEditor {
 		private IInputManager inputManager;
 		private IGridElementFactory gridElementFactory;
 		private ILevelGridProvider levelGridProvider;
-		private EditorCellSelector cellSelector;
+		private EditorLevelCellSelector cellSelector;
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
 			gridElementFactory = Context.Resolve<IGridElementFactory>();
 			levelGridProvider = Context.Resolve<ILevelGridProvider>();
-			cellSelector = Context.Resolve<EditorCellSelector>();
+			cellSelector = Context.Resolve<EditorLevelCellSelector>();
 
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
 			InitializeColorMap();
