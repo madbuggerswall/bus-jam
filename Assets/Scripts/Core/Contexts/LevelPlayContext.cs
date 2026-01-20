@@ -6,7 +6,6 @@ using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
-using Core.Waiting;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using UnityEngine;
@@ -38,6 +37,7 @@ namespace Core.Contexts {
 			Bind<BusManager>().To<IBusManager>();
 			// Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
 			Bind<RuleManager>();
+			Bind<TweenTimer>();
 			
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();
 			Bind<PassengerClickHandler>();

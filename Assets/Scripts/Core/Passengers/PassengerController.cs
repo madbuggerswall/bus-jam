@@ -4,6 +4,7 @@ using Core.PathFinding;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
+using Frolics.Tweens.Core;
 using Frolics.Utilities;
 using UnityEngine;
 
@@ -22,14 +23,14 @@ namespace Core.Passengers {
 			pathFinder = Context.Resolve<IPathFinder>();
 		}
 
-		void IPassengerController.PlayWaitingToBus(Passenger passenger) {
+		Tween IPassengerController.PlayWaitingToBus(Passenger passenger) {
 			List<Vector3> positions = new();
 			positions.Add(passenger.transform.position);
 			positions.Add(busMountPoint.position);
-			passenger.GetTweenHelper().PlayPathTween(positions);
+			return passenger.GetTweenHelper().PlayPathTween(positions);
 		}
 
-		void IPassengerController.PlayGridToBus(Passenger passenger, LevelCell cell) {
+		Tween IPassengerController.PlayGridToBus(Passenger passenger, LevelCell cell) {
 			List<SquareCoord> coords = pathFinder.GetPath(cell.GetCoord());
 			List<Vector3> positions = new();
 			LevelGrid grid = gridProvider.GetGrid();
@@ -38,10 +39,10 @@ namespace Core.Passengers {
 				positions.Add(grid.ToWorldPosition(coords[i]));
 
 			positions.Add(busMountPoint.position);
-			passenger.GetTweenHelper().PlayPathTween(positions);
+			return passenger.GetTweenHelper().PlayPathTween(positions);
 		}
 
-		void IPassengerController.PlayGridToWaiting(Passenger passenger, LevelCell cell, WaitingCell waitingCell) {
+		Tween IPassengerController.PlayGridToWaiting(Passenger passenger, LevelCell cell, WaitingCell waitingCell) {
 			List<SquareCoord> coords = pathFinder.GetPath(cell.GetCoord());
 			List<Vector3> positions = new();
 			LevelGrid grid = gridProvider.GetGrid();
@@ -51,7 +52,7 @@ namespace Core.Passengers {
 				positions.Add(grid.ToWorldPosition(coords[i]));
 
 			positions.Add(waitingGrid.GetWorldPosition(waitingCell));
-			passenger.GetTweenHelper().PlayPathTween(positions);
+			return passenger.GetTweenHelper().PlayPathTween(positions);
 		}
 	}
 }

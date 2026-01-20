@@ -1,8 +1,3 @@
-using Core.Passengers;
-using Core.Waiting.Grids;
-using Frolics.Contexts;
-using Frolics.Utilities;
-
 namespace Core.Waiting {
 	// public interface IWaitingAreaManager {
 	// 	public bool TryPlacePassenger(Passenger passenger, out );

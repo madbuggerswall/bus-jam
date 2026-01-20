@@ -1,14 +1,12 @@
-using System.Collections.Generic;
 using Core.Buses;
 using Core.CameraSystem.Core;
 using Core.LevelGrids;
 using Core.Passengers;
 using Core.PathFinding;
-using Core.Waiting;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
-using Frolics.Grids.SpatialHelpers;
 using Frolics.Input;
+using Frolics.Signals;
 using Frolics.Utilities;
 using UnityEngine;
 
@@ -47,6 +45,7 @@ namespace Core.Input {
 	// TODO Rename
 	public class RuleManager : IInitializable {
 		// Services
+		private ISignalBus signalBus;
 		private IPathFinder pathFinder;
 		private IBusManager busManager;
 		private ILevelGridProvider gridProvider;
@@ -54,6 +53,7 @@ namespace Core.Input {
 		private IPassengerController passengerController;
 
 		void IInitializable.Initialize() {
+			signalBus = Context.Resolve<ISignalBus>();
 			pathFinder = Context.Resolve<IPathFinder>();
 			busManager = Context.Resolve<IBusManager>();
 			gridProvider = Context.Resolve<ILevelGridProvider>();
@@ -75,7 +75,8 @@ namespace Core.Input {
 				currentBus.HavePassenger(passenger);
 				levelGrid.RemoveElement(passenger);
 				pathFinder.OnGridModified();
-				passengerController.PlayGridToBus(passenger, cell);
+				signalBus.Fire(new PassengerBoardSignal(currentBus, passenger, cell));
+				// passengerController.PlayGridToBus(passenger, cell);
 
 				if (currentBus.IsFull()) {
 					busManager.OnBusFill();
@@ -87,15 +88,13 @@ namespace Core.Input {
 
 				levelGrid.RemoveElement(passenger);
 				pathFinder.OnGridModified();
-				passengerController.PlayGridToWaiting(passenger, cell, waitingCell);
+				signalBus.Fire(new PassengerWaitSignal(passenger, cell, waitingCell));
+				// passengerController.PlayGridToWaiting(passenger, cell, waitingCell);
 
 				if (!waitingGrid.HasEmptyCells()) {
 					// TODO GameOver
 				}
 			}
-
-			// List<SquareCoord> squareCoords = pathFinder.GetPath(cell.GetCoord());
-			// passenger.GetController().PlayPathTween(levelGridProvider.GetGrid(), squareCoords);
 		}
 
 		private void CheckWaitingArea() {
@@ -113,7 +112,8 @@ namespace Core.Input {
 
 				bus.HavePassenger(passenger);
 				grid.RemovePassenger(passenger);
-				passengerController.PlayWaitingToBus(passenger);
+				signalBus.Fire(new WaitingPassengerBoardSignal(bus, passenger));
+				// passengerController.PlayWaitingToBus(passenger);
 			}
 		}
 	}

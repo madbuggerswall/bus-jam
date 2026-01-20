@@ -13,7 +13,7 @@ namespace Core.Buses {
 	public interface IBusManager {
 		public void OnBusFill();
 		public Bus GetCurrentBus();
-		public Bus GetNextBus();
+		public Bus GetArrivingBus();
 		public Bus GetLeavingBus();
 	}
 
@@ -24,15 +24,17 @@ namespace Core.Buses {
 		private ISignalBus signalBus;
 
 		private Dictionary<Bus, int> waitingPassengersByBus;
+		private Queue<WaitingPassengerBoardSignal> waitingPassengersQueue;
 		private HashSet<Bus> busesToLeave;
 
 		void IInitializable.Initialize() {
 			passengerController = Context.Resolve<IPassengerController>();
 			busController = Context.Resolve<IBusController>();
-			busManager =  Context.Resolve<IBusManager>();
+			busManager = Context.Resolve<IBusManager>();
 			signalBus = Context.Resolve<ISignalBus>();
 
 			waitingPassengersByBus = new Dictionary<Bus, int>();
+			waitingPassengersQueue = new Queue<WaitingPassengerBoardSignal>();
 			busesToLeave = new HashSet<Bus>();
 
 			signalBus.SubscribeTo<PassengerBoardSignal>(OnPassengerBoard);
@@ -55,14 +57,14 @@ namespace Core.Buses {
 		}
 
 		private void OnBoardTweenComplete(Bus bus) {
-			if (!waitingPassengersByBus.ContainsKey(bus))
+			if (waitingPassengersByBus.ContainsKey(bus))
 				waitingPassengersByBus[bus] -= 1;
 
 			if (waitingPassengersByBus[bus] == 0 && busesToLeave.Contains(bus)) {
 				waitingPassengersByBus.Remove(bus);
 				busesToLeave.Remove(bus);
-				
-				busController.
+				Tween tween = busController.PlayBusSequence();
+				tween.SetOnComplete(CheckWaitingQueue);
 			}
 		}
 
@@ -74,9 +76,22 @@ namespace Core.Buses {
 		}
 
 		private void OnWaitingPassengerBoard(WaitingPassengerBoardSignal signal) {
-			Bus bus = signal.Bus;
-			Passenger passenger = signal.Passenger;
-			passengerController.PlayWaitingToBus(passenger);
+			waitingPassengersQueue.Enqueue(signal);
+			
+		}
+
+		private void CheckWaitingQueue() {
+			while(waitingPassengersQueue.Count > 0) {
+				WaitingPassengerBoardSignal signal = waitingPassengersQueue.Dequeue(); 
+				Bus bus = signal.Bus;
+				Passenger passenger = signal.Passenger;
+
+				if (!waitingPassengersByBus.TryAdd(bus, 1))
+					waitingPassengersByBus[bus] += 1;
+
+				Tween tween = passengerController.PlayWaitingToBus(passenger);
+				tween.SetOnComplete(() => OnBoardTweenComplete(bus));
+			}
 		}
 
 		private void OnBusFull(BussFullSignal signal) {
@@ -130,17 +145,19 @@ namespace Core.Buses {
 		private BusData[] busDTOs;
 		private int currentIndex = 0;
 
-		private Bus nextBus;
+		private Bus arrivingBus;
 		private Bus currentBus;
 		private Bus leavingBus;
 
 		// Services
+		private ISignalBus signalBus;
 		private IBusController busController;
 		private IBusFactory busFactory;
 		private ILevelLoader levelLoader;
 
 
 		void IInitializable.Initialize() {
+			signalBus = Context.Resolve<ISignalBus>();
 			busFactory = Context.Resolve<IBusFactory>();
 			levelLoader = Context.Resolve<ILevelLoader>();
 			busController = Context.Resolve<IBusController>();
@@ -149,23 +166,24 @@ namespace Core.Buses {
 
 			// Init
 			BusData currentBusData = busDTOs[currentIndex++];
-			BusData nextBusData = busDTOs[currentIndex++];
+			BusData arrivingBusData = busDTOs[currentIndex++];
 
 			currentBus = busFactory.CreateBus(currentBusData);
 			busController.PlayStartToStopTween(currentBus);
 
-			nextBus = busFactory.CreateBus(nextBusData);
-			busController.PlaySpawnToStartTween(nextBus);
+			arrivingBus = busFactory.CreateBus(arrivingBusData);
+			busController.PlaySpawnToStartTween(arrivingBus);
 		}
 
 		void IBusManager.OnBusFill() {
-			leavingBus = currentBus;
-			currentBus = nextBus;
+			signalBus.Fire(new BussFullSignal(currentBus));
 
-			if (currentIndex < busDTOs.Length) {
-				BusData nextBusData = busDTOs[currentIndex++];
-				nextBus = busFactory.CreateBus(nextBusData);
-			}
+			leavingBus = currentBus;
+			currentBus = arrivingBus;
+			BusData nextBusData = busDTOs[currentIndex++];
+			arrivingBus = busFactory.CreateBus(nextBusData);
+
+			if (currentIndex < busDTOs.Length) { }
 
 			// busController.PlayStopToExitTween(currentBus);
 			// busController.PlayStartToStopTween(currentBus);
@@ -174,7 +192,7 @@ namespace Core.Buses {
 		}
 
 		Bus IBusManager.GetCurrentBus() => currentBus;
-		Bus IBusManager.GetNextBus() => nextBus;
+		Bus IBusManager.GetArrivingBus() => arrivingBus;
 		Bus IBusManager.GetLeavingBus() => leavingBus;
 	}
 }
