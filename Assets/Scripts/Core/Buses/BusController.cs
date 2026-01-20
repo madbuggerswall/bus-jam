@@ -26,9 +26,15 @@ namespace Core.Buses {
 			Bus leavingBus = busManager.GetLeavingBus();
 
 			Sequence sequence = Sequence.Create();
-			sequence.Join(CreateArrivingBusTween(arrivingBus, duration));
-			sequence.Join(CreateCurrentBusTween(currentBus, duration));
-			sequence.Join(CreateLeavingBusTween(leavingBus, duration));
+			if (arrivingBus != null)
+				sequence.Join(CreateArrivingBusTween(arrivingBus, duration));
+
+			if (currentBus != null)
+				sequence.Join(CreateCurrentBusTween(currentBus, duration));
+
+			if (leavingBus != null)
+				sequence.Join(CreateLeavingBusTween(leavingBus, duration));
+
 			sequence.Play();
 			return sequence;
 		}

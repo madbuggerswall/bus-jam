@@ -22,7 +22,7 @@ namespace Core.LevelGrids {
 			this.pivotPoint = pivotPoint;
 		}
 
-		public bool CanPlaceElementAtCell(LevelCell pivotCell, GridElement element) {
+		public bool CanPlaceElementAtCell(GridElement element, LevelCell pivotCell) {
 			SquareCoord[] coords = element.GetSquareCoords();
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 
@@ -33,7 +33,7 @@ namespace Core.LevelGrids {
 			return true;
 		}
 
-		public void PlaceElementAtCell(LevelCell pivotCell, GridElement element) {
+		public void PlaceElementAtCell(GridElement element, LevelCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = element.GetSquareCoords();
 
@@ -50,6 +50,13 @@ namespace Core.LevelGrids {
 				throw new InvalidOperationException("Element does not exist");
 
 			RemoveElement(element, pivotCell);
+		}
+
+		public LevelCell GetCell(GridElement element) {
+			if (!elements.TryGetValue(element, out LevelCell cell))
+				throw new InvalidOperationException("Element does not exist");
+
+			return cell;
 		}
 
 		public void ClearElements() {

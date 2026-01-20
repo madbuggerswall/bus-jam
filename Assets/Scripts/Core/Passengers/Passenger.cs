@@ -22,7 +22,5 @@ namespace Core.Passengers {
 		public Transform GetMeshTransform() => meshTransform;
 	}
 
-	public class ReservedPassenger : Passenger { }
-
 	// IDEA Rename to PassengerTweenHelper
 }

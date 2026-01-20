@@ -29,13 +29,14 @@ namespace Core.Contexts {
 			Bind<LevelLoader>().To<ILevelLoader>();
 			Bind<LevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
 			Bind<WaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
+			Bind<LevelAreaManager>().To<ILevelAreaManager>();
+			Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 
 			Bind<PathFinder>().To<IPathFinder>();
 			Bind<PassengerController>().To<IPassengerController>();
 			Bind<BusController>().To<IBusController>();
 			Bind<BusManager>().To<IBusManager>();
-			// Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
 			Bind<RuleManager>();
 			Bind<TweenTimer>();
 			

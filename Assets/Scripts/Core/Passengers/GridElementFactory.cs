@@ -21,7 +21,7 @@ namespace Core.Passengers {
 			Vector3 pivotOffset = element.transform.position - element.GetPivotWorldPosition();
 			element.transform.position = grid.GetWorldPosition(cell) + pivotOffset;
 
-			grid.PlaceElementAtCell(cell, element);
+			grid.PlaceElementAtCell(element, cell);
 			return element;
 		}
 	}

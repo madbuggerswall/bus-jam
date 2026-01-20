@@ -24,7 +24,7 @@ namespace Core.Buses {
 			meshRenderer.sharedMaterial = material;
 		}
 
-		public bool CanPassengerRide(Passenger passenger) {
+		public bool CanBoarPassenger(Passenger passenger) {
 			PassengerColor passengerColor = passenger.GetColor();
 			if (color != passengerColor)
 				return false;
@@ -52,6 +52,4 @@ namespace Core.Buses {
 		public int GetReservedCapacity() => reservedCapacity;
 		public int GetPassengerCount() => passengerCount;
 	}
-
-	public class ReservedBus : Bus { }
 }

@@ -22,72 +22,44 @@ namespace Core.Waiting.Grids {
 			this.pivotPoint = pivotPoint;
 		}
 
-		public bool HasEmptyCells() {
-			WaitingCell[] cells = GetCells();
-			for (int i = 0; i < cells.Length; i++)
-				if (!cells[i].HasPassenger())
-					return true;
+		public bool CanPlaceElementAtCell(Passenger passenger, WaitingCell pivotCell) {
+			SquareCoord[] coords = passenger.GetSquareCoords();
+			SquareCoord pivotCoord = pivotCell.GetCoord();
 
-			return false;
+			for (int i = 0; i < coords.Length; i++)
+				if (!TryGetCell(pivotCoord + coords[i], out WaitingCell cell) || cell.HasPassenger())
+					return false;
+
+			return true;
 		}
 
-		public bool TryPlacePassenger(Passenger passenger, out WaitingCell cell) {
-			WaitingCell[] cells = GetCells();
-			for (int i = 0; i < cells.Length; i++) {
-				if (cells[i].HasPassenger())
-					continue;
+		public void PlacePassengerAtCell(Passenger passenger, WaitingCell pivotCell) {
+			SquareCoord pivotCoord = pivotCell.GetCoord();
+			SquareCoord[] coords = passenger.GetSquareCoords();
 
-				cell = cells[i];
-				cell.SetPassenger(passenger);
-				passengers.Add(passenger, cell);
+			for (int i = 0; i < coords.Length; i++)
+				if (TryGetCell(pivotCoord + coords[i], out WaitingCell cell))
+					cell.SetPassenger(passenger);
 
-				return true;
-			}
-
-			cell = null;
-			return false;
+			if (!passengers.TryAdd(passenger, pivotCell))
+				throw new InvalidOperationException("Element already exists");
 		}
-
-		// public void PlaceToNextEmptyCell(Passenger passenger) { }
-
-		// public bool CanPlaceElementAtCell(LevelCell pivotCell, GridElement element) {
-		// 	SquareCoord[] coords = element.GetSquareCoords();
-		// 	SquareCoord pivotCoord = pivotCell.GetCoord();
-		//
-		// 	for (int i = 0; i < coords.Length; i++)
-		// 		if (!TryGetCell(pivotCoord + coords[i], out WaitingCell cell) || cell.HasPassenger())
-		// 			return false;
-		//
-		// 	return true;
-		// }
-
-		// public void PlacePassengerAtCell(WaitingCell pivotCell, Passenger passenger) {
-		// 	SquareCoord pivotCoord = pivotCell.GetCoord();
-		// 	SquareCoord[] coords = passenger.GetSquareCoords();
-		//
-		// 	for (int i = 0; i < coords.Length; i++)
-		// 		if (TryGetCell(pivotCoord + coords[i], out WaitingCell cell))
-		// 			cell.SetPassenger(passenger);
-		//
-		// 	if (!passengers.TryAdd(passenger, pivotCell))
-		// 		throw new InvalidOperationException("Element already exists");
-		// }
 
 		public void RemovePassenger(Passenger passenger) {
 			if (!passengers.Remove(passenger, out WaitingCell pivotCell))
 				throw new InvalidOperationException("Passenger does not exist");
 
-			RemoveElement(passenger, pivotCell);
+			RemovePassenger(passenger, pivotCell);
 		}
 
 		public void ClearPassengers() {
 			foreach ((Passenger passenger, WaitingCell pivotCell) in passengers) {
-				RemoveElement(passenger, pivotCell);
+				RemovePassenger(passenger, pivotCell);
 				passenger.GetLifecycle().Despawn();
 			}
 		}
 
-		private void RemoveElement(Passenger passenger, WaitingCell pivotCell) {
+		private void RemovePassenger(Passenger passenger, WaitingCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = passenger.GetSquareCoords();
 
