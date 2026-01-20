@@ -44,11 +44,12 @@ namespace Core.Buses {
 			// Init
 			BusData currentBusData = busDTOs[currentIndex++];
 			currentBus = busFactory.CreateBus(currentBusData);
-			busController.PlayStartToStopTween(currentBus);
 
 			BusData arrivingBusData = busDTOs[currentIndex++];
 			arrivingBus = busFactory.CreateBus(arrivingBusData);
-			busController.PlaySpawnToStartTween(arrivingBus);
+
+			// TODO TweenTimer needs to play this
+			busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
 		}
 
 		public void BoardPassenger(Passenger passenger) {
@@ -79,16 +80,16 @@ namespace Core.Buses {
 		private void OnBusFull() {
 			leavingBus = currentBus;
 			currentBus = arrivingBus;
-			signalBus.Fire(new BussFullSignal(leavingBus));
 
 			if (currentIndex >= busDTOs.Length) {
 				arrivingBus = null;
-				return;
+			} else {
+				BusData nextBusData = busDTOs[currentIndex++];
+				arrivingBus = busFactory.CreateBus(nextBusData);
 			}
 
-			BusData nextBusData = busDTOs[currentIndex++];
-			arrivingBus = busFactory.CreateBus(nextBusData);
 
+			signalBus.Fire(new BussFullSignal(arrivingBus, currentBus, leavingBus));
 			BoardWaitingPassengers();
 		}
 

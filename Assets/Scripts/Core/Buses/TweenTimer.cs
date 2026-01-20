@@ -17,6 +17,7 @@ namespace Core.Buses {
 
 		private Dictionary<Bus, int> waitingPassengersByBus;
 		private Queue<WaitingPassengerBoardSignal> waitingPassengersQueue;
+		private Queue<BussFullSignal> busSequenceQueue;
 		private HashSet<Bus> busesToLeave;
 
 		void IInitializable.Initialize() {
@@ -28,6 +29,7 @@ namespace Core.Buses {
 
 			waitingPassengersByBus = new Dictionary<Bus, int>();
 			waitingPassengersQueue = new Queue<WaitingPassengerBoardSignal>();
+			busSequenceQueue = new Queue<BussFullSignal>();
 			busesToLeave = new HashSet<Bus>();
 
 			signalBus.SubscribeTo<PassengerBoardSignal>(OnPassengerBoard);
@@ -56,7 +58,11 @@ namespace Core.Buses {
 			if (waitingPassengersByBus[bus] == 0 && busesToLeave.Contains(bus)) {
 				waitingPassengersByBus.Remove(bus);
 				busesToLeave.Remove(bus);
-				Tween tween = busController.PlayBusSequence();
+				BussFullSignal bussFullSignal = busSequenceQueue.Dequeue();
+				Bus arrivingBus = bussFullSignal.ArrivingBus;
+				Bus currentBus = bussFullSignal.CurrentBus;
+				Bus leavingBus = bussFullSignal.LeavingBus;
+				Tween tween = busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
 				tween.SetOnComplete(CheckWaitingQueue);
 			}
 		}
@@ -87,7 +93,8 @@ namespace Core.Buses {
 		}
 
 		private void OnBusFull(BussFullSignal signal) {
-			busesToLeave.Add(signal.Bus);
+			busesToLeave.Add(signal.LeavingBus);
+			busSequenceQueue.Enqueue(signal);
 		}
 	}
 }

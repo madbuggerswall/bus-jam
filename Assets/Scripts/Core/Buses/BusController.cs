@@ -12,18 +12,11 @@ namespace Core.Buses {
 		[SerializeField] private Transform stopPoint;
 		[SerializeField] private Transform exitPoint;
 
-		private IBusManager busManager;
 
-		void IInitializable.Initialize() {
-			busManager = Context.Resolve<IBusManager>();
-		}
+		void IInitializable.Initialize() { }
 
-		Tween IBusController.PlayBusSequence() {
+		Tween IBusController.PlayBusSequence(Bus arrivingBus, Bus currentBus, Bus leavingBus) {
 			const float duration = 0.5f;
-
-			Bus arrivingBus = busManager.GetArrivingBus();
-			Bus currentBus = busManager.GetCurrentBus();
-			Bus leavingBus = busManager.GetLeavingBus();
 
 			Sequence sequence = Sequence.Create();
 			if (arrivingBus != null)
@@ -57,35 +50,6 @@ namespace Core.Buses {
 			bus.transform.position = stopPoint.position;
 			Tween tween = bus.transform.TweenPosition(exitPoint.position, duration);
 			tween.SetEase(Ease.Type.InOutQuad);
-			return tween;
-		}
-
-		Tween IBusController.PlaySpawnToStartTween(Bus bus) {
-			const float duration = 0.5f;
-
-			bus.transform.position = spawnPoint.position;
-			Tween tween = bus.transform.TweenPosition(startPoint.position, duration);
-			tween.SetEase(Ease.Type.InOutQuad);
-			return tween;
-		}
-
-		Tween IBusController.PlayStartToStopTween(Bus bus) {
-			const float duration = 0.5f;
-			bus.transform.position = startPoint.position;
-
-			Tween tween = bus.transform.TweenPosition(stopPoint.position, duration);
-			tween.SetEase(Ease.Type.InOutQuad);
-			tween.Play();
-			return tween;
-		}
-
-		Tween IBusController.PlayStopToExitTween(Bus bus) {
-			const float duration = 0.5f;
-			bus.transform.position = stopPoint.position;
-
-			Tween tween = bus.transform.TweenPosition(exitPoint.position, duration);
-			tween.SetEase(Ease.Type.InOutQuad);
-			tween.Play();
 			return tween;
 		}
 	}

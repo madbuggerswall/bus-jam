@@ -2,10 +2,14 @@ using Frolics.Signals;
 
 namespace Core.Buses {
 	public struct BussFullSignal : ISignal {
-		public Bus Bus { get; }
+		public Bus ArrivingBus { get; }
+		public Bus CurrentBus { get; }
+		public Bus LeavingBus { get; }
 
-		public BussFullSignal(Bus bus) {
-			this.Bus = bus;
+		public BussFullSignal(Bus arrivingBus, Bus currentBus, Bus leavingBus) {
+			ArrivingBus = arrivingBus;
+			CurrentBus = currentBus;
+			LeavingBus = leavingBus;
 		}
 	}
 }
