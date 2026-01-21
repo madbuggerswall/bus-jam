@@ -2,35 +2,31 @@ using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
-using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Grids.SpatialHelpers;
-using Frolics.Signals;
 using Frolics.Utilities;
 
 namespace Core.Mechanics {
 	public class RuleService : IInitializable, IRuleService {
 		// Services
-		private ISignalBus signalBus;
 		private IPathFinder pathFinder;
 		private IBusManager busManager;
 		private ILevelGridProvider gridProvider;
-		private IWaitingGridProvider waitingGridProvider;
 		private IWaitingAreaManager waitingAreaManager;
-		private IPassengerController passengerController;
 		private ILevelStateManager levelStateManager;
 
 		void IInitializable.Initialize() {
-			signalBus = Context.Resolve<ISignalBus>();
 			pathFinder = Context.Resolve<IPathFinder>();
 			busManager = Context.Resolve<IBusManager>();
 			gridProvider = Context.Resolve<ILevelGridProvider>();
-			waitingGridProvider = Context.Resolve<IWaitingGridProvider>();
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
-			passengerController = Context.Resolve<IPassengerController>();
+			levelStateManager = Context.Resolve<ILevelStateManager>();
 		}
 
 		void IRuleService.OnPassengerSelected(Passenger passenger, LevelCell cell) {
+			if (levelStateManager.HasLevelEnded())
+				return;
+
 			if (!pathFinder.IsTargetReachable(cell.GetCoord())) {
 				passenger.GetTweenHelper().PlayUnreachableTween();
 				return;
@@ -39,17 +35,15 @@ namespace Core.Mechanics {
 			if (busManager.TryBoardPassenger(passenger)) {
 				NotifyNeighbors(cell);
 				NotifyAll();
+				CheckLevelState();
 				return;
 			}
 
 			if (waitingAreaManager.TryPlacePassenger(passenger)) {
 				NotifyNeighbors(cell);
 				NotifyAll();
+				CheckLevelState();
 				return;
-			}
-
-			if (!waitingAreaManager.HasEmptySlots()) {
-				levelStateManager.OnFail();
 			}
 		}
 
@@ -77,6 +71,14 @@ namespace Core.Mechanics {
 
 				passenger.OnAnyMove();
 			}
+		}
+
+		private void CheckLevelState() {
+			if (!waitingAreaManager.HasEmptySlots())
+				levelStateManager.OnFail();
+
+			if (busManager.AreAllBusesFilled())
+				levelStateManager.OnSuccess();
 		}
 	}
 }

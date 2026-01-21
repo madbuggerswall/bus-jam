@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Core.GridElements;
 using Core.LevelGrids;
-using Core.Passengers;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;

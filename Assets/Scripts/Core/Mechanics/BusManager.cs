@@ -14,6 +14,7 @@ namespace Core.Mechanics {
 	public class BusManager : IInitializable, IBusManager {
 		private BusDTO[] busDTOs;
 		private int currentIndex = 0;
+		private int busesFilled = 0;
 
 		private Bus arrivingBus;
 		private Bus currentBus;
@@ -54,12 +55,17 @@ namespace Core.Mechanics {
 			busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
 		}
 
-		public bool TryBoardPassenger(Passenger passenger) {
+		bool IBusManager.TryBoardPassenger(Passenger passenger) {
 			if (!currentBus.CanBoardPassenger(passenger))
 				return false;
 
 			BoardPassenger(passenger);
 			return true;
+		}
+
+		bool IBusManager.AreAllBusesFilled() {
+			UnityEngine.Debug.Log($"BusesFilled: {busesFilled} | busDTOs: {busDTOs.Length}");
+			return busesFilled == busDTOs.Length;
 		}
 
 		private void BoardPassenger(Passenger passenger) {
@@ -73,8 +79,9 @@ namespace Core.Mechanics {
 			if (currentBus.IsFull())
 				OnBusFull();
 		}
-		
+
 		private void OnBusFull() {
+			busesFilled++;
 			leavingBus = currentBus;
 			currentBus = arrivingBus;
 

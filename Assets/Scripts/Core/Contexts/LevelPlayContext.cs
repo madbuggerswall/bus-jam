@@ -32,6 +32,7 @@ namespace Core.Contexts {
 			Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 
+			// Mechanics
 			Bind<PathFinder>().To<IPathFinder>();
 			Bind<PassengerController>().To<IPassengerController>();
 			Bind<BusController>().To<IBusController>();
@@ -39,8 +40,11 @@ namespace Core.Contexts {
 			Bind<RuleService>().To<IRuleService>();
 			Bind<TweenTimer>();
 			
+			// Input
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();
 			Bind<PassengerClickHandler>();
+			
+			Bind<LevelStateManager>().To<ILevelStateManager>();
 		}
 
 		protected override void OnInitialized() {

@@ -1,17 +1,24 @@
 using Frolics.Utilities;
+using UnityEngine;
 
 namespace Core.Levels {
 	public class LevelStateManager : IInitializable, ILevelStateManager {
-		void IInitializable.Initialize() {
-			throw new System.NotImplementedException();
+		private bool levelFailed;
+		private bool levelSucceeded;
+		void IInitializable.Initialize() { }
+
+		bool ILevelStateManager.HasLevelEnded() {
+			return levelFailed || levelSucceeded;
 		}
 
 		void ILevelStateManager.OnSuccess() {
-			throw new System.NotImplementedException();
+			Debug.Log("Success");
+			levelSucceeded = true;
 		}
 
 		void ILevelStateManager.OnFail() {
-			throw new System.NotImplementedException();
+			Debug.Log("Fail");
+			levelFailed = true;
 		}
 	}
 }
