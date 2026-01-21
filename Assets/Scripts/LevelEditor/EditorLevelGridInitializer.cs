@@ -27,6 +27,7 @@ namespace LevelEditor {
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
 			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
+			gridElementFactory = Context.Resolve<IGridElementFactory>();
 		}
 
 		// TODO Remove ContextMenu

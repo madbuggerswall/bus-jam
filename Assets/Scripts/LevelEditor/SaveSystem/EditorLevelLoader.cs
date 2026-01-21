@@ -2,12 +2,14 @@ using Core.Data;
 using Core.LevelGrids;
 using Core.Mechanics;
 using Frolics.Contexts;
+using Frolics.Signals;
 using Frolics.Utilities;
 using LevelEditor.BusGrids;
 
 namespace LevelEditor.SaveSystem {
 	public class EditorLevelLoader : IInitializable, IEditorLevelLoader {
 		// Services
+		private ISignalBus signalBus;
 		private ILevelDefinitionLoader levelDefinitionLoader;
 		private IEditorLevelGridInitializer levelGridInitializer;
 		private IEditorWaitingGridInitializer waitingGridInitializer;
@@ -23,6 +25,7 @@ namespace LevelEditor.SaveSystem {
 
 
 		void IInitializable.Initialize() {
+			signalBus = Context.Resolve<ISignalBus>();
 			levelDefinitionLoader = Context.Resolve<ILevelDefinitionLoader>();
 			levelGridInitializer = Context.Resolve<IEditorLevelGridInitializer>();
 			waitingGridInitializer = Context.Resolve<IEditorWaitingGridInitializer>();
@@ -79,6 +82,16 @@ namespace LevelEditor.SaveSystem {
 			BusCell[] busCells = busGrid.GetCells();
 			for (int i = 0; i < busDTOs.Length; i++)
 				busDTOSpawner.SpawnBus(busDTOs[i], busCells[i]);
+
+			signalBus.Fire(new EditorLevelLoadedSignal(levelDTO));
+		}
+	}
+
+	public struct EditorLevelLoadedSignal : ISignal {
+		public LevelDTO LevelDTO { get; }
+
+		public EditorLevelLoadedSignal(LevelDTO levelDTO) {
+			LevelDTO = levelDTO;
 		}
 	}
 }
