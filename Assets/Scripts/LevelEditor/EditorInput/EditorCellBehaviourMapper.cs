@@ -4,7 +4,7 @@ using Frolics.Contexts;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorInput {
 	public class EditorCellBehaviourMapper : IInitializable, IEditorCellBehaviourMapper {
 		private Dictionary<Collider, LevelCellBehaviour> cellBehavioursByColliders = new();
 		private Dictionary<LevelCell, LevelCellBehaviour> cellBehavioursByCells = new();

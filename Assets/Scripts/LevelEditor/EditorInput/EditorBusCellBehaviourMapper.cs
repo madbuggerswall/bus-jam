@@ -4,7 +4,7 @@ using Frolics.Utilities;
 using LevelEditor.BusGrids;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorInput {
 	public class EditorBusCellBehaviourMapper : IInitializable, IEditorBusCellBehaviourMapper {
 		private Dictionary<Collider, BusCellBehaviour> cellBehaviourMap = new();
 
