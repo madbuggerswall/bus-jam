@@ -1,8 +1,10 @@
 using Core.Buses;
 using Core.CameraSystem.Core;
+using Core.GridElements;
 using Core.Input;
 using Core.LevelGrids;
 using Core.Levels;
+using Core.Mechanics;
 using Core.Passengers;
 using Core.PathFinding;
 using Core.Waiting.Grids;
@@ -34,7 +36,7 @@ namespace Core.Contexts {
 			Bind<PassengerController>().To<IPassengerController>();
 			Bind<BusController>().To<IBusController>();
 			Bind<BusManager>().To<IBusManager>();
-			Bind<RuleManager>();
+			Bind<RuleService>().To<IRuleService>();
 			Bind<TweenTimer>();
 			
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();

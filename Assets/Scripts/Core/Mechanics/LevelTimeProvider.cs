@@ -1,7 +1,7 @@
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace Core.Data {
+namespace Core.Mechanics {
 	public class LevelTimeProvider : MonoBehaviour, IInitializable, ILevelTimeProvider {
 		[SerializeField] private float levelTime = 300;
 

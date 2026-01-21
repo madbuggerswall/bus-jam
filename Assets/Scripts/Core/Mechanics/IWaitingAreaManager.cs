@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Core.Passengers;
 
-namespace Core.Waiting.Grids {
+namespace Core.Mechanics {
 	public interface IWaitingAreaManager {
 		public bool HasEmptySlots();
 		public bool TryPlacePassenger(Passenger passenger);

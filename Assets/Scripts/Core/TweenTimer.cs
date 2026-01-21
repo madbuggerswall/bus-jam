@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using Core.Buses;
 using Core.LevelGrids;
 using Core.Passengers;
+using Core.Signals;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Tweens.Core;
 using Frolics.Utilities;
 
-namespace Core.Buses {
+namespace Core {
 	public class TweenTimer : IInitializable {
 		private IPassengerController passengerController;
 		private IBusController busController;

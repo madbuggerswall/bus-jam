@@ -2,13 +2,13 @@ using Frolics.Contexts;
 using UnityEditor;
 
 namespace LevelEditor.SaveSystem {
-	public static class SaveLevelDefinitionContextMenu {
+	public static class LoadLevelDefinitionContextMenu {
 		private const string MenuPath = "Assets/Create/Levels/LevelDefinition/";
-		private const string FileName = "Save Current Level";
+		private const string FileName = "Load Level";
 
 		[MenuItem(MenuPath + FileName)]
 		private static void SaveLevelDefinition() {
-			Context.Resolve<ILevelDefinitionSaver>().SaveLevelDefinition();
+			Context.Resolve<IEditorLevelLoader>().LoadLevel();
 		}
 	}
 }

@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using Core.Buses;
 using Core.Data;
 using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
 using Core.PathFinding;
-using Core.Waiting.Grids;
+using Core.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
 
-namespace Core.Buses {
+namespace Core.Mechanics {
 	public class BusManager : IInitializable, IBusManager {
 		private BusDTO[] busDTOs;
 		private int currentIndex = 0;
@@ -49,10 +50,19 @@ namespace Core.Buses {
 			arrivingBus = busFactory.CreateBus(arrivingBusDTO);
 
 			// TODO TweenTimer needs to play this
+			// TODO OnBusesInitialized
 			busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
 		}
 
-		public void BoardPassenger(Passenger passenger) {
+		public bool TryBoardPassenger(Passenger passenger) {
+			if (!currentBus.CanBoardPassenger(passenger))
+				return false;
+
+			BoardPassenger(passenger);
+			return true;
+		}
+
+		private void BoardPassenger(Passenger passenger) {
 			LevelCell cell = levelAreaManager.GetCell(passenger);
 
 			currentBus.HavePassenger(passenger);
@@ -63,20 +73,7 @@ namespace Core.Buses {
 			if (currentBus.IsFull())
 				OnBusFull();
 		}
-
-		public void BoardWaitingPassenger(Passenger passenger) {
-			currentBus.HavePassenger(passenger);
-			waitingAreaManager.RemovePassenger(passenger);
-			signalBus.Fire(new WaitingPassengerBoardSignal(currentBus, passenger));
-
-			if (currentBus.IsFull())
-				OnBusFull();
-		}
-
-		public bool CanBoardPassenger(Passenger passenger) {
-			return currentBus.CanBoardPassenger(passenger);
-		}
-
+		
 		private void OnBusFull() {
 			leavingBus = currentBus;
 			currentBus = arrivingBus;
@@ -96,13 +93,22 @@ namespace Core.Buses {
 			List<Passenger> passengers = waitingAreaManager.GetPassengers();
 			for (int i = passengers.Count - 1; i >= 0; i--) {
 				Passenger passenger = passengers[i];
-				if (CanBoardPassenger(passenger))
+				if (currentBus.CanBoardPassenger(passenger))
 					BoardWaitingPassenger(passenger);
 			}
 		}
 
-		Bus IBusManager.GetCurrentBus() => currentBus;
-		Bus IBusManager.GetArrivingBus() => arrivingBus;
-		Bus IBusManager.GetLeavingBus() => leavingBus;
+		private void BoardWaitingPassenger(Passenger passenger) {
+			currentBus.HavePassenger(passenger);
+			waitingAreaManager.RemovePassenger(passenger);
+			signalBus.Fire(new WaitingPassengerBoardSignal(currentBus, passenger));
+
+			if (currentBus.IsFull())
+				OnBusFull();
+		}
+
+		// Bus IBusManager.GetCurrentBus() => currentBus;
+		// Bus IBusManager.GetArrivingBus() => arrivingBus;
+		// Bus IBusManager.GetLeavingBus() => leavingBus;
 	}
 }

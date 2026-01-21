@@ -1,6 +1,7 @@
+using Core.Buses;
 using Frolics.Signals;
 
-namespace Core.Buses {
+namespace Core.Signals {
 	public struct BussFullSignal : ISignal {
 		public Bus ArrivingBus { get; }
 		public Bus CurrentBus { get; }

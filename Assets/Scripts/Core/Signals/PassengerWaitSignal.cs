@@ -3,7 +3,7 @@ using Core.Passengers;
 using Core.Waiting.Grids;
 using Frolics.Signals;
 
-namespace Core.Buses {
+namespace Core.Signals {
 	public struct PassengerWaitSignal : ISignal {
 		public Passenger Passenger { get; }
 		public LevelCell Cell { get; }

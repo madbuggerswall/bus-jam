@@ -3,6 +3,7 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.LevelGrids {
+	// TODO Remove this
 	[System.Serializable]
 	public class LevelGridPreview : MonoBehaviour {
 		[Header("Grid Settings")]

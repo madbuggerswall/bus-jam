@@ -1,9 +1,10 @@
+using Core.LevelGrids;
 using Core.Passengers;
 using Core.PathFinding;
 using Frolics.Contexts;
 using Frolics.Utilities;
 
-namespace Core.LevelGrids {
+namespace Core.Mechanics {
 	public class LevelAreaManager : IInitializable, ILevelAreaManager {
 		// Services 
 		private ILevelGridProvider levelGridProvider;

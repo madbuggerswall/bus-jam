@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using Core.Buses;
 using Core.LevelGrids;
 using Core.Passengers;
 using Core.PathFinding;
+using Core.Signals;
+using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
 
-namespace Core.Waiting.Grids {
+namespace Core.Mechanics {
 	public class WaitingAreaManager : IInitializable, IWaitingAreaManager {
 		private readonly List<Passenger> passengers = new();
 

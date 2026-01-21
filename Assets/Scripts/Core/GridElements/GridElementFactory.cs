@@ -1,10 +1,9 @@
-using Core.GridElements;
 using Core.LevelGrids;
 using Frolics.Pooling;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace Core.Passengers {
+namespace Core.GridElements {
 	public class GridElementFactory : MonoBehaviour, IInitializable, IGridElementFactory {
 		private IObjectPool<GridElement> pool;
 

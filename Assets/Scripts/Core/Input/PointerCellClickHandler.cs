@@ -1,5 +1,6 @@
 using Core.CameraSystem.Core;
 using Core.LevelGrids;
+using Core.Mechanics;
 using Core.Passengers;
 using Frolics.Contexts;
 using Frolics.Input;
@@ -11,13 +12,13 @@ namespace Core.Input {
 		protected readonly IInputManager inputManager;
 		private readonly IMainCameraProvider cameraProvider;
 		private readonly ICellBehaviourMapper cellBehaviourMapper;
-		private readonly RuleManager ruleManager;
+		private readonly IRuleService ruleService;
 
 		protected PointerCellClickHandler() {
 			inputManager = Context.Resolve<IInputManager>();
 			cameraProvider = Context.Resolve<IMainCameraProvider>();
 			cellBehaviourMapper = Context.Resolve<ICellBehaviourMapper>();
-			ruleManager = Context.Resolve<RuleManager>();
+			ruleService = Context.Resolve<IRuleService>();
 		}
 
 		// Sandbox methods 
@@ -33,7 +34,7 @@ namespace Core.Input {
 			if (cell.GetGridElement() is not Passenger passenger)
 				return;
 
-			ruleManager.OnPassengerSelected(passenger, cell);
+			ruleService.OnPassengerSelected(passenger, cell);
 		}
 	}
 }
