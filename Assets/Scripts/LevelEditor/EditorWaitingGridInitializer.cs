@@ -8,6 +8,7 @@ using UnityEngine;
 namespace LevelEditor {
 	public class EditorWaitingGridInitializer : MonoBehaviour,
 		IInitializable,
+		IEditorWaitingGridInitializer,
 		IWaitingGridBehaviourProvider,
 		IWaitingGridProvider {
 		[SerializeField] private Vector2Int gridSize = new Vector2Int(7, 1);
@@ -24,6 +25,29 @@ namespace LevelEditor {
 			cellBehaviourFactory = Context.Resolve<IWaitingCellBehaviourFactory>();
 		}
 
+		// TODO Remove ContextMenu
+		[ContextMenu("Create Grid")]
+		void IEditorWaitingGridInitializer.CreateGrid() {
+			DespawnGrid();
+
+			gridBehaviour = gridBehaviourFactory.Create();
+			grid = CreateWaitingGrid();
+			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
+		}
+
+		void IEditorWaitingGridInitializer.SetGridSize(Vector2Int gridSize) => this.gridSize = gridSize;
+
+		private void DespawnGrid() {
+			if (gridBehaviour == null)
+				return;
+
+			List<WaitingCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
+			for (int index = 0; index < cellBehaviours.Count; index++)
+				cellBehaviourFactory.Despawn(cellBehaviours[index]);
+
+			gridBehaviourFactory.Despawn(gridBehaviour);
+		}
+
 		private WaitingGrid CreateWaitingGrid() {
 			const GridPlane gridPlane = GridPlane.XZ;
 			const float cellDiameter = 1f;
@@ -36,25 +60,5 @@ namespace LevelEditor {
 
 		WaitingGridBehaviour IWaitingGridBehaviourProvider.GetWaitingGridBehaviour() => gridBehaviour;
 		WaitingGrid IWaitingGridProvider.GetGrid() => grid;
-
-		[ContextMenu("Create Grid")]
-		public void CreateGrid() {
-			DespawnFormerGrid();
-
-			gridBehaviour = gridBehaviourFactory.Create();
-			grid = CreateWaitingGrid();
-			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
-		}
-
-		private void DespawnFormerGrid() {
-			if (gridBehaviour == null)
-				return;
-
-			List<WaitingCellBehaviour> cellBehaviours = gridBehaviour.GetCellBehaviours();
-			for (int index = 0; index < cellBehaviours.Count; index++)
-				cellBehaviourFactory.Despawn(cellBehaviours[index]);
-
-			gridBehaviourFactory.Despawn(gridBehaviour);
-		}
 	}
 }

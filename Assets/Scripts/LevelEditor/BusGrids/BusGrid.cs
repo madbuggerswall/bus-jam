@@ -60,6 +60,9 @@ namespace LevelEditor.BusGrids {
 					cell.SetBus(null);
 		}
 
+		// Editor
+		public Dictionary<EditorBus, BusCell> GetBuses() => buses;
+
 		public override Vector3 GetPivotPoint() => transform.TransformPoint(pivotPoint);
 	}
 }

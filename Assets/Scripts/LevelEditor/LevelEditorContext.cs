@@ -21,9 +21,18 @@ namespace LevelEditor {
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<EditorBusFactory>().To<IEditorBusFactory>();
 
-			Bind<EditorLevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
-			Bind<EditorWaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
-			Bind<BusGridInitializer>().To<IBusGridBehaviourProvider>().To<IBusGridProvider>();
+			Bind<LevelTimeProvider>().To<ILevelTimeProvider>();
+			Bind<EditorLevelGridInitializer>()
+				.To<IEditorLevelGridInitializer>()
+				.To<ILevelGridBehaviourProvider>()
+				.To<ILevelGridProvider>();
+
+			Bind<EditorWaitingGridInitializer>()
+				.To<IEditorWaitingGridInitializer>()
+				.To<IWaitingGridBehaviourProvider>()
+				.To<IWaitingGridProvider>();
+
+			Bind<BusGridInitializer>().To<IBusGridInitializer>().To<IBusGridBehaviourProvider>().To<IBusGridProvider>();
 
 			Bind<EditorCellBehaviourMapper>().To<IEditorCellBehaviourMapper>();
 			Bind<EditorLevelCellSelector>().To<IEditorLevelCellSelector>();
@@ -35,13 +44,17 @@ namespace LevelEditor {
 
 			Bind<LevelDataSaver>().To<ILevelDataSaver>();
 			Bind<LevelDefinitionSaver>().To<ILevelDefinitionSaver>();
-			Bind<LevelTimeProvider>().To<ILevelTimeProvider>();
+
+			Bind<PassengerDTOSpawner>().To<IPassengerDTOSpawner>();
+			Bind<BusDTOSpawner>().To<IBusDTOSpawner>();
+			Bind<LevelDefinitionLoader>().To<ILevelDefinitionLoader>();
+			Bind<EditorLevelLoader>().To<IEditorLevelLoader>();
 		}
 
 		protected override void OnInitialized() {
-			Resolve<EditorLevelGridInitializer>().CreateGrid();
-			Resolve<EditorWaitingGridInitializer>().CreateGrid();
-			Resolve<BusGridInitializer>().CreateGrid();
+			Resolve<IEditorLevelGridInitializer>().CreateGrid();
+			Resolve<IEditorWaitingGridInitializer>().CreateGrid();
+			Resolve<IBusGridInitializer>().CreateGrid();
 		}
 	}
 }

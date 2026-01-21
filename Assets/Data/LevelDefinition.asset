@@ -15,6 +15,7 @@ MonoBehaviour:
   levelDTO:
     levelGridSize: {x: 6, y: 6}
     waitingGridSize: {x: 7, y: 1}
+    busGridSize: {x: 8, y: 2}
     levelTime: 300
     cellDTOs:
     - isEmpty: 0

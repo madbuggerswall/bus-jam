@@ -5,5 +5,7 @@ namespace LevelEditor {
 	public interface IEditorCellBehaviourMapper {
 		public void MapCellBehavioursByCollider();
 		public bool TryGetCellBehaviour(Collider collider, out LevelCellBehaviour cellBehaviour);
+		void MapCellBehavioursByCells();
+		bool TryGetCellBehaviour(LevelCell cell, out LevelCellBehaviour cellBehaviour);
 	}
 }

@@ -31,7 +31,7 @@ namespace Core.LevelGrids {
 			const float cellDiameter = 1f;
 
 			LevelDTO levelDTO = levelLoader.GetLevelData();
-			Vector2Int gridSize = levelDTO.GetGridSize();
+			Vector2Int gridSize = levelDTO.GetLevelGridSize();
 			CellDTO[] cellDTOs = levelDTO.GetCellDTOs();
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, -gridSize.y);

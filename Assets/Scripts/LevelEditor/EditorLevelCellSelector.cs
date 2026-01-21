@@ -8,10 +8,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace LevelEditor {
-	public interface IEditorLevelCellSelector {
-		public LevelCell GetSelectedCell();
-	}
-
 	public class EditorLevelCellSelector : IInitializable, IEditorLevelCellSelector {
 		private LevelCell selectedCell;
 

@@ -68,6 +68,9 @@ namespace Core.LevelGrids {
 					cell.SetGridElement(null);
 		}
 
+		// Editor
+		public Dictionary<GridElement, LevelCell> GetElements() => elements;
+
 		public override Vector3 GetPivotPoint() => transform.TransformPoint(pivotPoint);
 	}
 }

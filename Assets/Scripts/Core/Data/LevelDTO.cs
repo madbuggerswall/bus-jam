@@ -6,6 +6,7 @@ namespace Core.Data {
 	public class LevelDTO {
 		[SerializeField] private Vector2Int levelGridSize;
 		[SerializeField] private Vector2Int waitingGridSize;
+		[SerializeField] private Vector2Int busGridSize;
 		[SerializeField] private float levelTime;
 		[SerializeField] private CellDTO[] cellDTOs;
 		[SerializeField] private PassengerDTO[] passengerDTOs;
@@ -14,6 +15,7 @@ namespace Core.Data {
 		public LevelDTO(
 			Vector2Int levelGridSize,
 			Vector2Int waitingGridSize,
+			Vector2Int busGridSize,
 			float levelTime,
 			CellDTO[] cellDTOs,
 			PassengerDTO[] passengerDTOs,
@@ -21,14 +23,16 @@ namespace Core.Data {
 		) {
 			this.levelGridSize = levelGridSize;
 			this.waitingGridSize = waitingGridSize;
+			this.busGridSize = busGridSize;
 			this.levelTime = levelTime;
 			this.cellDTOs = cellDTOs;
 			this.passengerDTOs = passengerDTOs;
 			this.busDTOs = busDTOs;
 		}
 
-		public Vector2Int GetGridSize() => levelGridSize;
+		public Vector2Int GetLevelGridSize() => levelGridSize;
 		public Vector2Int GetWaitingGridSize() => waitingGridSize;
+		public Vector2Int GetBusGridSize() => busGridSize;
 		public float GetLevelTime() => levelTime;
 		public CellDTO[] GetCellDTOs() => cellDTOs;
 		public PassengerDTO[] GetPassengerDTOs() => passengerDTOs;

@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace LevelEditor {
 	public class EditorCellBehaviourMapper : IInitializable, IEditorCellBehaviourMapper {
-		private Dictionary<Collider, LevelCellBehaviour> cellBehaviourMap = new();
+		private Dictionary<Collider, LevelCellBehaviour> cellBehavioursByColliders = new();
+		private Dictionary<LevelCell, LevelCellBehaviour> cellBehavioursByCells = new();
 
 		// Services
 		private ILevelGridBehaviourProvider levelGridBehaviourProvider;
@@ -16,14 +17,25 @@ namespace LevelEditor {
 		}
 
 		void IEditorCellBehaviourMapper.MapCellBehavioursByCollider() {
-			cellBehaviourMap.Clear();
+			cellBehavioursByColliders.Clear();
 			List<LevelCellBehaviour> cellBehaviours = levelGridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
 			for (int i = 0; i < cellBehaviours.Count; i++)
-				cellBehaviourMap.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
+				cellBehavioursByColliders.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
+		}
+
+		void IEditorCellBehaviourMapper.MapCellBehavioursByCells() {
+			cellBehavioursByCells.Clear();
+			List<LevelCellBehaviour> cellBehaviours = levelGridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
+			for (int i = 0; i < cellBehaviours.Count; i++)
+				cellBehavioursByCells.Add(cellBehaviours[i].GetCell(), cellBehaviours[i]);
 		}
 
 		bool IEditorCellBehaviourMapper.TryGetCellBehaviour(Collider collider, out LevelCellBehaviour cellBehaviour) {
-			return cellBehaviourMap.TryGetValue(collider, out cellBehaviour);
+			return cellBehavioursByColliders.TryGetValue(collider, out cellBehaviour);
+		}
+
+		bool IEditorCellBehaviourMapper.TryGetCellBehaviour(LevelCell cell, out LevelCellBehaviour cellBehaviour) {
+			return cellBehavioursByCells.TryGetValue(cell, out cellBehaviour);
 		}
 	}
 }

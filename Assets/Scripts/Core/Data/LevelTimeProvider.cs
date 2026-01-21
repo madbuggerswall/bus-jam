@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace Core.Data {
 	public class LevelTimeProvider : MonoBehaviour, IInitializable, ILevelTimeProvider {
-		[SerializeField] private float levelTime;
+		[SerializeField] private float levelTime = 300;
 
 		void IInitializable.Initialize() { }
 
-		public float GetLevelTime() {
-			return levelTime;
-		}
+		public float GetLevelTime() => levelTime;
+		public void SetLevelTime(float levelTime) => this.levelTime = levelTime;
 	}
 }

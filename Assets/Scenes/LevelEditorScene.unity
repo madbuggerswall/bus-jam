@@ -526,6 +526,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 285651418}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &291993882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 291993883}
+  - component: {fileID: 291993884}
+  m_Layer: 0
+  m_Name: BusDTOSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &291993883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291993882}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1307328014}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &291993884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291993882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 589e64c708c2496f87191b46b2c0c504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 7253729415749725602, guid: d42fc6b4170998d3782fa5fa3ecd86d1, type: 3}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,6 +1234,8 @@ MonoBehaviour:
   colorMapDefinition: {fileID: 11400000, guid: 300459bba293d58ea91ce1b07aff0623, type: 2}
   prefabMapDefinition: {fileID: 11400000, guid: ed527d0e74bc8e74c8b48b671aaae373,
     type: 2}
+  defaultColorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
+    type: 2}
 --- !u!1 &516995678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,6 +1470,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorMapDefinition: {fileID: 11400000, guid: 300459bba293d58ea91ce1b07aff0623, type: 2}
   prefabMapDefinition: {fileID: 11400000, guid: 1e7cef0b4c9f22772b045e0cb3518532,
+    type: 2}
+  defaultColorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
     type: 2}
 --- !u!1 &866863221
 GameObject:
@@ -1709,6 +1758,7 @@ Transform:
   - {fileID: 859355428}
   - {fileID: 516358027}
   - {fileID: 437557819}
+  - {fileID: 291993883}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1307328015

@@ -27,12 +27,21 @@ namespace LevelEditor {
 		LevelDTO ILevelDataSaver.SaveLevelData() {
 			Vector2Int levelGridSize = levelGridProvider.GetGrid().GetGridSize();
 			Vector2Int waitingGridSize = waitingGridProvider.GetGrid().GetGridSize();
+			Vector2Int busGridSize = busGridProvider.GetGrid().GetGridSize();
 			float levelTime = levelTimeProvider.GetLevelTime();
 			CellDTO[] cellDTOs = SaveCellData();
 			PassengerDTO[] passengerDTOs = SavePassengerData();
 			BusDTO[] busDTOs = SaveBusData();
 
-			return new LevelDTO(levelGridSize, waitingGridSize, levelTime, cellDTOs, passengerDTOs, busDTOs);
+			return new LevelDTO(
+				levelGridSize,
+				waitingGridSize,
+				busGridSize,
+				levelTime,
+				cellDTOs,
+				passengerDTOs,
+				busDTOs
+			);
 		}
 
 		private CellDTO[] SaveCellData() {
