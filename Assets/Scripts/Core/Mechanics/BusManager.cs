@@ -4,7 +4,6 @@ using Core.Data;
 using Core.LevelGrids;
 using Core.Levels;
 using Core.Passengers;
-using Core.PathFinding;
 using Core.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
@@ -28,7 +27,6 @@ namespace Core.Mechanics {
 
 		private ILevelAreaManager levelAreaManager;
 		private IWaitingAreaManager waitingAreaManager;
-		private IPathFinder pathFinder;
 
 
 		void IInitializable.Initialize() {
@@ -39,7 +37,6 @@ namespace Core.Mechanics {
 
 			levelAreaManager = Context.Resolve<ILevelAreaManager>();
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
-			pathFinder = Context.Resolve<IPathFinder>();
 
 			busDTOs = levelLoader.GetLevelData().GetBusDTOs();
 
@@ -64,7 +61,6 @@ namespace Core.Mechanics {
 		}
 
 		bool IBusManager.AreAllBusesFilled() {
-			UnityEngine.Debug.Log($"BusesFilled: {busesFilled} | busDTOs: {busDTOs.Length}");
 			return busesFilled == busDTOs.Length;
 		}
 
@@ -113,9 +109,5 @@ namespace Core.Mechanics {
 			if (currentBus.IsFull())
 				OnBusFull();
 		}
-
-		// Bus IBusManager.GetCurrentBus() => currentBus;
-		// Bus IBusManager.GetArrivingBus() => arrivingBus;
-		// Bus IBusManager.GetLeavingBus() => leavingBus;
 	}
 }

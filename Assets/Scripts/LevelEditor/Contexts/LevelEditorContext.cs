@@ -4,6 +4,7 @@ using Core.LevelGrids;
 using Core.Mechanics;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
+using Frolics.Signals;
 using LevelEditor.BusGrids;
 using LevelEditor.EditorInput;
 using LevelEditor.SaveSystem;
@@ -12,6 +13,7 @@ using LevelEditor.Tools;
 namespace LevelEditor.Contexts {
 	public class LevelEditorContext : SubContext<LevelEditorContext> {
 		protected override void BindContext() {
+			// Bind<SignalBus>().To<ISignalBus>();
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
 
 			Bind<LevelGridBehaviourFactory>().To<ILevelGridBehaviourFactory>();

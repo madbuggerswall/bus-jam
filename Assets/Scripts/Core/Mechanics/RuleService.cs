@@ -14,6 +14,7 @@ namespace Core.Mechanics {
 		private ILevelGridProvider gridProvider;
 		private IWaitingAreaManager waitingAreaManager;
 		private ILevelStateManager levelStateManager;
+		private ITimerManager timerManager;
 
 		void IInitializable.Initialize() {
 			pathFinder = Context.Resolve<IPathFinder>();
@@ -21,6 +22,7 @@ namespace Core.Mechanics {
 			gridProvider = Context.Resolve<ILevelGridProvider>();
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
 			levelStateManager = Context.Resolve<ILevelStateManager>();
+			timerManager = Context.Resolve<ITimerManager>();
 		}
 
 		void IRuleService.OnPassengerSelected(Passenger passenger, LevelCell cell) {
@@ -33,6 +35,7 @@ namespace Core.Mechanics {
 			}
 
 			if (busManager.TryBoardPassenger(passenger)) {
+				timerManager.StartTimer();
 				NotifyNeighbors(cell);
 				NotifyAll();
 				CheckLevelState();
@@ -40,6 +43,7 @@ namespace Core.Mechanics {
 			}
 
 			if (waitingAreaManager.TryPlacePassenger(passenger)) {
+				timerManager.StartTimer();
 				NotifyNeighbors(cell);
 				NotifyAll();
 				CheckLevelState();
@@ -74,11 +78,15 @@ namespace Core.Mechanics {
 		}
 
 		private void CheckLevelState() {
-			if (!waitingAreaManager.HasEmptySlots())
+			if (!waitingAreaManager.HasEmptySlots()) {
 				levelStateManager.OnFail();
+				timerManager.StopTimer();
+			}
 
-			if (busManager.AreAllBusesFilled())
+			if (busManager.AreAllBusesFilled()) {
 				levelStateManager.OnSuccess();
+				timerManager.StopTimer();
+			}
 		}
 	}
 }

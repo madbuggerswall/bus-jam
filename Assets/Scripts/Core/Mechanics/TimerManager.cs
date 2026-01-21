@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Core.Mechanics {
 	public interface ITimerManager {
 		public void StartTimer();
+		public void StopTimer();
 		public float GetRemainingTime();
 	}
 
@@ -27,7 +28,16 @@ namespace Core.Mechanics {
 			timerStarted = false;
 		}
 
-		void ITimerManager.StartTimer() => timerStarted = true;
+		void ITimerManager.StartTimer() {
+			if (!timerStarted)
+				timerStarted = true;
+		}
+
+		public void StopTimer() {
+			if (timerStarted)
+				timerStarted = false;
+		}
+
 		float ITimerManager.GetRemainingTime() => Mathf.Max(levelTime - passedTime, 0f);
 
 		private void Update() => Tick();

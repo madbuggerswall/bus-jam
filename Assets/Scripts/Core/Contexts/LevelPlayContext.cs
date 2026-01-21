@@ -7,13 +7,16 @@ using Core.Levels;
 using Core.Mechanics;
 using Core.Passengers;
 using Core.PathFinding;
+using Core.Persistence;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
+using Frolics.Signals;
 using UnityEngine;
 
 namespace Core.Contexts {
 	public class LevelPlayContext : SubContext<LevelPlayContext> {
 		protected override void BindContext() {
+			// Bind<SignalBus>().To<ISignalBus>();
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
 
 			// Factories
@@ -25,6 +28,8 @@ namespace Core.Contexts {
 			Bind<BusFactory>().To<IBusFactory>();
 			
 			// Level Initialization
+			Bind<PersistenceManager>().To<IPersistenceManager>();
+			Bind<LevelPackManager>().To<ILevelPackManager>();
 			Bind<LevelLoader>().To<ILevelLoader>();
 			Bind<LevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
 			Bind<WaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
@@ -38,6 +43,7 @@ namespace Core.Contexts {
 			Bind<BusController>().To<IBusController>();
 			Bind<BusManager>().To<IBusManager>();
 			Bind<RuleService>().To<IRuleService>();
+			Bind<TimerManager>().To<ITimerManager>();
 			Bind<TweenTimer>();
 			
 			// Input
