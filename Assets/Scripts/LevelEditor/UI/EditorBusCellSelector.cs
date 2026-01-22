@@ -6,6 +6,7 @@ using Frolics.Signals;
 using Frolics.Utilities;
 using LevelEditor.BusGrids;
 using LevelEditor.EditorInput;
+using LevelEditor.UI.Signals;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -60,13 +61,5 @@ namespace LevelEditor.UI {
 		}
 
 		BusCell IEditorBusCellSelector.GetSelectedCell() => selectedCell;
-	}
-
-	public struct SelectedBusCellChangeSignal : ISignal {
-		public BusCell Cell { get; }
-
-		public SelectedBusCellChangeSignal(BusCell cell) {
-			Cell = cell;
-		}
 	}
 }

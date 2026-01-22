@@ -1,5 +1,3 @@
-using System;
-using Core.Data;
 using UnityEngine;
 
 namespace Core.Levels {
@@ -10,11 +8,5 @@ namespace Core.Levels {
 
 		[SerializeField] private LevelPack levelPack;
 		public LevelPack GetLevelPack() => levelPack;
-	}
-
-	[Serializable]
-	public class LevelPack {
-		[SerializeField] private LevelDefinition[] levelDefinitions;
-		public LevelDefinition[] GetLevelDefinitions() => levelDefinitions;
 	}
 }

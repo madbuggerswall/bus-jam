@@ -5,6 +5,7 @@ using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
 using LevelEditor.BusGrids;
+using LevelEditor.EditorGrids;
 using LevelEditor.EditorInput;
 
 namespace LevelEditor.SaveSystem {
@@ -85,14 +86,6 @@ namespace LevelEditor.SaveSystem {
 				busDTOSpawner.SpawnBus(busDTOs[i], busCells[i]);
 
 			signalBus.Fire(new EditorLevelLoadedSignal(levelDTO));
-		}
-	}
-
-	public struct EditorLevelLoadedSignal : ISignal {
-		public LevelDTO LevelDTO { get; }
-
-		public EditorLevelLoadedSignal(LevelDTO levelDTO) {
-			LevelDTO = levelDTO;
 		}
 	}
 }

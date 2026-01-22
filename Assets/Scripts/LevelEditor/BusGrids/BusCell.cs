@@ -1,5 +1,6 @@
 using Frolics.Grids;
 using Frolics.Grids.SpatialHelpers;
+using LevelEditor.EditorBuses;
 
 namespace LevelEditor.BusGrids {
 	public class BusCell : SquareCell {

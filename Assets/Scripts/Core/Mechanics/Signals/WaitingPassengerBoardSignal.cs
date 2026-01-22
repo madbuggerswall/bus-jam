@@ -2,7 +2,7 @@ using Core.Buses;
 using Core.Passengers;
 using Frolics.Signals;
 
-namespace Core.Signals {
+namespace Core.Mechanics.Signals {
 	public struct WaitingPassengerBoardSignal : ISignal {
 		public Passenger Passenger { get; }
 		public Bus Bus { get; }

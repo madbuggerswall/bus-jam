@@ -6,6 +6,7 @@ using Frolics.Input.Standalone;
 using Frolics.Signals;
 using Frolics.Utilities;
 using LevelEditor.EditorInput;
+using LevelEditor.UI.Signals;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,13 +60,5 @@ namespace LevelEditor.UI {
 		}
 
 		LevelCell IEditorLevelCellSelector.GetSelectedCell() => selectedCell;
-	}
-
-	public struct SelectedLevelCellChangeSignal : ISignal {
-		public LevelCell Cell { get; }
-
-		public SelectedLevelCellChangeSignal(LevelCell cell) {
-			Cell = cell;
-		}
 	}
 }

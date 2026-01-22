@@ -7,7 +7,7 @@ using Frolics.Utilities;
 using LevelEditor.EditorInput;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorGrids {
 	public class EditorLevelGridInitializer : MonoBehaviour,
 		IInitializable,
 		IEditorLevelGridInitializer,

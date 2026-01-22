@@ -4,12 +4,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Mechanics {
-	public interface ITimerManager {
-		public void StartTimer();
-		public void StopTimer();
-		public float GetRemainingTime();
-	}
-
 	public class TimerManager : MonoBehaviour, IInitializable, ITimerManager {
 		private float levelTime;
 		private float passedTime;

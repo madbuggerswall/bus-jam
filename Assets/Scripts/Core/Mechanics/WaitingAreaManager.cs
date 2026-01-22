@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Core.LevelGrids;
+using Core.Mechanics.Signals;
 using Core.Passengers;
 using Core.PathFinding;
-using Core.Signals;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
 using Frolics.Signals;

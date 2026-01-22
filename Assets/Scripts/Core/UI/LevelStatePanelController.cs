@@ -1,4 +1,4 @@
-using Core.Levels;
+using Core.Levels.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
 using UnityEngine;

@@ -5,12 +5,6 @@ using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Levels {
-	public interface ILevelPackManager {
-		public LevelDefinition GetLastPlayedLevel();
-		public int GetLevelCount();
-		public int GetCurrentLevelIndex();
-	}
-
 	public class LevelPackManager : MonoBehaviour, IInitializable, ILevelPackManager {
 		[SerializeField] private LevelPackDefinition levelPackDefinition;
 

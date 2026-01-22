@@ -2,15 +2,14 @@ using System.Collections.Generic;
 using Core.Buses;
 using Core.GridElements;
 using Core.LevelGrids;
-using Core.Mechanics;
+using Core.Mechanics.Signals;
 using Core.Passengers;
-using Core.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Tweens.Core;
 using Frolics.Utilities;
 
-namespace Core {
+namespace Core.Mechanics {
 	public class BoardingSequenceController : IInitializable {
 		private IGridElementFactory gridElementFactory;
 		private IBusFactory busFactory;

@@ -1,3 +1,4 @@
+using Core.Levels.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
@@ -28,8 +29,4 @@ namespace Core.Levels {
 			signalBus.Fire(new LevelFailSignal());
 		}
 	}
-
-	public struct LevelSuccessSignal : ISignal { }
-
-	public struct LevelFailSignal : ISignal { }
 }

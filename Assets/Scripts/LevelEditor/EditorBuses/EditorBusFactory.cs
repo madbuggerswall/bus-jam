@@ -3,7 +3,7 @@ using Frolics.Utilities;
 using LevelEditor.BusGrids;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorBuses {
 	public class EditorBusFactory : MonoBehaviour, IInitializable, IEditorBusFactory {
 		private IObjectPool<EditorBus> pool;
 

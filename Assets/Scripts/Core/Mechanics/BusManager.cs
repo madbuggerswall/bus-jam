@@ -3,8 +3,8 @@ using Core.Buses;
 using Core.Data;
 using Core.LevelGrids;
 using Core.Levels;
+using Core.Mechanics.Signals;
 using Core.Passengers;
-using Core.Signals;
 using Frolics.Contexts;
 using Frolics.Signals;
 using Frolics.Utilities;
@@ -104,18 +104,6 @@ namespace Core.Mechanics {
 
 			if (currentBus.IsFull())
 				OnBusFull();
-		}
-	}
-
-	public struct BusesInitializedSignal : ISignal {
-		public Bus ArrivingBus { get; }
-		public Bus CurrentBus { get; }
-		public Bus LeavingBus { get; }
-
-		public BusesInitializedSignal(Bus arrivingBus, Bus currentBus, Bus leavingBus) {
-			ArrivingBus = arrivingBus;
-			CurrentBus = currentBus;
-			LeavingBus = leavingBus;
 		}
 	}
 }

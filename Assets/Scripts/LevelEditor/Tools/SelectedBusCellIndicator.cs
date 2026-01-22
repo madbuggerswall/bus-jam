@@ -1,7 +1,7 @@
 using Frolics.Contexts;
 using Frolics.Signals;
 using LevelEditor.BusGrids;
-using LevelEditor.UI;
+using LevelEditor.UI.Signals;
 using UnityEngine;
 
 namespace LevelEditor.Tools {

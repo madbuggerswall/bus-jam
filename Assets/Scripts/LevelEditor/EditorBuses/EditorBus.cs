@@ -4,7 +4,7 @@ using Core.Passengers;
 using TMPro;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorBuses {
 	public class EditorBus : GridElement, IColorable {
 		[SerializeField] private MeshRenderer meshRenderer;
 		[SerializeField] private TextMeshPro capacityText;

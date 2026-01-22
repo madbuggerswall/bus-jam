@@ -5,7 +5,7 @@ using Frolics.Grids;
 using Frolics.Utilities;
 using UnityEngine;
 
-namespace LevelEditor {
+namespace LevelEditor.EditorGrids {
 	public class EditorWaitingGridInitializer : MonoBehaviour,
 		IInitializable,
 		IEditorWaitingGridInitializer,

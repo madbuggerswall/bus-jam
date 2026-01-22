@@ -1,13 +1,7 @@
-using System;
 using Frolics.Utilities;
 using UnityEngine;
 
 namespace Core.Persistence {
-	public interface IPersistenceManager {
-		public bool TryLoad(out PlayerData playerData);
-		public void Save(PlayerData playerData);
-	}
-
 	public class PersistenceManager : MonoBehaviour, IInitializable, IPersistenceManager {
 		private const string PlayerDataPath = "/PlayerData.dat";
 
@@ -39,14 +33,5 @@ namespace Core.Persistence {
 		private static string GetPlayerDataPath() {
 			return Application.persistentDataPath + PlayerDataPath;
 		}
-	}
-
-	[Serializable]
-	public struct PlayerData {
-		[SerializeField] private int lastPlayedLevelIndex;
-
-		public PlayerData(int lastPlayedLevelIndex) => this.lastPlayedLevelIndex = lastPlayedLevelIndex;
-		public int GetLastPlayedLevelIndex() => lastPlayedLevelIndex;
-		public void SetLastPlayedLevelIndex(int levelIndex) => lastPlayedLevelIndex = levelIndex;
 	}
 }
