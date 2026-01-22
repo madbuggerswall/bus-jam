@@ -22,5 +22,9 @@ namespace Core.Buses {
 			bus.transform.position = spawnPoint.position;
 			return bus;
 		}
+
+		void IBusFactory.Despawn(Bus bus) {
+			pool.Despawn(bus);
+		}
 	}
 }
