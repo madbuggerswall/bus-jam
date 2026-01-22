@@ -25,8 +25,6 @@ namespace LevelEditor {
 			cellBehaviourFactory = Context.Resolve<IWaitingCellBehaviourFactory>();
 		}
 
-		// TODO Remove ContextMenu
-		[ContextMenu("Create Grid")]
 		void IEditorWaitingGridInitializer.CreateGrid() {
 			DespawnGrid();
 

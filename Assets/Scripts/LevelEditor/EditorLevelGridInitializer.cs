@@ -31,8 +31,6 @@ namespace LevelEditor {
 			gridElementFactory = Context.Resolve<IGridElementFactory>();
 		}
 
-		// TODO Remove ContextMenu
-		[ContextMenu("Create Grid")]
 		void IEditorLevelGridInitializer.CreateGrid() {
 			DespawnElements();
 			DespawnGrid();

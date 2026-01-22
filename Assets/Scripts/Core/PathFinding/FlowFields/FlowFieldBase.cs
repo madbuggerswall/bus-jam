@@ -21,7 +21,6 @@ namespace Core.PathFinding.FlowFields {
 		protected abstract bool IsDestinationValid(SquareCoord targetCoord);
 		protected abstract bool IsNeighborValid(SquareCoord neighborCoord);
 
-		// TODO SetTarget
 		public void Build() {
 			distanceMap.Clear();
 			flowMap.Clear();

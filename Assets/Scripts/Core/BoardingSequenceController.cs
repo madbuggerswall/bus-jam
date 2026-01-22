@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core.Buses;
 using Core.GridElements;
 using Core.LevelGrids;
+using Core.Mechanics;
 using Core.Passengers;
 using Core.Signals;
 using Frolics.Contexts;
@@ -20,7 +21,7 @@ namespace Core {
 
 		private Dictionary<Bus, int> passengersBusWaits;
 		private Queue<WaitingPassengerBoardSignal> waitingPassengersQueue;
-		private Queue<BussFullSignal> busSequenceQueue;
+		private Queue<BusesFullSignal> busSequenceQueue;
 		private HashSet<Bus> busesToLeave;
 
 		void IInitializable.Initialize() {
@@ -33,13 +34,18 @@ namespace Core {
 
 			passengersBusWaits = new Dictionary<Bus, int>();
 			waitingPassengersQueue = new Queue<WaitingPassengerBoardSignal>();
-			busSequenceQueue = new Queue<BussFullSignal>();
+			busSequenceQueue = new Queue<BusesFullSignal>();
 			busesToLeave = new HashSet<Bus>();
 
 			signalBus.SubscribeTo<PassengerBoardSignal>(OnPassengerBoard);
 			signalBus.SubscribeTo<PassengerWaitSignal>(OnPassengerWait);
 			signalBus.SubscribeTo<WaitingPassengerBoardSignal>(OnWaitingPassengerBoard);
-			signalBus.SubscribeTo<BussFullSignal>(OnBusFull);
+			signalBus.SubscribeTo<BusesFullSignal>(OnBusFull);
+			signalBus.SubscribeTo<BusesInitializedSignal>(OnBusesInitialized);
+		}
+
+		private void OnBusesInitialized(BusesInitializedSignal signal) {
+			busController.PlayBusSequence(signal.ArrivingBus, signal.CurrentBus, signal.LeavingBus);
 		}
 
 		private void OnPassengerBoard(PassengerBoardSignal signal) {
@@ -68,7 +74,7 @@ namespace Core {
 			busesToLeave.Remove(bus);
 
 			// TODO Try to avoid closure
-			BussFullSignal signal = busSequenceQueue.Dequeue();
+			BusesFullSignal signal = busSequenceQueue.Dequeue();
 			Tween tween = busController.PlayBusSequence(signal.ArrivingBus, signal.CurrentBus, signal.LeavingBus);
 			tween.SetOnComplete(() => OnBusTweenComplete(signal.LeavingBus));
 		}
@@ -90,7 +96,7 @@ namespace Core {
 			List<WaitingPassengerBoardSignal> requeueList = new();
 			while (waitingPassengersQueue.Count > 0) {
 				WaitingPassengerBoardSignal signal = waitingPassengersQueue.Dequeue();
-				bool hasNextBus = busSequenceQueue.TryPeek(out BussFullSignal bussFullSignal);
+				bool hasNextBus = busSequenceQueue.TryPeek(out BusesFullSignal bussFullSignal);
 				if (hasNextBus && bussFullSignal.LeavingBus != signal.Bus)
 					requeueList.Add(signal);
 				else
@@ -109,7 +115,7 @@ namespace Core {
 			tween.SetOnComplete(() => OnBoardTweenComplete(passenger, bus));
 		}
 
-		private void OnBusFull(BussFullSignal signal) {
+		private void OnBusFull(BusesFullSignal signal) {
 			busesToLeave.Add(signal.LeavingBus);
 			busSequenceQueue.Enqueue(signal);
 		}

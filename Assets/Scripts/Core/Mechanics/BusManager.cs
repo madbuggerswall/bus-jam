@@ -21,7 +21,7 @@ namespace Core.Mechanics {
 
 		// Services
 		private ISignalBus signalBus;
-		private IBusController busController;
+		// private IBusController busController;
 		private IBusFactory busFactory;
 		private ILevelLoader levelLoader;
 
@@ -33,7 +33,7 @@ namespace Core.Mechanics {
 			signalBus = Context.Resolve<ISignalBus>();
 			busFactory = Context.Resolve<IBusFactory>();
 			levelLoader = Context.Resolve<ILevelLoader>();
-			busController = Context.Resolve<IBusController>();
+			// busController = Context.Resolve<IBusController>();
 
 			levelAreaManager = Context.Resolve<ILevelAreaManager>();
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
@@ -46,10 +46,10 @@ namespace Core.Mechanics {
 
 			BusDTO arrivingBusDTO = busDTOs[currentIndex++];
 			arrivingBus = busFactory.CreateBus(arrivingBusDTO);
-
+			
 			// TODO TweenTimer needs to play this
 			// TODO OnBusesInitialized
-			busController.PlayBusSequence(arrivingBus, currentBus, leavingBus);
+			signalBus.Fire(new BusesInitializedSignal(arrivingBus, currentBus, leavingBus));
 		}
 
 		bool IBusManager.TryBoardPassenger(Passenger passenger) {
@@ -88,7 +88,7 @@ namespace Core.Mechanics {
 				arrivingBus = busFactory.CreateBus(nextBusDTO);
 			}
 
-			signalBus.Fire(new BussFullSignal(arrivingBus, currentBus, leavingBus));
+			signalBus.Fire(new BusesFullSignal(arrivingBus, currentBus, leavingBus));
 			BoardWaitingPassengers();
 		}
 
@@ -108,6 +108,18 @@ namespace Core.Mechanics {
 
 			if (currentBus.IsFull())
 				OnBusFull();
+		}
+	}
+
+	public struct BusesInitializedSignal : ISignal {
+		public Bus ArrivingBus { get; }
+		public Bus CurrentBus { get; }
+		public Bus LeavingBus { get; }
+
+		public BusesInitializedSignal(Bus arrivingBus, Bus currentBus, Bus leavingBus) {
+			ArrivingBus = arrivingBus;
+			CurrentBus = currentBus;
+			LeavingBus = leavingBus;
 		}
 	}
 }

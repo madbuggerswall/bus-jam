@@ -29,8 +29,6 @@ namespace LevelEditor.BusGrids {
 			cellBehaviourMapper = Context.Resolve<IEditorBusCellBehaviourMapper>();
 		}
 
-		// TODO Remove ContextMenu
-		[ContextMenu("Create Grid")]
 		void IBusGridInitializer.CreateGrid() {
 			DespawnBuses();
 			DespawnGrid();

@@ -33,18 +33,20 @@ namespace Core.Contexts {
 			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 			Bind<LevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
 			Bind<WaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
+			Bind<PathFinder>().To<IPathFinder>();
 
 			Bind<LevelAreaManager>().To<ILevelAreaManager>();
 			Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
 
-			// Mechanics
-			Bind<PathFinder>().To<IPathFinder>();
+			// Mechanics (View)
 			Bind<PassengerController>().To<IPassengerController>();
 			Bind<BusController>().To<IBusController>();
+			Bind<BoardingSequenceController>();
+			
+			// Mechanics
 			Bind<BusManager>().To<IBusManager>();
 			Bind<RuleService>().To<IRuleService>();
 			Bind<TimerManager>().To<ITimerManager>();
-			Bind<BoardingSequenceController>();
 
 			// Input
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();
