@@ -18,9 +18,8 @@ namespace LevelEditor.SaveSystem {
 		}
 
 		void IBusDTOSpawner.SpawnBus(BusDTO busDTO, BusCell cell) {
-			ColorDefinition colorDefinition = busDTO.GetColorDefinition();
 			EditorBus bus = editorBusFactory.Create(prefab, busGridProvider.GetGrid(), cell);
-			bus.SetColorDefinition(colorDefinition);
+			bus.Initialize(busDTO);
 		}
 	}
 }

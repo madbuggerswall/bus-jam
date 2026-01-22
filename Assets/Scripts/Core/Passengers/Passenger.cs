@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Core.Passengers {
 	public abstract class Passenger : GridElement, IColorable {
 		[SerializeField] private PassengerDefinition passengerDefinition;
-		[SerializeField] private MeshRenderer meshRenderer;
+		[SerializeField] private Renderer meshRenderer;
 		[SerializeField] private Transform meshTransform;
 
 		private ColorDefinition colorDefinition;

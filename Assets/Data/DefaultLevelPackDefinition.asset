@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPack:
     levelDefinitions:
+    - {fileID: 11400000, guid: 57ec3fcddd1c7d9a4a1401a4eac0ec40, type: 2}
     - {fileID: 11400000, guid: 1c84aa1bfec040c20ace77b8efb1f595, type: 2}
     - {fileID: 11400000, guid: 8bc403a7213eb6952ab7936ba34197a3, type: 2}
     - {fileID: 11400000, guid: af85b6b3c11b4e6a798811954750cd33, type: 2}

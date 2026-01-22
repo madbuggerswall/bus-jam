@@ -19,9 +19,15 @@ namespace LevelEditor.EditorBuses {
 
 		public void Initialize(ColorDefinition colorDefinition) {
 			SetColorDefinition(colorDefinition);
-
 			capacity = DefaultCapacity;
 			reservedCapacity = 0;
+			UpdateTexts();
+		}
+
+		public void Initialize(BusDTO busDTO) {
+			SetColorDefinition(busDTO.GetColorDefinition());
+			capacity = busDTO.GetCapacity();
+			reservedCapacity = busDTO.GetReservedCapacity();
 			UpdateTexts();
 		}
 

@@ -24,14 +24,14 @@ namespace Core.Passengers.Types {
 				return;
 
 			isSecret = false;
-			PlayCloakTween();
+			PlaySecretTween();
 		}
 
 		public override void OnAnyMove() { }
 
-		private void PlayCloakTween() {
+		private void PlaySecretTween() {
 			const float duration = 0.5f;
-			float targetScale = isSecret ? 1f : 0.2f;
+			float targetScale = isSecret ? 1f : 0.1f;
 
 			Tween tween = secretTransform.TweenLocalScaleY(targetScale, duration);
 			tween.SetEase(Ease.Type.InOutQuad);

@@ -34,6 +34,11 @@ namespace Core.Mechanics {
 				return;
 			}
 
+			if (!passenger.CanMove()) {
+				passenger.GetTweenHelper().PlayUnreachableTween();
+				return;
+			}
+
 			if (busManager.TryBoardPassenger(passenger)) {
 				timerManager.StartTimer();
 				NotifyNeighbors(cell);
@@ -66,8 +71,7 @@ namespace Core.Mechanics {
 		}
 
 		private void NotifyAll() {
-			LevelGrid grid = gridProvider.GetGrid();
-			LevelCell[] cells = grid.GetCells();
+			LevelCell[] cells = gridProvider.GetGrid().GetCells();
 			for (int i = 0; i < cells.Length; i++) {
 				LevelCell cell = cells[i];
 				if (!cell.HasElement() || cell.GetGridElement() is not Passenger passenger)

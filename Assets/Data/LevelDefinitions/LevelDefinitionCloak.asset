@@ -1,0 +1,211 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6c6e12a5044c35a1f6b484af4dc79a, type: 3}
+  m_Name: LevelDefinitionCloak
+  m_EditorClassIdentifier: 
+  levelDTO:
+    levelGridSize: {x: 4, y: 4}
+    waitingGridSize: {x: 4, y: 1}
+    busGridSize: {x: 8, y: 2}
+    levelTime: 300
+    cellDTOs:
+    - isEmpty: 0
+      localCoord:
+        x: 0
+        y: 0
+    - isEmpty: 0
+      localCoord:
+        x: 1
+        y: 0
+    - isEmpty: 0
+      localCoord:
+        x: 2
+        y: 0
+    - isEmpty: 0
+      localCoord:
+        x: 3
+        y: 0
+    - isEmpty: 0
+      localCoord:
+        x: 0
+        y: 1
+    - isEmpty: 0
+      localCoord:
+        x: 1
+        y: 1
+    - isEmpty: 0
+      localCoord:
+        x: 2
+        y: 1
+    - isEmpty: 0
+      localCoord:
+        x: 3
+        y: 1
+    - isEmpty: 0
+      localCoord:
+        x: 0
+        y: 2
+    - isEmpty: 0
+      localCoord:
+        x: 1
+        y: 2
+    - isEmpty: 0
+      localCoord:
+        x: 2
+        y: 2
+    - isEmpty: 0
+      localCoord:
+        x: 3
+        y: 2
+    - isEmpty: 0
+      localCoord:
+        x: 0
+        y: 3
+    - isEmpty: 0
+      localCoord:
+        x: 1
+        y: 3
+    - isEmpty: 0
+      localCoord:
+        x: 2
+        y: 3
+    - isEmpty: 0
+      localCoord:
+        x: 3
+        y: 3
+    passengerDTOs:
+    - localCoord:
+        x: 0
+        y: 0
+      colorDefinition: {fileID: 11400000, guid: acfe092fb5c607a7eaa7448d44617133,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 1
+        y: 0
+      colorDefinition: {fileID: 11400000, guid: acfe092fb5c607a7eaa7448d44617133,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 2
+        y: 0
+      colorDefinition: {fileID: 11400000, guid: acfe092fb5c607a7eaa7448d44617133,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 0
+        y: 1
+      colorDefinition: {fileID: 11400000, guid: 4e346022c94138b608981f0933e8082b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 31f8ef462e9308d40b01327e15cb9d19,
+        type: 2}
+    - localCoord:
+        x: 1
+        y: 1
+      colorDefinition: {fileID: 11400000, guid: 4e346022c94138b608981f0933e8082b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 31f8ef462e9308d40b01327e15cb9d19,
+        type: 2}
+    - localCoord:
+        x: 2
+        y: 1
+      colorDefinition: {fileID: 11400000, guid: 4e346022c94138b608981f0933e8082b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 31f8ef462e9308d40b01327e15cb9d19,
+        type: 2}
+    - localCoord:
+        x: 3
+        y: 1
+      colorDefinition: {fileID: 11400000, guid: 5645892e5a274a2d09d6b0a392c937cc,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 0
+        y: 2
+      colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 1
+        y: 2
+      colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 2
+        y: 2
+      colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 3
+        y: 2
+      colorDefinition: {fileID: 11400000, guid: 5645892e5a274a2d09d6b0a392c937cc,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 0
+        y: 3
+      colorDefinition: {fileID: 11400000, guid: 4362743dd3ba92e069abfa0ab1e5208b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 1
+        y: 3
+      colorDefinition: {fileID: 11400000, guid: 4362743dd3ba92e069abfa0ab1e5208b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 2
+        y: 3
+      colorDefinition: {fileID: 11400000, guid: 4362743dd3ba92e069abfa0ab1e5208b,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    - localCoord:
+        x: 3
+        y: 3
+      colorDefinition: {fileID: 11400000, guid: 5645892e5a274a2d09d6b0a392c937cc,
+        type: 2}
+      passengerDefinition: {fileID: 11400000, guid: 8ac61cfd3d87559cf819a959f8316505,
+        type: 2}
+    busDTOs:
+    - colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
+        type: 2}
+      capacity: 3
+      reservedCapacity: 0
+    - colorDefinition: {fileID: 11400000, guid: 4e346022c94138b608981f0933e8082b,
+        type: 2}
+      capacity: 3
+      reservedCapacity: 0
+    - colorDefinition: {fileID: 11400000, guid: acfe092fb5c607a7eaa7448d44617133,
+        type: 2}
+      capacity: 3
+      reservedCapacity: 0
+    - colorDefinition: {fileID: 11400000, guid: 5645892e5a274a2d09d6b0a392c937cc,
+        type: 2}
+      capacity: 3
+      reservedCapacity: 0
+    - colorDefinition: {fileID: 11400000, guid: 4362743dd3ba92e069abfa0ab1e5208b,
+        type: 2}
+      capacity: 3
+      reservedCapacity: 0
