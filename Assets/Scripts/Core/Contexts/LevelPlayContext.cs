@@ -25,16 +25,17 @@ namespace Core.Contexts {
 			Bind<WaitingCellBehaviourFactory>().To<IWaitingCellBehaviourFactory>();
 			Bind<GridElementFactory>().To<IGridElementFactory>();
 			Bind<BusFactory>().To<IBusFactory>();
-			
+
 			// Level Initialization
 			Bind<PersistenceManager>().To<IPersistenceManager>();
 			Bind<LevelPackManager>().To<ILevelPackManager>();
 			Bind<LevelLoader>().To<ILevelLoader>();
+			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 			Bind<LevelGridInitializer>().To<ILevelGridBehaviourProvider>().To<ILevelGridProvider>();
 			Bind<WaitingGridInitializer>().To<IWaitingGridBehaviourProvider>().To<IWaitingGridProvider>();
+
 			Bind<LevelAreaManager>().To<ILevelAreaManager>();
 			Bind<WaitingAreaManager>().To<IWaitingAreaManager>();
-			Bind<PassengerSpawner>().To<IPassengerSpawner>();
 
 			// Mechanics
 			Bind<PathFinder>().To<IPathFinder>();
@@ -44,11 +45,11 @@ namespace Core.Contexts {
 			Bind<RuleService>().To<IRuleService>();
 			Bind<TimerManager>().To<ITimerManager>();
 			Bind<TweenTimer>();
-			
+
 			// Input
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();
 			Bind<PassengerClickHandler>();
-			
+
 			Bind<LevelStateManager>().To<ILevelStateManager>();
 		}
 

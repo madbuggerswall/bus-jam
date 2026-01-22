@@ -1,5 +1,6 @@
 using Core.Data;
 using Core.Levels;
+using Core.Passengers;
 using Frolics.Contexts;
 using Frolics.Grids;
 using Frolics.Utilities;
@@ -12,17 +13,20 @@ namespace Core.LevelGrids {
 
 		// Services
 		private ILevelLoader levelLoader;
+		private IPassengerSpawner passengerSpawner;
 		private ILevelGridBehaviourFactory gridBehaviourFactory;
 		private ILevelCellBehaviourFactory cellBehaviourFactory;
 
 		void IInitializable.Initialize() {
 			levelLoader = Context.Resolve<ILevelLoader>();
+			passengerSpawner = Context.Resolve<IPassengerSpawner>();
 			gridBehaviourFactory = Context.Resolve<ILevelGridBehaviourFactory>();
 			cellBehaviourFactory = Context.Resolve<ILevelCellBehaviourFactory>();
 
 			// Create Grid & GridBehaviour
 			gridBehaviour = gridBehaviourFactory.Create();
 			grid = CreateLevelGrid();
+			passengerSpawner.SpawnPassengers(grid);
 			cellBehaviourFactory.CreateCellBehaviours(grid, gridBehaviour);
 		}
 

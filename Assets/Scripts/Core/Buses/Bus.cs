@@ -10,20 +10,18 @@ namespace Core.Buses {
 		[SerializeField] private TextMeshPro capacityText;
 		[SerializeField] private TextMeshPro reservedCapacityText;
 
-		private const int DefaultCapacity = 3;
-
 		private ColorDefinition colorDefinition;
-
 		private int capacity;
 		private int reservedCapacity;
+
 		private int passengerCount;
 		private int reservedCount;
 
 		public void Initialize(BusDTO busDTO) {
 			SetColorDefinition(busDTO.GetColorDefinition());
-
-			capacity = DefaultCapacity;
+			capacity = busDTO.GetCapacity();
 			reservedCapacity = busDTO.GetReservedCapacity();
+
 			passengerCount = 0;
 			reservedCount = 0;
 
@@ -65,8 +63,8 @@ namespace Core.Buses {
 		}
 
 		private void UpdateTexts() {
-			capacityText.text = $"{capacity - reservedCapacity}";
-			reservedCapacityText.text = $"R{reservedCapacity}";
+			capacityText.text = $"{capacity - reservedCapacity - passengerCount}";
+			reservedCapacityText.text = $"R{reservedCapacity - reservedCount}";
 		}
 	}
 }

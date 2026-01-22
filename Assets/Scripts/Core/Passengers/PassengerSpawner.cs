@@ -17,20 +17,15 @@ namespace Core.Passengers {
 		// Services
 		private ILevelLoader levelLoader;
 		private IGridElementFactory elementFactory;
-		private ILevelGridProvider gridProvider;
 
 		void IInitializable.Initialize() {
 			levelLoader = Context.Resolve<ILevelLoader>();
 			elementFactory = Context.Resolve<IGridElementFactory>();
-			gridProvider = Context.Resolve<ILevelGridProvider>();
-
-			SpawnPassengers();
 		}
 
-		public void SpawnPassengers() {
+		void IPassengerSpawner.SpawnPassengers(LevelGrid grid) {
 			LevelDTO levelDTO = levelLoader.GetLevelData();
 			PassengerDTO[] passengerDTOs = levelDTO.GetPassengerDTOs();
-			LevelGrid grid = gridProvider.GetGrid();
 
 			for (int i = 0; i < passengerDTOs.Length; i++) {
 				PassengerDTO passengerDTO = passengerDTOs[i];

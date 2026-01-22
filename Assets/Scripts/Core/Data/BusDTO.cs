@@ -15,7 +15,7 @@ namespace Core.Data {
 		}
 
 		public ColorDefinition GetColorDefinition() => colorDefinition;
-		public int GetCapacity() => reservedCapacity;
+		public int GetCapacity() => capacity;
 		public int GetReservedCapacity() => reservedCapacity;
 	}
 }
