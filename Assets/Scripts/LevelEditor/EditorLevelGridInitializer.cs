@@ -13,7 +13,7 @@ namespace LevelEditor {
 		IEditorLevelGridInitializer,
 		ILevelGridBehaviourProvider,
 		ILevelGridProvider {
-		[SerializeField] private Vector2Int gridSize = new Vector2Int(6, 6);
+		[SerializeField] private Vector2Int gridSize = new(6, 6);
 
 		private LevelGrid grid;
 		private LevelGridBehaviour gridBehaviour;

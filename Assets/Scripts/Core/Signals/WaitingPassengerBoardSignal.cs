@@ -8,8 +8,8 @@ namespace Core.Signals {
 		public Bus Bus { get; }
 
 		public WaitingPassengerBoardSignal(Bus bus, Passenger passenger) {
-			this.Passenger = passenger;
-			this.Bus = bus;
+			Passenger = passenger;
+			Bus = bus;
 		}
 	}
 }

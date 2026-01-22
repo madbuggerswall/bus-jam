@@ -97,7 +97,7 @@ namespace LevelEditor.SaveSystem {
 				int capacity = bus.GetCapacity();
 				int reservedCapacity = bus.GetReservedCapacity();
 
-				BusDTO busDTO = new BusDTO(colorDefinition, capacity, reservedCapacity);
+				BusDTO busDTO = new(colorDefinition, capacity, reservedCapacity);
 				busDTOs.Add(busDTO);
 			}
 

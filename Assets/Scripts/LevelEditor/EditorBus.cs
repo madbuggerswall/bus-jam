@@ -10,7 +10,7 @@ namespace LevelEditor {
 		[SerializeField] private TextMeshPro capacityText;
 		[SerializeField] private TextMeshPro reservedCapacityText;
 
-		public const int DefaultCapacity = 3;
+		private const int DefaultCapacity = 3;
 
 		private int capacity;
 		private int reservedCapacity;

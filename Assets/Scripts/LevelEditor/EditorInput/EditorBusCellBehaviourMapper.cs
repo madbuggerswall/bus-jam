@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LevelEditor.EditorInput {
 	public class EditorBusCellBehaviourMapper : IInitializable, IEditorBusCellBehaviourMapper {
-		private Dictionary<Collider, BusCellBehaviour> cellBehaviourMap = new();
+		private readonly Dictionary<Collider, BusCellBehaviour> cellBehaviourMap = new();
 
 		// Services
 		private IBusGridBehaviourProvider busGridBehaviourProvider;

@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace LevelEditor.EditorInput {
 	public class EditorCellBehaviourMapper : IInitializable, IEditorCellBehaviourMapper {
-		private Dictionary<Collider, LevelCellBehaviour> cellBehavioursByColliders = new();
-		private Dictionary<LevelCell, LevelCellBehaviour> cellBehavioursByCells = new();
+		private readonly Dictionary<Collider, LevelCellBehaviour> cellBehavioursByColliders = new();
+		private readonly Dictionary<LevelCell, LevelCellBehaviour> cellBehavioursByCells = new();
 
 		// Services
 		private ILevelGridBehaviourProvider levelGridBehaviourProvider;

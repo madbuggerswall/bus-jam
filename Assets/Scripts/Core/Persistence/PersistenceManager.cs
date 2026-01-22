@@ -13,10 +13,6 @@ namespace Core.Persistence {
 
 		void IInitializable.Initialize() { }
 
-		private string GetPlayerDataPath() {
-			return Application.persistentDataPath + PlayerDataPath;
-		}
-
 
 		bool IPersistenceManager.TryLoad(out PlayerData playerData) {
 			playerData = default;
@@ -38,6 +34,10 @@ namespace Core.Persistence {
 				return;
 
 			SaveManager.Delete(GetPlayerDataPath());
+		}
+
+		private static string GetPlayerDataPath() {
+			return Application.persistentDataPath + PlayerDataPath;
 		}
 	}
 

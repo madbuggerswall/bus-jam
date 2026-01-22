@@ -15,7 +15,6 @@ using UnityEngine;
 namespace Core.Contexts {
 	public class LevelPlayContext : SubContext<LevelPlayContext> {
 		protected override void BindContext() {
-			// Bind<SignalBus>().To<ISignalBus>();
 			Bind<CameraController>().To<ICameraController>().To<IMainCameraProvider>();
 
 			// Factories

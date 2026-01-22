@@ -5,8 +5,8 @@ namespace Core.CameraSystem.PositionContributors {
 	[Serializable]
 	public class PerlinShake : IPositionContributor {
 		[SerializeField] private Vector3 pivotOffset = Vector3.zero;
-		[SerializeField] private Vector3 amplitudeGain = new Vector3(1f, 1f, 1f);
-		[SerializeField] private Vector3 frequencyGain = new Vector3(.2f, .2f, .2f);
+		[SerializeField] private Vector3 amplitudeGain = new(1f, 1f, 1f);
+		[SerializeField] private Vector3 frequencyGain = new(.2f, .2f, .2f);
 		[SerializeField] private int noiseSeed = 0;
 
 		// Fields

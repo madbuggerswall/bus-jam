@@ -11,7 +11,7 @@ namespace LevelEditor.BusGrids {
 		IBusGridInitializer,
 		IBusGridBehaviourProvider,
 		IBusGridProvider {
-		[SerializeField] private Vector2Int gridSize = new Vector2Int(8, 2);
+		[SerializeField] private Vector2Int gridSize = new(8, 2);
 
 		private BusGrid grid;
 		private BusGridBehaviour gridBehaviour;
@@ -66,8 +66,7 @@ namespace LevelEditor.BusGrids {
 			const float cellDiameter = 1f;
 
 			Vector3 pivotLocalPos = new(-gridSize.x / 2f + cellDiameter / 2, 0, 0);
-			BusGrid grid = new(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
-			return grid;
+			return new BusGrid(gridBehaviour.transform, pivotLocalPos, gridSize, cellDiameter, gridPlane);
 		}
 
 		BusGridBehaviour IBusGridBehaviourProvider.GetGridBehaviour() => gridBehaviour;

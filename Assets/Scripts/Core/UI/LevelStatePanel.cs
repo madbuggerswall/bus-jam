@@ -35,7 +35,7 @@ namespace Core.UI {
 		}
 
 
-		private void OnRestartButtonClick() {
+		private static void OnRestartButtonClick() {
 			Scene activeScene = SceneManager.GetActiveScene();
 			SceneManager.LoadScene(activeScene.buildIndex);
 		}

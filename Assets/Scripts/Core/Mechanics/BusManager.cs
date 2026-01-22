@@ -12,8 +12,8 @@ using Frolics.Utilities;
 namespace Core.Mechanics {
 	public class BusManager : IInitializable, IBusManager {
 		private BusDTO[] busDTOs;
-		private int currentIndex = 0;
-		private int busesFilled = 0;
+		private int currentIndex;
+		private int busesFilled;
 
 		private Bus arrivingBus;
 		private Bus currentBus;
@@ -21,7 +21,6 @@ namespace Core.Mechanics {
 
 		// Services
 		private ISignalBus signalBus;
-		// private IBusController busController;
 		private IBusFactory busFactory;
 		private ILevelLoader levelLoader;
 
@@ -33,7 +32,6 @@ namespace Core.Mechanics {
 			signalBus = Context.Resolve<ISignalBus>();
 			busFactory = Context.Resolve<IBusFactory>();
 			levelLoader = Context.Resolve<ILevelLoader>();
-			// busController = Context.Resolve<IBusController>();
 
 			levelAreaManager = Context.Resolve<ILevelAreaManager>();
 			waitingAreaManager = Context.Resolve<IWaitingAreaManager>();
@@ -47,8 +45,6 @@ namespace Core.Mechanics {
 			BusDTO arrivingBusDTO = busDTOs[currentIndex++];
 			arrivingBus = busFactory.CreateBus(arrivingBusDTO);
 			
-			// TODO TweenTimer needs to play this
-			// TODO OnBusesInitialized
 			signalBus.Fire(new BusesInitializedSignal(arrivingBus, currentBus, leavingBus));
 		}
 

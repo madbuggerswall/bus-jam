@@ -10,9 +10,9 @@ namespace Core.Signals {
 		public LevelCell Cell { get; }
 
 		public PassengerBoardSignal(Bus bus, Passenger passenger, LevelCell cell) {
-			this.Passenger = passenger;
-			this.Bus = bus;
-			this.Cell = cell;
+			Passenger = passenger;
+			Bus = bus;
+			Cell = cell;
 		}
 	}
 }

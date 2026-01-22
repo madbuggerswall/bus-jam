@@ -22,17 +22,6 @@ namespace Core.Waiting.Grids {
 			this.pivotPoint = pivotPoint;
 		}
 
-		public bool CanPlaceElementAtCell(Passenger passenger, WaitingCell pivotCell) {
-			SquareCoord[] coords = passenger.GetSquareCoords();
-			SquareCoord pivotCoord = pivotCell.GetCoord();
-
-			for (int i = 0; i < coords.Length; i++)
-				if (!TryGetCell(pivotCoord + coords[i], out WaitingCell cell) || cell.HasPassenger())
-					return false;
-
-			return true;
-		}
-
 		public void PlacePassengerAtCell(Passenger passenger, WaitingCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = passenger.GetSquareCoords();

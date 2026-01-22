@@ -10,7 +10,7 @@ namespace Core.UI {
 		[SerializeField] private float updateInterval = 0.5f;
 
 		private readonly StringBuilder stringBuilder = new StringBuilder(16);
-		private float accumulator = 0f;
+		private float accumulator;
 
 		// Services
 		private ITimerManager timerManager;

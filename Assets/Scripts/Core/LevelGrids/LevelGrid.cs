@@ -22,17 +22,6 @@ namespace Core.LevelGrids {
 			this.pivotPoint = pivotPoint;
 		}
 
-		public bool CanPlaceElementAtCell(GridElement element, LevelCell pivotCell) {
-			SquareCoord[] coords = element.GetSquareCoords();
-			SquareCoord pivotCoord = pivotCell.GetCoord();
-
-			for (int i = 0; i < coords.Length; i++)
-				if (!TryGetCell(pivotCoord + coords[i], out LevelCell cell) || cell.HasElement())
-					return false;
-
-			return true;
-		}
-
 		public void PlaceElementAtCell(GridElement element, LevelCell pivotCell) {
 			SquareCoord pivotCoord = pivotCell.GetCoord();
 			SquareCoord[] coords = element.GetSquareCoords();

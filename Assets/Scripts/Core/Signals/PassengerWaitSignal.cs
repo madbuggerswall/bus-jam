@@ -10,9 +10,9 @@ namespace Core.Signals {
 		public WaitingCell WaitingCell { get; }
 
 		public PassengerWaitSignal(Passenger passenger, LevelCell cell, WaitingCell waitingCell) {
-			this.Passenger = passenger;
-			this.Cell = cell;
-			this.WaitingCell = waitingCell;
+			Passenger = passenger;
+			Cell = cell;
+			WaitingCell = waitingCell;
 		}
 	}
 }

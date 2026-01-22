@@ -19,35 +19,21 @@ namespace Core.Buses {
 
 			Sequence sequence = Sequence.Create();
 			if (arrivingBus != null)
-				sequence.Join(CreateArrivingBusTween(arrivingBus, duration));
+				sequence.Join(CreateBusTween(arrivingBus, spawnPoint, startPoint, duration));
 
 			if (currentBus != null)
-				sequence.Join(CreateCurrentBusTween(currentBus, duration));
+				sequence.Join(CreateBusTween(currentBus, startPoint, stopPoint, duration));
 
 			if (leavingBus != null)
-				sequence.Join(CreateLeavingBusTween(leavingBus, duration));
+				sequence.Join(CreateBusTween(leavingBus, stopPoint, exitPoint, duration));
 
 			sequence.Play();
 			return sequence;
 		}
 
-		Tween CreateArrivingBusTween(Bus bus, float duration) {
-			bus.transform.position = spawnPoint.position;
-			Tween tween = bus.transform.TweenPosition(startPoint.position, duration);
-			tween.SetEase(Ease.Type.InOutQuad);
-			return tween;
-		}
-
-		Tween CreateCurrentBusTween(Bus bus, float duration) {
-			bus.transform.position = startPoint.position;
-			Tween tween = bus.transform.TweenPosition(stopPoint.position, duration);
-			tween.SetEase(Ease.Type.InOutQuad);
-			return tween;
-		}
-
-		Tween CreateLeavingBusTween(Bus bus, float duration) {
-			bus.transform.position = stopPoint.position;
-			Tween tween = bus.transform.TweenPosition(exitPoint.position, duration);
+		private static Tween CreateBusTween(Bus bus, Transform start, Transform target, float duration) {
+			bus.transform.position = start.position;
+			Tween tween = bus.transform.TweenPosition(target.position, duration);
 			tween.SetEase(Ease.Type.InOutQuad);
 			return tween;
 		}

@@ -11,7 +11,7 @@ namespace LevelEditor {
 		IEditorWaitingGridInitializer,
 		IWaitingGridBehaviourProvider,
 		IWaitingGridProvider {
-		[SerializeField] private Vector2Int gridSize = new Vector2Int(7, 1);
+		[SerializeField] private Vector2Int gridSize = new(7, 1);
 
 		private WaitingGrid grid;
 		private WaitingGridBehaviour gridBehaviour;
