@@ -94,8 +94,10 @@ namespace LevelEditor.SaveSystem {
 
 				EditorBus bus = cell.GetBus();
 				ColorDefinition colorDefinition = bus.GetColorDefinition();
-				int reservedCount = bus.GetReservedCount();
-				BusDTO busDTO = new BusDTO(colorDefinition, reservedCount);
+				int capacity = bus.GetCapacity();
+				int reservedCapacity = bus.GetReservedCapacity();
+
+				BusDTO busDTO = new BusDTO(colorDefinition, capacity, reservedCapacity);
 				busDTOs.Add(busDTO);
 			}
 

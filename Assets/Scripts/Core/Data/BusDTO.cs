@@ -5,14 +5,17 @@ namespace Core.Data {
 	[Serializable]
 	public struct BusDTO {
 		[SerializeField] private ColorDefinition colorDefinition;
-		[SerializeField] private int reservedCount;
+		[SerializeField] private int capacity;
+		[SerializeField] private int reservedCapacity;
 
-		public BusDTO(ColorDefinition colorDefinition, int reservedCount) {
+		public BusDTO(ColorDefinition colorDefinition, int capacity, int reservedCapacity) {
 			this.colorDefinition = colorDefinition;
-			this.reservedCount = reservedCount;
+			this.capacity = capacity;
+			this.reservedCapacity = reservedCapacity;
 		}
 
 		public ColorDefinition GetColorDefinition() => colorDefinition;
-		public int GetReservedCount() => reservedCount;
+		public int GetCapacity() => reservedCapacity;
+		public int GetReservedCapacity() => reservedCapacity;
 	}
 }

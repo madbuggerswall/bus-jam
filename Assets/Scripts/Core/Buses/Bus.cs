@@ -1,11 +1,14 @@
 using Core.Data;
 using Core.Passengers;
 using Core.Passengers.Types;
+using TMPro;
 using UnityEngine;
 
 namespace Core.Buses {
 	public class Bus : MonoBehaviour, IColorable {
 		[SerializeField] private MeshRenderer meshRenderer;
+		[SerializeField] private TextMeshPro capacityText;
+		[SerializeField] private TextMeshPro reservedCapacityText;
 
 		private const int DefaultCapacity = 3;
 
@@ -14,15 +17,17 @@ namespace Core.Buses {
 		private int capacity;
 		private int reservedCapacity;
 		private int passengerCount;
-		private int reservedCount = 0;
+		private int reservedCount;
 
 		public void Initialize(BusDTO busDTO) {
 			SetColorDefinition(busDTO.GetColorDefinition());
 
 			capacity = DefaultCapacity;
-			reservedCapacity = busDTO.GetReservedCount();
+			reservedCapacity = busDTO.GetReservedCapacity();
 			passengerCount = 0;
 			reservedCount = 0;
+
+			UpdateTexts();
 		}
 
 		public bool CanBoardPassenger(Passenger passenger) {
@@ -40,6 +45,8 @@ namespace Core.Buses {
 				reservedCount++;
 			else
 				passengerCount++;
+
+			UpdateTexts();
 		}
 
 		public bool IsFull() {
@@ -57,9 +64,9 @@ namespace Core.Buses {
 			meshRenderer.sharedMaterial = colorDefinition.GetMaterial();
 		}
 
-		public int GetCapacity() => capacity;
-		public int GetReservedCount() => reservedCount;
-		public int GetReservedCapacity() => reservedCapacity;
-		public int GetPassengerCount() => passengerCount;
+		private void UpdateTexts() {
+			capacityText.text = $"{capacity - reservedCapacity}";
+			reservedCapacityText.text = $"R{reservedCapacity}";
+		}
 	}
 }

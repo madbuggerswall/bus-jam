@@ -63,6 +63,10 @@ namespace LevelEditor.Tools {
 			if (keyData.KeyControl.keyCode == Key.Backspace) {
 				DeleteElement();
 			}
+
+			if (keyData.KeyControl.keyCode == Key.R) {
+				IncrementReservedCapacity();
+			}
 		}
 
 		private void SpawnElement(GridElement prefab) {
@@ -74,7 +78,7 @@ namespace LevelEditor.Tools {
 				return;
 
 			EditorBus bus = editorBusFactory.Create(prefab as EditorBus, busGridProvider.GetGrid(), selectedCell);
-			bus.SetColorDefinition(defaultColorDefinition);
+			bus.Initialize(defaultColorDefinition);
 		}
 
 		private void DeleteElement() {
@@ -88,6 +92,18 @@ namespace LevelEditor.Tools {
 			EditorBus bus = selectedCell.GetBus();
 			busGridProvider.GetGrid().RemoveBus(bus);
 			editorBusFactory.Despawn(bus);
+		}
+
+		private void IncrementReservedCapacity() {
+			BusCell selectedCell = cellSelector.GetSelectedCell();
+			if (selectedCell == null)
+				return;
+
+			if (!selectedCell.HasBus())
+				return;
+
+			EditorBus bus = selectedCell.GetBus();
+			bus.SetReservedCapacity((bus.GetReservedCapacity() + 1) % (bus.GetCapacity() + 1));
 		}
 
 		private void ColorElement(ColorDefinition colorDefinition) {

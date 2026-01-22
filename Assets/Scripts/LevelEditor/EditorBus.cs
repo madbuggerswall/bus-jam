@@ -1,17 +1,39 @@
+using Core.Buses;
 using Core.Data;
 using Core.GridElements;
 using Core.Passengers;
+using TMPro;
 using UnityEngine;
 
 namespace LevelEditor {
 	public class EditorBus : GridElement, IColorable {
 		[SerializeField] private MeshRenderer meshRenderer;
-		[SerializeField] private int reservedCount;
+		[SerializeField] private TextMeshPro capacityText;
+		[SerializeField] private TextMeshPro reservedCapacityText;
+
+		public const int DefaultCapacity = 3;
+
+		private int capacity;
+		private int reservedCapacity;
 
 		private ColorDefinition colorDefinition;
 
 		public void Initialize(ColorDefinition colorDefinition) {
 			SetColorDefinition(colorDefinition);
+
+			capacity = DefaultCapacity;
+			reservedCapacity = 0;
+			UpdateTexts();
+		}
+
+		public void SetReservedCapacity(int reservedCapacity) {
+			this.reservedCapacity = reservedCapacity;
+			UpdateTexts();
+		}
+
+		private void UpdateTexts() {
+			capacityText.text = $"{capacity - reservedCapacity}";
+			reservedCapacityText.text = $"R{reservedCapacity}";
 		}
 
 		// IColorable
@@ -24,7 +46,8 @@ namespace LevelEditor {
 			this.colorDefinition = colorDefinition;
 			meshRenderer.sharedMaterial = colorDefinition.GetMaterial();
 		}
-		
-		public int GetReservedCount() => reservedCount;
+
+		public int GetCapacity() => capacity;
+		public int GetReservedCapacity() => reservedCapacity;
 	}
 }

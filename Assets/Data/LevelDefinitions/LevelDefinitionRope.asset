@@ -133,10 +133,13 @@ MonoBehaviour:
     busDTOs:
     - colorDefinition: {fileID: 11400000, guid: d9db1c7ea3f422149b34743c905d6ba9,
         type: 2}
-      reservedCount: 0
+      capacity: 3
+      reservedCapacity: 0
     - colorDefinition: {fileID: 11400000, guid: b65c130079d31b089a5ad5f35aff5d72,
         type: 2}
-      reservedCount: 0
+      capacity: 3
+      reservedCapacity: 0
     - colorDefinition: {fileID: 11400000, guid: de27c58320f927bb79e1b206e432f88e,
         type: 2}
-      reservedCount: 0
+      capacity: 3
+      reservedCapacity: 0
