@@ -66,6 +66,10 @@ namespace LevelEditor.Tools {
 			if (keyData.KeyControl.keyCode == Key.Backspace) {
 				DeleteElement();
 			}
+
+			if (keyData.KeyControl.keyCode == Key.P) {
+				ToggleCellEmpty();
+			}
 		}
 
 		private void SpawnElement(GridElement prefab) {
@@ -95,6 +99,19 @@ namespace LevelEditor.Tools {
 			GridElement element = selectedCell.GetGridElement();
 			levelGridProvider.GetGrid().RemoveElement(element);
 			elementFactory.Despawn(element);
+		}
+
+		private void ToggleCellEmpty() {
+			LevelCell selectedCell = cellSelector.GetSelectedCell();
+			if (selectedCell == null)
+				return;
+
+			if (selectedCell.HasElement())
+				return;
+
+			selectedCell.SetReachable(!selectedCell.IsReachable());
+			if (cellBehaviourMapper.TryGetCellBehaviour(selectedCell, out LevelCellBehaviour cellBehaviour))
+				cellBehaviour.Initialize(selectedCell);
 		}
 
 		private void ColorElement(ColorDefinition colorDefinition) {
