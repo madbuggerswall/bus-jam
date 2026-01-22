@@ -44,7 +44,7 @@ namespace Core.Contexts {
 			Bind<BusManager>().To<IBusManager>();
 			Bind<RuleService>().To<IRuleService>();
 			Bind<TimerManager>().To<ITimerManager>();
-			Bind<TweenTimer>();
+			Bind<BoardingSequenceController>();
 
 			// Input
 			Bind<CellBehaviourMapper>().To<ICellBehaviourMapper>();

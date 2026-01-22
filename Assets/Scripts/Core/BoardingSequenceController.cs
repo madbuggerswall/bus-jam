@@ -10,8 +10,7 @@ using Frolics.Tweens.Core;
 using Frolics.Utilities;
 
 namespace Core {
-	// TODO Rename this
-	public class TweenTimer : IInitializable {
+	public class BoardingSequenceController : IInitializable {
 		private IGridElementFactory gridElementFactory;
 		private IBusFactory busFactory;
 
@@ -68,15 +67,10 @@ namespace Core {
 			passengersBusWaits.Remove(bus);
 			busesToLeave.Remove(bus);
 
-			BussFullSignal bussFullSignal = busSequenceQueue.Dequeue();
-			Tween tween = busController.PlayBusSequence(
-				bussFullSignal.ArrivingBus,
-				bussFullSignal.CurrentBus,
-				bussFullSignal.LeavingBus
-			);
-
 			// TODO Try to avoid closure
-			tween.SetOnComplete(() => OnBusTweenComplete(bussFullSignal.LeavingBus));
+			BussFullSignal signal = busSequenceQueue.Dequeue();
+			Tween tween = busController.PlayBusSequence(signal.ArrivingBus, signal.CurrentBus, signal.LeavingBus);
+			tween.SetOnComplete(() => OnBusTweenComplete(signal.LeavingBus));
 		}
 
 		private void OnPassengerWait(PassengerWaitSignal signal) {
@@ -96,25 +90,23 @@ namespace Core {
 			List<WaitingPassengerBoardSignal> requeueList = new();
 			while (waitingPassengersQueue.Count > 0) {
 				WaitingPassengerBoardSignal signal = waitingPassengersQueue.Dequeue();
-				Bus bus = signal.Bus;
-				Passenger passenger = signal.Passenger;
-
-				if (busSequenceQueue.TryPeek(out BussFullSignal bussFullSignal))
-					if (bussFullSignal.LeavingBus != bus) {
-						requeueList.Add(signal);
-						continue;
-					}
-
-				if (!passengersBusWaits.TryAdd(bus, 1))
-					passengersBusWaits[bus] += 1;
-
-				Tween tween = passengerController.PlayWaitingToBus(passenger);
-				tween.SetOnComplete(() => OnBoardTweenComplete(passenger, bus));
+				bool hasNextBus = busSequenceQueue.TryPeek(out BussFullSignal bussFullSignal);
+				if (hasNextBus && bussFullSignal.LeavingBus != signal.Bus)
+					requeueList.Add(signal);
+				else
+					BoardWaitingPassenger(signal.Bus, signal.Passenger);
 			}
 
-			foreach (WaitingPassengerBoardSignal requeue in requeueList) {
+			foreach (WaitingPassengerBoardSignal requeue in requeueList)
 				waitingPassengersQueue.Enqueue(requeue);
-			}
+		}
+
+		private void BoardWaitingPassenger(Bus bus, Passenger passenger) {
+			if (!passengersBusWaits.TryAdd(bus, 1))
+				passengersBusWaits[bus] += 1;
+
+			Tween tween = passengerController.PlayWaitingToBus(passenger);
+			tween.SetOnComplete(() => OnBoardTweenComplete(passenger, bus));
 		}
 
 		private void OnBusFull(BussFullSignal signal) {
