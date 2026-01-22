@@ -1,6 +1,6 @@
 using LevelEditor.BusGrids;
 
-namespace LevelEditor.Tools {
+namespace LevelEditor.UI {
 	public interface IEditorBusCellSelector {
 		public BusCell GetSelectedCell();
 	}

@@ -1,18 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+using Frolics.Contexts;
+using Frolics.Signals;
+using LevelEditor.BusGrids;
+using LevelEditor.UI;
 using UnityEngine;
 
-public class SelectedBusCellIndicator : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace LevelEditor.Tools {
+	public class SelectedBusCellIndicator : MonoBehaviour {
+		// Services
+		private ISignalBus signalBus;
+		private IBusGridProvider busGridProvider;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+		private void Start() {
+			signalBus = Context.Resolve<ISignalBus>();
+			busGridProvider = Context.Resolve<IBusGridProvider>();
+
+			signalBus.SubscribeTo<SelectedBusCellChangeSignal>(OnSelectedBusCellChange);
+			gameObject.SetActive(false);
+		}
+
+		private void OnSelectedBusCellChange(SelectedBusCellChangeSignal signal) {
+			if (signal.Cell == null) {
+				gameObject.SetActive(false);
+			} else {
+				gameObject.SetActive(true);
+				Vector3 position = busGridProvider.GetGrid().GetWorldPosition(signal.Cell);
+				transform.position = position;
+			}
+		}
+	}
 }

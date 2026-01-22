@@ -20,7 +20,7 @@ namespace Core.Input {
 			Dictionary<Collider, LevelCellBehaviour> cellBehaviourMap = new();
 			List<LevelCellBehaviour> cellBehaviours = levelGridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
 			for (int i = 0; i < cellBehaviours.Count; i++)
-				cellBehaviourMap.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
+				cellBehaviourMap.Add(cellBehaviours[i].GetOccupiedCellCollider(), cellBehaviours[i]);
 
 			return cellBehaviourMap;
 		}

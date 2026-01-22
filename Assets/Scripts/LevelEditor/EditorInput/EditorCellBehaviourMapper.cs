@@ -19,8 +19,10 @@ namespace LevelEditor.EditorInput {
 		void IEditorCellBehaviourMapper.MapCellBehavioursByCollider() {
 			cellBehavioursByColliders.Clear();
 			List<LevelCellBehaviour> cellBehaviours = levelGridBehaviourProvider.GetGridBehaviour().GetCellBehaviours();
-			for (int i = 0; i < cellBehaviours.Count; i++)
-				cellBehavioursByColliders.Add(cellBehaviours[i].GetCollider(), cellBehaviours[i]);
+			for (int i = 0; i < cellBehaviours.Count; i++) {
+				cellBehavioursByColliders.Add(cellBehaviours[i].GetOccupiedCellCollider(), cellBehaviours[i]);
+				cellBehavioursByColliders.Add(cellBehaviours[i].GetEmptyCellCollider(), cellBehaviours[i]);
+			}
 		}
 
 		void IEditorCellBehaviourMapper.MapCellBehavioursByCells() {

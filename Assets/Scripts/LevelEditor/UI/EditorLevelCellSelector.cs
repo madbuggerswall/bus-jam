@@ -9,7 +9,7 @@ using LevelEditor.EditorInput;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace LevelEditor.Tools {
+namespace LevelEditor.UI {
 	public class EditorLevelCellSelector : IInitializable, IEditorLevelCellSelector {
 		private LevelCell selectedCell;
 
@@ -43,24 +43,28 @@ namespace LevelEditor.Tools {
 		private bool TrySelectCell(Vector2 pointerPosition, out LevelCell cell) {
 			cell = null;
 			Ray ray = cameraProvider.GetMainCamera().ScreenPointToRay(pointerPosition);
-			if (!Physics.Raycast(ray, out RaycastHit hit))
+			if (!Physics.Raycast(ray, out RaycastHit hit)) {
+				signalBus.Fire(new SelectedLevelCellChangeSignal(cell));
 				return false;
+			}
 
-			if (!cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out LevelCellBehaviour cellBehaviour))
+			if (!cellBehaviourMapper.TryGetCellBehaviour(hit.collider, out LevelCellBehaviour cellBehaviour)) {
+				signalBus.Fire(new SelectedLevelCellChangeSignal(cell));
 				return false;
+			}
 
 			cell = cellBehaviour.GetCell();
-			signalBus.Fire(new LevelCellSelectedSignal(cell));
+			signalBus.Fire(new SelectedLevelCellChangeSignal(cell));
 			return true;
 		}
 
 		LevelCell IEditorLevelCellSelector.GetSelectedCell() => selectedCell;
 	}
 
-	public struct LevelCellSelectedSignal : ISignal {
+	public struct SelectedLevelCellChangeSignal : ISignal {
 		public LevelCell Cell { get; }
 
-		public LevelCellSelectedSignal(LevelCell cell) {
+		public SelectedLevelCellChangeSignal(LevelCell cell) {
 			Cell = cell;
 		}
 	}

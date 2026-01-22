@@ -7,6 +7,8 @@ using Frolics.Contexts;
 using Frolics.Input;
 using Frolics.Input.Standalone;
 using Frolics.Utilities;
+using LevelEditor.EditorInput;
+using LevelEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,12 +26,14 @@ namespace LevelEditor.Tools {
 		private IGridElementFactory elementFactory;
 		private ILevelGridProvider levelGridProvider;
 		private IEditorLevelCellSelector cellSelector;
+		private IEditorCellBehaviourMapper cellBehaviourMapper;
 
 		void IInitializable.Initialize() {
 			inputManager = Context.Resolve<IInputManager>();
 			elementFactory = Context.Resolve<IGridElementFactory>();
 			levelGridProvider = Context.Resolve<ILevelGridProvider>();
 			cellSelector = Context.Resolve<IEditorLevelCellSelector>();
+			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
 
 			inputManager.KeyboardInputHandler.KeyPressEvent += OnKeyPress;
 			InitializeColorMap();
@@ -75,6 +79,9 @@ namespace LevelEditor.Tools {
 			GridElement element = elementFactory.Create(prefab, levelGridProvider.GetGrid(), selectedCell);
 			if (element is IColorable colorable)
 				colorable.SetColorDefinition(defaultColorDefinition);
+
+			if (cellBehaviourMapper.TryGetCellBehaviour(selectedCell, out LevelCellBehaviour cellBehaviour))
+				cellBehaviour.Initialize(selectedCell);
 		}
 
 		private void DeleteElement() {

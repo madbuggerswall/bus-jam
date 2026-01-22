@@ -10,7 +10,6 @@ using Core.PathFinding;
 using Core.Persistence;
 using Core.Waiting.Grids;
 using Frolics.Contexts;
-using Frolics.Signals;
 using UnityEngine;
 
 namespace Core.Contexts {
