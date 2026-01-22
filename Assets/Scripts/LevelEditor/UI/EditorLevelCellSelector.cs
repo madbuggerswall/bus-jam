@@ -3,6 +3,7 @@ using Core.LevelGrids;
 using Frolics.Contexts;
 using Frolics.Input;
 using Frolics.Input.Standalone;
+using Frolics.Signals;
 using Frolics.Utilities;
 using LevelEditor.EditorInput;
 using UnityEngine;
@@ -13,11 +14,13 @@ namespace LevelEditor.Tools {
 		private LevelCell selectedCell;
 
 		// Services
+		private ISignalBus signalBus;
 		private IInputManager inputManager;
 		private IMainCameraProvider cameraProvider;
 		private IEditorCellBehaviourMapper cellBehaviourMapper;
 
 		public void Initialize() {
+			signalBus = Context.Resolve<ISignalBus>();
 			inputManager = Context.Resolve<IInputManager>();
 			cameraProvider = Context.Resolve<IMainCameraProvider>();
 			cellBehaviourMapper = Context.Resolve<IEditorCellBehaviourMapper>();
@@ -47,9 +50,18 @@ namespace LevelEditor.Tools {
 				return false;
 
 			cell = cellBehaviour.GetCell();
+			signalBus.Fire(new LevelCellSelectedSignal(cell));
 			return true;
 		}
 
 		LevelCell IEditorLevelCellSelector.GetSelectedCell() => selectedCell;
+	}
+
+	public struct LevelCellSelectedSignal : ISignal {
+		public LevelCell Cell { get; }
+
+		public LevelCellSelectedSignal(LevelCell cell) {
+			Cell = cell;
+		}
 	}
 }
