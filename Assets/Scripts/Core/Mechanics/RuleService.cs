@@ -82,19 +82,22 @@ namespace Core.Mechanics {
 		}
 
 		private void CheckLevelState() {
+			if (busManager.AreAllBusesFilled()) {
+				levelStateManager.OnSuccess();
+				timerManager.StopTimer();
+				return;
+			}
+
 			if (!waitingAreaManager.HasEmptySlots()) {
 				levelStateManager.OnFail();
 				timerManager.StopTimer();
+				return;
 			}
 
 			if (!AnyMovesLeft()) {
 				levelStateManager.OnFail();
 				timerManager.StopTimer();
-			}
-
-			if (busManager.AreAllBusesFilled()) {
-				levelStateManager.OnSuccess();
-				timerManager.StopTimer();
+				return;
 			}
 		}
 
