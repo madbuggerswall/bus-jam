@@ -87,10 +87,29 @@ namespace Core.Mechanics {
 				timerManager.StopTimer();
 			}
 
+			if (!AnyMovesLeft()) {
+				levelStateManager.OnFail();
+				timerManager.StopTimer();
+			}
+
 			if (busManager.AreAllBusesFilled()) {
 				levelStateManager.OnSuccess();
 				timerManager.StopTimer();
 			}
+		}
+
+		private bool AnyMovesLeft() {
+			LevelCell[] cells = gridProvider.GetGrid().GetCells();
+			for (int i = 0; i < cells.Length; i++) {
+				LevelCell cell = cells[i];
+				if (!cell.HasElement() || cell.GetGridElement() is not Passenger passenger)
+					continue;
+
+				if (pathFinder.IsTargetReachable(cell.GetCoord()) && passenger.CanMove())
+					return true;
+			}
+
+			return false;
 		}
 	}
 }
